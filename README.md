@@ -1,18 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alvyto - Exam Room EMR
 
-## Getting Started
+High-accuracy, local transcription and data management for medical consultations.
 
-First, run the development server:
+## 🚀 Quick Start (Recommended)
+
+To set up everything (virtual environments, dependencies) and run all services (Frontend, Backend, and Room Agent) in one go:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+chmod +x setup_and_run.sh
+./setup_and_run.sh
 ```
+
+---
+
+## Technical Stack
+- **Frontend**: Next.js (React 19)
+- **Data Backend**: FastAPI (Python 3)
+- **Transcription Agent**: Faster-Whisper (Python 3)
+
+---
+
+## Alternative: Manual Setup
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
