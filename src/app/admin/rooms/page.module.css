@@ -1,0 +1,405 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--spacing-8);
+}
+
+.title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.addButton:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-6);
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+}
+
+.searchBox {
+    position: relative;
+    width: 300px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: var(--spacing-3) var(--spacing-4) var(--spacing-3) var(--spacing-10);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    transition: border-color var(--transition-fast);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.filterGroup {
+    display: flex;
+    gap: var(--spacing-2);
+    background: var(--color-surface);
+    padding: var(--spacing-1);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.filterButton {
+    padding: var(--spacing-2) var(--spacing-4);
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.filterButton:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.filterButton.active {
+    background: white;
+    color: var(--color-primary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Table */
+.tableContainer {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    text-align: left;
+    padding: var(--spacing-4);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+}
+
+.table td {
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.roomInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.roomName {
+    font-weight: var(--font-weight-medium);
+}
+
+.roomFloor {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.statusBadge {
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.statusBadge.free {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.statusBadge.occupied {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.statusBadge.offline {
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.personInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+.avatar.patient {
+    background: var(--color-secondary-light);
+    color: var(--color-secondary);
+}
+
+.unassigned,
+.empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+    font-size: var(--font-size-xs);
+}
+
+.pin {
+    background: var(--color-surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    border: 1px solid var(--color-border);
+}
+
+.actionButton {
+    padding: var(--spacing-2) var(--spacing-4);
+    border: 1px solid var(--color-border);
+    background: white;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.actionButton:hover {
+    background: var(--color-surface);
+    border-color: var(--color-text-secondary);
+}
+
+.actionGroup {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.deleteButton {
+    color: var(--color-danger, #dc2626);
+    border-color: var(--color-danger-light, #fecaca);
+}
+
+.deleteButton:hover {
+    background: var(--color-danger-light, #fee2e2);
+    border-color: var(--color-danger, #dc2626);
+    color: var(--color-danger, #dc2626);
+}
+
+/* Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modalHeader {
+    padding: var(--spacing-5);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalTitle {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+}
+
+.modalBody {
+    padding: var(--spacing-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+}
+
+.select {
+    padding: var(--spacing-3) var(--spacing-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+}
+
+.hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-1);
+}
+
+.modalFooter {
+    padding: var(--spacing-5);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    background: var(--color-surface);
+    border-bottom-left-radius: var(--radius-xl);
+    border-bottom-right-radius: var(--radius-xl);
+}
+
+.cancelButton {
+    padding: var(--spacing-3) var(--spacing-5);
+    border: 1px solid var(--color-border);
+    background: white;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+}
+
+.saveButton {
+    padding: var(--spacing-3) var(--spacing-5);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+}
+
+.saveButton:hover {
+    background: var(--color-primary-dark);
+}
+
+.confirmDeleteButton {
+    padding: var(--spacing-3) var(--spacing-5);
+    background: var(--color-danger, #dc2626);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.confirmDeleteButton:hover {
+    background: #b91c1c;
+}
+
+.confirmDeleteButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

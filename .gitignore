@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+backend/venv/
+room-agent/venv/
+
+# local sqlite
+*.db
+

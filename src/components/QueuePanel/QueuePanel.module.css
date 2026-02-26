@@ -1,0 +1,106 @@
+.container {
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.refreshButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.refreshButton:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.patientName {
+    font-weight: 500;
+    color: #0f172a;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.startButton {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.startButton:hover {
+    background: #1d4ed8;
+}
+
+.empty {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 1rem;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: 1rem;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.error {
+    color: #ef4444;
+}
