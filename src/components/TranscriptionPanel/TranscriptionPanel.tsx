@@ -2,28 +2,85 @@
 
 import { useRef, useEffect } from 'react';
 import styles from './TranscriptionPanel.module.css';
-import type { DialogueTurn } from '@/hooks/useWhisperLive';
+import type { DialogueTurn, SpeakerSample } from '@/hooks/useWhisperLive';
 
 interface TranscriptionPanelProps {
     confirmedText: string;
     partialText: string;
+    livePreviewText?: string;
     confidence?: number;
     isRecording: boolean;
     isProcessing: boolean;
     connectionStatus?: 'disconnected' | 'connecting' | 'connected' | 'error';
     dialogue?: DialogueTurn[];
+    onReassign?: (turnIndex: number, newSpeaker: string) => void;
+    speakerSamples?: SpeakerSample[];
+    onConfirmSpeakers?: (mapping: Record<string, string>) => void;
+}
+
+function SpeakerAvatar({ name }: { name: string }) {
+    function getInitials(fullName: string) {
+        if (!fullName || fullName === "Unknown") return "?";
+        const cleaned = fullName.replace(/^Dr\.?\s*/i, "").trim();
+        const parts = cleaned.split(" ").filter(Boolean);
+        if (parts.length === 0) return "?";
+        if (parts.length === 1) return parts[0][0].toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function getColor(name: string) {
+        if (!name || name === "Unknown") return { bg: "#f0f0f0", text: "#999999" };
+        const colors = [
+            { bg: "#E3F2FD", text: "#1565C0" }, // blue
+            { bg: "#E8F5E9", text: "#2E7D32" }, // green
+            { bg: "#FFF3E0", text: "#E65100" }, // orange
+            { bg: "#F3E5F5", text: "#6A1B9A" }, // purple
+        ];
+        const hash = name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+        return colors[hash % colors.length];
+    }
+
+    const initials = getInitials(name);
+    const { bg, text } = getColor(name);
+
+    return (
+        <div
+            style={{
+                backgroundColor: bg,
+                color: text,
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 12,
+                fontWeight: 700,
+                flexShrink: 0,
+                letterSpacing: "0.05em",
+                marginRight: "8px"
+            }}
+        >
+            {initials}
+        </div>
+    );
 }
 
 export default function TranscriptionPanel({
     confirmedText,
     partialText,
+    livePreviewText,
     confidence = 0,
     isRecording,
     isProcessing,
     connectionStatus = 'disconnected',
     dialogue = [],
+    onReassign,
+    speakerSamples,
+    onConfirmSpeakers,
 }: TranscriptionPanelProps) {
     const contentRef = useRef<HTMLDivElement>(null);
+    const SPEAKER_OPTIONS = ["Doctor", "Patient", "Companion"];
 
     // Auto-scroll to bottom when text updates
     useEffect(() => {
@@ -91,7 +148,7 @@ export default function TranscriptionPanel({
             </div>
 
             <div className={styles.content} ref={contentRef}>
-                {isEmpty ? (
+                {isEmpty && !isRecording && !isProcessing ? (
                     <div className={styles.placeholder}>
                         <svg
                             className={styles.placeholderIcon}
@@ -107,16 +164,54 @@ export default function TranscriptionPanel({
                             Start recording to see live transcription appear here.
                         </p>
                     </div>
+                ) : isEmpty && isRecording && !livePreviewText ? (
+                    <div className={styles.placeholder}>
+                        <div className={styles.recordingPulse}></div>
+                        <h3 className={styles.placeholderTitle}>Recording...</h3>
+                        <p className={styles.placeholderText}>
+                            Audio is being captured and buffered securely on the device.
+                        </p>
+                    </div>
+                ) : isEmpty && isProcessing ? (
+                    <div className={styles.placeholder}>
+                        <div className={styles.loadingSpinner}></div>
+                        <h3 className={styles.placeholderTitle}>Processing Audio</h3>
+                        <p className={styles.placeholderText}>
+                            Running advanced WhisperX transcription and exact word-level diarization...
+                        </p>
+                    </div>
                 ) : !isRecording && dialogue.length > 0 ? (
                     <div className={styles.dialogue}>
-                        {dialogue.map((turn, i) => (
-                            <div key={i} className={`${styles.dialogueTurn} ${styles[`speaker${turn.speaker}`]}`}>
-                                <span className={`${styles.speakerLabel} ${styles[`label${turn.speaker}`]}`}>
-                                    {turn.speaker === 'Doctor' ? '👨‍⚕️' : '🧑'} {turn.speaker}
-                                </span>
-                                <p className={styles.turnText}>{turn.text}</p>
-                            </div>
-                        ))}
+                        {dialogue.map((turn, i) => {
+                            const isUnknown = turn.speaker === "Unknown";
+                            return (
+                                <div key={i} className={`${styles.dialogueTurn} ${styles[`speaker${turn.speaker}`]} ${isUnknown ? styles.speakerUnknown : ''}`}>
+                                    <div className={styles.turnHeader} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <SpeakerAvatar name={turn.speaker} />
+                                        <span className={`${styles.speakerLabel} ${styles[`label${turn.speaker}`]}`}>
+                                            {turn.speaker}
+                                        </span>
+                                        {isUnknown && onReassign && (
+                                            <select
+                                                className={styles.reassignSelect}
+                                                defaultValue=""
+                                                onChange={(e) => {
+                                                    if (e.target.value) {
+                                                        onReassign(i, e.target.value);
+                                                    }
+                                                }}
+                                            >
+                                                <option value="" disabled>Assign to...</option>
+                                                {SPEAKER_OPTIONS.map(opt => (
+                                                    <option key={opt} value={opt}>{opt}</option>
+                                                ))}
+                                            </select>
+                                        )}
+                                    </div>
+                                    <p className={styles.turnText}>{turn.text}</p>
+                                </div>
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className={styles.transcript}>
@@ -128,7 +223,14 @@ export default function TranscriptionPanel({
                                 {confirmedText ? ' ' : ''}{partialText}
                             </span>
                         )}
-                        {isRecording && <span className={styles.cursor} />}
+                        {livePreviewText && isRecording && (
+                            <div className={styles.livePreviewBanner}>
+                                <span className={styles.previewLabel}>● Recording — live preview</span>
+                                <p className={styles.previewText}>{livePreviewText}</p>
+                                <span className={styles.previewNote}>Final diarized transcript will appear after Stop</span>
+                            </div>
+                        )}
+                        {isRecording && !livePreviewText && <span className={styles.cursor} />}
                     </div>
                 )}
             </div>

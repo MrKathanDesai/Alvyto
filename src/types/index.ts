@@ -23,6 +23,14 @@ export interface Medication {
   frequency: string;
 }
 
+export interface DialogueTurn {
+  speaker: 'Doctor' | 'Patient' | 'Unknown' | string;
+  text: string;
+  start: number;
+  end: number;
+}
+
+
 // Visit Types
 export type VisitStatus = 'recording' | 'draft' | 'approved';
 
@@ -32,13 +40,14 @@ export interface Visit {
   transcript: string;
   atomicFacts: AtomicFact[];
   summary: VisitSummary;
+  dialogue?: DialogueTurn[];
   status: VisitStatus;
   approvedAt?: string;
   createdAt: string;
 }
 
 // Atomic Fact Types (Medical AI Safety)
-export type FactCategory = 
+export type FactCategory =
   | 'patient_fact'      // symptoms, duration, history
   | 'observation'       // exam findings if spoken
   | 'action'            // meds, tests, referrals

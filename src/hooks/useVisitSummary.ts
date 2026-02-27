@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface UseVisitSummaryReturn {
     currentVisit: Visit | null;
     startNewVisit: (patientId: string) => void;
-    updateTranscript: (transcript: string) => void;
+    updateTranscript: (transcript: string, dialogue?: Visit['dialogue']) => void;
     updateIssues: (items: SummaryItem[]) => void;
     updateActions: (items: SummaryItem[]) => void;
     setVisitStatus: (status: VisitStatus) => void;
@@ -28,14 +28,15 @@ export function useVisitSummary(): UseVisitSummaryReturn {
                 issuesIdentified: [],
                 actionsPlan: [],
             },
+            dialogue: [],
             status: 'recording',
             createdAt: new Date().toISOString(),
         };
         setCurrentVisit(newVisit);
     }, []);
 
-    const updateTranscript = useCallback((transcript: string) => {
-        setCurrentVisit(prev => prev ? { ...prev, transcript } : null);
+    const updateTranscript = useCallback((transcript: string, dialogue?: Visit['dialogue']) => {
+        setCurrentVisit(prev => prev ? { ...prev, transcript, dialogue: dialogue || prev.dialogue } : null);
     }, []);
 
     const updateIssues = useCallback((items: SummaryItem[]) => {

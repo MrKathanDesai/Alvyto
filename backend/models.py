@@ -70,6 +70,7 @@ class Visit(Base):
     room_id = Column(String, ForeignKey("rooms.id"), nullable=True)
     
     transcript = Column(Text, default="")
+    dialogue = Column(JSON, default=list)
     summary = Column(JSON, default=dict)
     status = Column(String, default="scheduled")
     

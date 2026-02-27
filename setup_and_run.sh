@@ -14,13 +14,20 @@ fi
 # 2. Setup Backend Environment
 echo "📦 Setting up Backend Python environment..."
 if [ ! -d "venv" ]; then
-    python3 -m venv venv
+    python3.11 -m venv venv
     echo "✅ Created virtual environment."
 fi
 
 source venv/bin/activate
 pip install -r backend/requirements.txt
 echo "✅ Backend dependencies installed."
+
+# 2.1 Seed Database if missing
+if [ ! -f "emr.db" ]; then
+    echo "🗄️ Database not found. Seeding initial data..."
+    python3 -m backend.seed
+    echo "✅ Database seeded."
+fi
 
 # 3. Setup Frontend Environment
 echo "📦 Setting up Frontend dependencies..."
@@ -40,8 +47,7 @@ trap cleanup SIGINT SIGTERM
 
 # 5. Start Services
 echo "🎬 Starting Room Agent (Transcription Service) on port 8000..."
-cd room-agent && ./start.sh &
-cd ..
+(cd room-agent && ./start.sh) &
 
 echo "🎬 Starting Data Backend on port 8080..."
 source venv/bin/activate && python3 -m backend.server &

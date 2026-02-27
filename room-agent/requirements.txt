@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-faster-whisper
+whisperx
 av
 numpy
 scipy

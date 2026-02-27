@@ -1,0 +1,171 @@
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.3s ease-out;
+    backdrop-filter: blur(5px);
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.speakersList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.speakerRow {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e9ecef;
+}
+
+.speakerSample {
+    margin-bottom: 12px;
+}
+
+.speakerLabel {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.sampleText {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.4;
+    font-style: italic;
+}
+
+.rolePills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pill {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pill:hover {
+    border-color: #bbb;
+    background: #f0f0f0;
+}
+
+.pillActive {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+.pillDisabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f9f9f9;
+    border-color: #eee;
+    color: #aaa;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+    border-top: 1px solid #eee;
+    padding-top: 24px;
+}
+
+.btnSkip {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnSkip:hover {
+    background: #f8f9fa;
+    color: #333;
+}
+
+.btnConfirm {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    background: #111;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnConfirm:hover:not(:disabled) {
+    background: #333;
+}
+
+.btnConfirm:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -3,10 +3,16 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
 export interface DialogueTurn {
-    speaker: 'Doctor' | 'Patient' | 'Unknown';
+    speaker: 'Doctor' | 'Patient' | 'Unknown' | string;
     text: string;
     start: number;
     end: number;
+}
+
+export interface SpeakerSample {
+    speaker_id: string;
+    sample_text: string;
+    start: number;
 }
 
 interface UseWhisperLiveOptions {
@@ -15,7 +21,7 @@ interface UseWhisperLiveOptions {
     onError?: (error: string) => void;
 }
 
-interface UseWhisperLiveReturn {
+export interface UseWhisperLiveReturn {
     isRecording: boolean;
     isTranscribing: boolean;
     confirmedText: string;
@@ -24,12 +30,17 @@ interface UseWhisperLiveReturn {
     confidence: number;
     dialogue: DialogueTurn[];
     startRecording: () => Promise<void>;
-    stopRecording: () => Promise<string>;
+    stopRecording: (doctorName?: string, patientName?: string) => Promise<{ text: string; dialogue: DialogueTurn[] }>;
+    updateDialogue: (newDialogue: DialogueTurn[]) => void;
     clearTranscript: () => void;
     error: string | null;
     recordingDuration: number;
     isWhisperAvailable: boolean;
     connectionStatus: 'disconnected' | 'connecting' | 'connected' | 'error';
+    speakerSamples: SpeakerSample[];
+    isConfirming: boolean;
+    confirmSpeakersClientSide: (mapping: Record<string, string> | null) => void;
+    livePreviewText: string;
 }
 
 export function useWhisperLive(
@@ -51,17 +62,23 @@ export function useWhisperLive(
     const [isWhisperAvailable, setIsWhisperAvailable] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState<'disconnected' | 'connecting' | 'connected' | 'error'>('disconnected');
     const [dialogue, setDialogue] = useState<DialogueTurn[]>([]);
-    const [isDiarizationAvailable, setIsDiarizationAvailable] = useState(false);
+    const [speakerSamples, setSpeakerSamples] = useState<SpeakerSample[]>([]);
+    const [sessionId, setSessionId] = useState<string | null>(null);
+    const [livePreviewText, setLivePreviewText] = useState('');
+    const [isConfirming, setIsConfirming] = useState(false);
+    const [rawSegments, setRawSegments] = useState<any[]>([]);
+    const [backendDialogue, setBackendDialogue] = useState<DialogueTurn[]>([]);
 
     const wsRef = useRef<WebSocket | null>(null);
-    const audioContextRef = useRef<AudioContext | null>(null);
-    const processorRef = useRef<ScriptProcessorNode | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const processorRef = useRef<ScriptProcessorNode | null>(null);
+    const audioContextRef = useRef<AudioContext | null>(null);
     const isRecordingRef = useRef(false);
-
-    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const confirmationResolverRef = useRef<((value: { text: string; dialogue: DialogueTurn[] }) => void) | null>(null);
+    const namesRef = useRef<{ doctor?: string, patient?: string }>({});
 
     const wsUrl = whisperEndpoint.replace('http://', 'ws://').replace('https://', 'wss://') + '/ws/transcribe';
 
@@ -70,9 +87,8 @@ export function useWhisperLive(
             try {
                 const res = await fetch(`${whisperEndpoint}/health`);
                 if (res.ok) {
-                    const data = await res.json();
+                    await res.json();
                     setIsWhisperAvailable(true);
-                    setIsDiarizationAvailable(data.diarization === true);
                 }
             } catch {
                 setIsWhisperAvailable(false);
@@ -99,17 +115,20 @@ export function useWhisperLive(
                 try {
                     const data = JSON.parse(event.data);
 
-                    if (data.type === 'transcription') {
-                        const confirmed = data.confirmed || '';
-                        const partial = data.partial || '';
-                        const conf = data.confidence || 0;
-
-                        setConfirmedText(confirmed);
-                        setPartialText(partial);
-                        setConfidence(conf);
-                        onTranscriptUpdate?.(confirmed, partial);
+                    if (data.type === 'recording_progress') {
+                        // The server sends us how much audio it has buffered.
+                        setRecordingDuration(data.duration || 0);
                     } else if (data.type === 'session_start') {
                         // Session started
+                        if (data.session_id) {
+                            setSessionId(data.session_id);
+                        }
+                    } else if (data.type === 'live_preview') {
+                        // Used for visual proof-of-life only
+                        if (data.text) {
+                            setLivePreviewText(data.text);
+                            setRecordingDuration(data.duration || recordingDuration);
+                        }
                     }
                 } catch (e) {
                     console.warn('Failed to parse WebSocket message:', e);
@@ -137,9 +156,12 @@ export function useWhisperLive(
             setError(null);
             setConfirmedText('');
             setPartialText('');
+            setLivePreviewText('');
             setConfidence(0);
-            audioChunksRef.current = [];
             setRecordingDuration(0);
+            setIsConfirming(false);
+            setRawSegments([]);
+            setBackendDialogue([]);
 
             // Get microphone access
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -152,22 +174,13 @@ export function useWhisperLive(
             });
             streamRef.current = stream;
 
-            // Try WebSocket-first approach
-            let useWebSocket = false;
-            try {
-                await connectWebSocket();
-                useWebSocket = true;
-            } catch (e) {
-                console.warn('WebSocket failed, falling back to HTTP chunking');
-            }
+            await connectWebSocket();
 
-            if (useWebSocket && wsRef.current) {
+            if (wsRef.current) {
                 // Setup audio processing for WebSocket streaming
                 audioContextRef.current = new AudioContext({ sampleRate: 16000 });
                 const source = audioContextRef.current.createMediaStreamSource(stream);
 
-                // Use ScriptProcessor for raw PCM access (deprecated but reliable)
-                // Buffer size 4096 = ~256ms at 16kHz
                 const processor = audioContextRef.current.createScriptProcessor(4096, 1, 1);
                 processorRef.current = processor;
 
@@ -184,72 +197,9 @@ export function useWhisperLive(
 
                 source.connect(processor);
                 processor.connect(audioContextRef.current.destination);
-
-                // Also record full audio via MediaRecorder for final transcription on stop
-                const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-                    ? 'audio/webm;codecs=opus'
-                    : 'audio/webm';
-                const recorder = new MediaRecorder(stream, { mimeType });
-                mediaRecorderRef.current = recorder;
-                recorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) {
-                        audioChunksRef.current.push(e.data);
-                    }
-                };
-                recorder.start(1000);
-            } else {
-                // HTTP fallback: use MediaRecorder
-                const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-                    ? 'audio/webm;codecs=opus'
-                    : 'audio/webm';
-
-                const recorder = new MediaRecorder(stream, { mimeType });
-                mediaRecorderRef.current = recorder;
-
-                recorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) {
-                        audioChunksRef.current.push(e.data);
-                    }
-                };
-
-                recorder.start(1000);  // 1s chunks
-
-                // Process chunks every 3 seconds
-                const processChunks = async () => {
-                    if (!isRecordingRef.current || audioChunksRef.current.length === 0) return;
-
-                    const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                    if (blob.size > 5000) {
-                        try {
-                            const formData = new FormData();
-                            formData.append('audio', blob, 'chunk.webm');
-
-                            const response = await fetch(`${whisperEndpoint}/transcribe/chunk`, {
-                                method: 'POST',
-                                body: formData,
-                            });
-
-                            if (response.ok) {
-                                const data = await response.json();
-                                if (data.text) {
-                                    // HTTP mode: all text is provisional until final
-                                    setPartialText(data.text);
-                                    setConfidence(data.confidence || 0);
-                                    onTranscriptUpdate?.('', data.text);
-                                }
-                            }
-                        } catch (e) {
-                            console.warn('Chunk processing failed:', e);
-                        }
-                    }
-                };
-
-                // Start chunk processing interval
-                const chunkInterval = setInterval(processChunks, 3000);
-                (window as unknown as { __chunkInterval?: NodeJS.Timeout }).__chunkInterval = chunkInterval;
             }
 
-            // Start duration timer
+            // Start duration timer just in case WS messages drop
             timerRef.current = setInterval(() => {
                 setRecordingDuration(d => d + 1);
             }, 1000);
@@ -261,44 +211,25 @@ export function useWhisperLive(
         } catch (err) {
             let errorMessage = 'Failed to start recording';
             if (err instanceof Error) {
-                if (err.name === 'NotAllowedError') {
-                    errorMessage = 'Microphone permission denied';
-                } else if (err.name === 'NotFoundError') {
-                    errorMessage = 'No microphone found';
-                } else {
-                    errorMessage = err.message;
-                }
+                errorMessage = err.message;
             }
             setError(errorMessage);
             onError?.(errorMessage);
         }
-    }, [connectWebSocket, whisperEndpoint, onTranscriptUpdate, onError]);
+    }, [connectWebSocket, onError]);
+
 
     // Stop recording
-    const stopRecording = useCallback(async (): Promise<string> => {
-        console.log('[useWhisperLive] stopRecording called');
+    const stopRecording = useCallback(async (doctorName?: string, patientName?: string): Promise<{ text: string; dialogue: DialogueTurn[] }> => {
+        console.log('[useWhisperLive] stopRecording called', doctorName, patientName);
+        namesRef.current = { doctor: doctorName, patient: patientName };
         isRecordingRef.current = false;
 
-        // Stop timer
         if (timerRef.current) {
             clearInterval(timerRef.current);
             timerRef.current = null;
         }
 
-        // Stop chunk interval
-        const chunkInterval = (window as unknown as { __chunkInterval?: NodeJS.Timeout }).__chunkInterval;
-        if (chunkInterval) {
-            clearInterval(chunkInterval);
-            delete (window as unknown as { __chunkInterval?: NodeJS.Timeout }).__chunkInterval;
-        }
-
-        // Stop WebSocket
-        if (wsRef.current) {
-            wsRef.current.close();
-            wsRef.current = null;
-        }
-
-        // Stop audio context
         if (processorRef.current && audioContextRef.current) {
             processorRef.current.disconnect();
             audioContextRef.current.close();
@@ -306,120 +237,148 @@ export function useWhisperLive(
             audioContextRef.current = null;
         }
 
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+
+        if (wsRef.current) {
+            wsRef.current.close();
+            wsRef.current = null;
+        }
+
         setIsRecording(false);
         setConnectionStatus('disconnected');
 
-        // Stop recorder explicitly ensuring we capture the final blob
-        const recorder = mediaRecorderRef.current;
-        let finalTranscriptionPromise: Promise<string> | null = null;
+        if (!sessionId) {
+            console.error('[useWhisperLive] No active session ID to process');
+            return { text: confirmedText, dialogue: dialogue };
+        }
 
-        if (recorder) {
-            console.log('[useWhisperLive] Waiting for recorder to stop...');
-            finalTranscriptionPromise = new Promise((resolve) => {
-                recorder.onstop = async () => {
-                    console.log('[useWhisperLive] recorder.onstop fired');
-                    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                    console.log(`[useWhisperLive] Final blob size: ${audioBlob.size} bytes`);
+        return new Promise(async (resolve) => {
+            setIsTranscribing(true);
 
-                    // Stop stream tracks now that we have our blob
-                    if (streamRef.current) {
-                        streamRef.current.getTracks().forEach(track => track.stop());
-                        streamRef.current = null;
-                    }
+            try {
+                const params = new URLSearchParams();
+                if (doctorName) params.append('doctor_name', doctorName);
+                if (patientName) params.append('patient_name', patientName);
+                const queryStr = params.toString() ? `?${params.toString()}` : '';
 
-                    if (audioBlob.size > 0) {
-                        setIsTranscribing(true);
-                        try {
-                            const formData = new FormData();
-                            formData.append('audio', audioBlob, 'recording.webm');
-                            console.log('[useWhisperLive] Sending to /transcribe?diarize=true');
-                            const response = await fetch(`${whisperEndpoint}/transcribe?diarize=true`, {
-                                method: 'POST',
-                                body: formData,
-                            });
+                const processResp = await fetch(`${whisperEndpoint}/process/${sessionId}${queryStr}`, { method: 'POST' });
+                if (!processResp.ok) throw new Error(`HTTP ${processResp.status}`);
 
-                            if (response.ok) {
-                                const data = await response.json();
-                                console.log('[useWhisperLive] Transcribe response:', data);
+                const interval = setInterval(async () => {
+                    try {
+                        const statusResp = await fetch(`${whisperEndpoint}/session/${sessionId}/status`);
+                        const statusData = await statusResp.json();
 
-                                const finalResponseText = data.text || '';
-
-                                // Only update if we got actual text, OR if we really want to clear it (rare).
-                                // Safety: if final is empty but we had live text, prefer keeping live text 
-                                // to avoid "disappearing" content.
-                                if (finalResponseText.length > 5) {
-                                    setConfirmedText(finalResponseText);
-                                    setPartialText('');
-                                } else {
-                                    console.warn('[useWhisperLive] Final text empty/short, keeping live transcript');
-                                    // Just commit whatever partial we had
-                                    const fallback = (confirmedText + ' ' + partialText).trim();
-                                    setConfirmedText(fallback);
-                                    setPartialText('');
-                                }
-
-                                setConfidence(data.confidence || 0);
-                                if (data.dialogue && Array.isArray(data.dialogue)) {
-                                    setDialogue(data.dialogue);
-                                }
-                                resolve(finalResponseText || confirmedText);
-                            } else {
-                                console.error('[useWhisperLive] Transcribe failed:', response.status);
-                                resolve(confirmedText + ' ' + partialText);
-                            }
-                        } catch (e) {
-                            console.error('[useWhisperLive] Transcribe error:', e);
-                            resolve(confirmedText + ' ' + partialText);
-                        } finally {
+                        if (statusData.status === 'completed') {
+                            clearInterval(interval);
                             setIsTranscribing(false);
+
+                            const data = statusData.data;
+                            const finalDialogue = data.dialogue || [];
+                            const finalSamples = data.speaker_samples || [];
+                            const rawSegs = data.raw_segments || [];
+
+                            setRawSegments(rawSegs);
+                            setBackendDialogue(finalDialogue);
+                            setSpeakerSamples(finalSamples);
+
+                            // Let the UI confirmation take over if there are samples
+                            if (finalSamples.length > 0) {
+                                setIsConfirming(true);
+                                confirmationResolverRef.current = resolve;
+                            } else {
+                                // No confirmation needed, resolve immediately
+                                const finalText = finalDialogue.map((d: any) => d.text).join(' ');
+                                setConfirmedText(finalText);
+                                setDialogue(finalDialogue);
+                                resolve({ text: finalText, dialogue: finalDialogue });
+                            }
+                        } else if (statusData.status === 'error' || statusData.error) {
+                            clearInterval(interval);
+                            setIsTranscribing(false);
+                            setError(statusData.error || "WhisperX processing failed");
+                            resolve({ text: confirmedText, dialogue: dialogue });
                         }
-                    } else {
-                        console.warn('[useWhisperLive] Audio blob was empty');
-                        resolve(confirmedText + ' ' + partialText);
+                    } catch (e) {
+                        console.error("Error polling processing status", e);
                     }
-                };
-            });
-
-            if (recorder.state !== 'inactive') {
-                recorder.stop();
-            } else {
-                console.warn('[useWhisperLive] Recorder was already inactive');
-                // If somehow already inactive, manually fire handler logic or callback
-                // But generally with this flow it should be active.
-                // Tricky part: if it IS inactive, onstop won't fire again.
-                // We should force stream stop here just in case.
-                if (streamRef.current) {
-                    streamRef.current.getTracks().forEach(track => track.stop());
-                    streamRef.current = null;
-                }
+                }, 3000);
+            } catch (e) {
+                console.error("Error starting WhisperX post-processing", e);
+                setIsTranscribing(false);
+                resolve({ text: confirmedText, dialogue });
             }
-        } else {
-            // No recorder, just stop stream
-            if (streamRef.current) {
-                streamRef.current.getTracks().forEach(track => track.stop());
-                streamRef.current = null;
-            }
-        }
-
-        if (finalTranscriptionPromise) {
-            return finalTranscriptionPromise;
-        }
-
-        // If no recorder promise, return current text
-        const finalFallback = confirmedText + (partialText ? ' ' + partialText : '');
-        setConfirmedText(finalFallback.trim());
-        setPartialText('');
-        return finalFallback.trim();
-    }, [whisperEndpoint, confirmedText, partialText]);
+        });
+    }, [sessionId, whisperEndpoint, confirmedText, dialogue]);
 
     const clearTranscript = useCallback(() => {
         setConfirmedText('');
         setPartialText('');
+        setLivePreviewText('');
         setConfidence(0);
         setError(null);
         setRecordingDuration(0);
         setDialogue([]);
+        setSpeakerSamples([]);
+        setSessionId(null);
+        setIsConfirming(false);
+        setRawSegments([]);
     }, []);
+
+    const confirmSpeakersClientSide = useCallback((assignments: Record<string, string> | null) => {
+        let finalDialogue: DialogueTurn[] = [];
+
+        if (!assignments) {
+            // Use auto-detected dialogue generated by the backend
+            // In a real scenario you might need to rebuild or trust the backend's auto-map
+            finalDialogue = backendDialogue;
+        } else {
+            const doctorName = namesRef.current.doctor || "Doctor";
+            const patientName = namesRef.current.patient || "Patient";
+
+            const roleToName: Record<string, string> = {
+                "Doctor": doctorName,
+                "Patient": patientName,
+                "Companion": "Companion"
+            };
+
+            // Re-map using doctor's confirmed assignments
+            const remapped = rawSegments.map(seg => {
+                const role = assignments[seg.speaker] || "Unknown";
+                const mappedName = roleToName[role] || role;
+                return { ...seg, speaker: mappedName };
+            });
+
+            // Merge consecutive same-speaker turns
+            for (const seg of remapped) {
+                if (finalDialogue.length && finalDialogue[finalDialogue.length - 1].speaker === seg.speaker) {
+                    finalDialogue[finalDialogue.length - 1].text += " " + seg.text.trim();
+                    finalDialogue[finalDialogue.length - 1].end = seg.end;
+                } else {
+                    finalDialogue.push({
+                        speaker: seg.speaker,
+                        text: seg.text.trim(),
+                        start: seg.start,
+                        end: seg.end
+                    });
+                }
+            }
+        }
+
+        const finalText = finalDialogue.map(d => d.text).join(' ');
+        setConfirmedText(finalText);
+        setDialogue(finalDialogue);
+        setIsConfirming(false);
+        setSpeakerSamples([]);
+
+        if (confirmationResolverRef.current) {
+            confirmationResolverRef.current({ text: finalText, dialogue: finalDialogue });
+            confirmationResolverRef.current = null;
+        }
+    }, [rawSegments, backendDialogue]);
 
     const fullTranscript = confirmedText + (partialText ? ' ' + partialText : '');
 
@@ -433,10 +392,15 @@ export function useWhisperLive(
         dialogue,
         startRecording,
         stopRecording,
+        updateDialogue: setDialogue,
         clearTranscript,
         error,
         recordingDuration,
         isWhisperAvailable,
         connectionStatus,
+        speakerSamples,
+        isConfirming,
+        confirmSpeakersClientSide,
+        livePreviewText,
     };
 }

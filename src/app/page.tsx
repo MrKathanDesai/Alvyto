@@ -13,6 +13,7 @@ import TranscriptionPanel from '@/components/TranscriptionPanel';
 import SummaryPanel from '@/components/SummaryPanel';
 import RecordingButton from '@/components/RecordingButton';
 import { QueuePanel } from '@/components/QueuePanel/QueuePanel';
+import SpeakerConfirmation from '@/components/SpeakerConfirmation/SpeakerConfirmation';
 import { useWhisperLive } from '@/hooks/useWhisperLive';
 import { useVisitSummary } from '@/hooks/useVisitSummary';
 
@@ -115,10 +116,15 @@ export default function ExamRoom() {
     dialogue,
     startRecording,
     stopRecording,
+    updateDialogue,
     clearTranscript,
     error: recordingError,
     isWhisperAvailable,
     connectionStatus,
+    speakerSamples,
+    isConfirming,
+    confirmSpeakersClientSide,
+    livePreviewText,
   } = useWhisperLive({
     whisperEndpoint: 'http://localhost:8000',
   });
@@ -149,12 +155,51 @@ export default function ExamRoom() {
     await startRecording();
   }, [clearTranscript, startNewVisit, selectedPatientId, startRecording]);
 
+  // Handle speaker reassignment
+  const handleReassignSpeaker = useCallback((turnIndex: number, newSpeaker: string) => {
+    // Determine which dialogue array we're currently using
+    const currentDialogueArr = currentVisit?.dialogue || dialogue;
+    if (!currentDialogueArr || currentDialogueArr.length === 0) return;
+
+    // 1. Reassign the unknown turn
+    const updated = currentDialogueArr.map((t, i) =>
+      i === turnIndex ? { ...t, speaker: newSpeaker as any } : t
+    );
+
+    // 2. Merge with adjacent turns if they now have the same speaker
+    const merged: typeof updated = [];
+    for (const turn of updated) {
+      const last = merged[merged.length - 1];
+      if (last && last.speaker === turn.speaker) {
+        // Merge: extend last turn's text and end time
+        merged[merged.length - 1] = {
+          ...last,
+          text: last.text + " " + turn.text,
+          end: Math.max(last.end, turn.end),
+        };
+      } else {
+        merged.push({ ...turn });
+      }
+    }
+
+    // 3. Save back to the correct state
+    if (currentVisit) {
+      updateTranscript(currentVisit.transcript, merged);
+    } else {
+      updateDialogue(merged);
+    }
+  }, [currentVisit, dialogue, updateTranscript, updateDialogue]);
+
   // Handle stop recording
   const handleStopRecording = useCallback(async () => {
-    const finalText = await stopRecording();
-    updateTranscript(finalText);
+    // Determine the true doctor name, not the room tablet name
+    const doctorName = currentRoom?.assignedDoctor?.name || user?.name || "Doctor";
+    const patientName = currentPatient?.name || "Patient";
+
+    const { text, dialogue } = await stopRecording(doctorName, patientName);
+    updateTranscript(text, dialogue);
     setVisitStatus('draft');
-  }, [stopRecording, updateTranscript, setVisitStatus]);
+  }, [stopRecording, updateTranscript, setVisitStatus, user, currentPatient, currentRoom]);
 
   // Handle approve
   const handleApprove = useCallback(async () => {
@@ -302,11 +347,13 @@ export default function ExamRoom() {
               <TranscriptionPanel
                 confirmedText={confirmedText}
                 partialText={partialText}
+                livePreviewText={livePreviewText}
                 confidence={confidence}
                 isRecording={isRecording}
                 isProcessing={isTranscribing}
                 connectionStatus={connectionStatus}
-                dialogue={dialogue}
+                dialogue={currentVisit?.dialogue || dialogue}
+                onReassign={handleReassignSpeaker}
               />
 
               {/* Right Panel - Summary (Manual Entry in MVP1) */}
@@ -330,6 +377,14 @@ export default function ExamRoom() {
             onApprove={handleApprove}
             onDiscard={handleDiscard}
           />
+
+          {/* Speaker Confirmation Overlay */}
+          {isConfirming && (
+            <SpeakerConfirmation
+              speakers={speakerSamples}
+              onConfirm={confirmSpeakersClientSide}
+            />
+          )}
         </>
       )}
     </main>
