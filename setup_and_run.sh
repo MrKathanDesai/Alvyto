@@ -10,6 +10,9 @@ if ! command -v ffmpeg &> /dev/null; then
     echo "❌ Error: ffmpeg is not installed. Please install it (e.g., 'brew install ffmpeg')."
     exit 1
 fi
+# 1.5 Cleanup existing services on ports 8000, 8080, 3000
+echo "🧹 Cleaning up existing services..."
+lsof -ti :8000,8080,3000 | xargs kill -9 2>/dev/null || true
 
 # 2. Setup Backend Environment
 echo "📦 Setting up Backend Python environment..."
@@ -44,6 +47,29 @@ cleanup() {
 }
 
 trap cleanup SIGINT SIGTERM
+
+# 5. Ensure Ollama is running (needed for local summarization)
+echo "🤖 Starting Ollama (local LLM server)..."
+if ! command -v ollama &> /dev/null; then
+    echo "⚠️  Warning: Ollama is not installed. Summarization will be disabled."
+    echo "   Install with: brew install ollama && ollama pull llama3.1:8b"
+else
+    # Start Ollama server if not already running
+    if ! curl -s http://localhost:11434 > /dev/null 2>&1; then
+        ollama serve &
+        OLLAMA_PID=$!
+        echo "   Waiting for Ollama to be ready..."
+        for i in $(seq 1 15); do
+            if curl -s http://localhost:11434 > /dev/null 2>&1; then
+                echo "   ✅ Ollama is ready."
+                break
+            fi
+            sleep 1
+        done
+    else
+        echo "   ✅ Ollama already running."
+    fi
+fi
 
 # 5. Start Services
 echo "🎬 Starting Room Agent (Transcription Service) on port 8000..."

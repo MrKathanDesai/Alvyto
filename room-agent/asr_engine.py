@@ -2,280 +2,301 @@ import os
 import logging
 import io
 import time
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
-import tempfile
-import difflib
 import numpy as np
-from faster_whisper import WhisperModel
+import torch
+import whisperx
+from pyannote.audio import Inference
+from sklearn.cluster import AgglomerativeClustering
+import pandas as pd
+from summarizer import Summarizer
 
 logger = logging.getLogger(__name__)
 
-SLIDING_WINDOW_SECONDS = 6.0
+def get_device() -> str:
+    if torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
+
+DEVICE = get_device()
+logger.info(f"Hardware acceleration: {DEVICE}")
+
 SAMPLE_RATE = 16000
-TOKEN_CONFIRM_COUNT = 2
+
+class HybridDiarizer:
+    def __init__(self, hf_token: str):
+        from pyannote.audio import Model
+        model = Model.from_pretrained(
+            "pyannote/wespeaker-voxceleb-resnet34-LM",
+            use_auth_token=hf_token
+        )
+        self.embedding_model = Inference(model, window="whole")
+        self.device = DEVICE
+        self.embedding_model.to(torch.device(self.device))
+        logger.info(f"HybridDiarizer ready on {self.device}")
+
+    def diarize(
+        self,
+        audio_array: np.ndarray,
+        whisperx_result: dict,
+        sample_rate: int = 16000,
+        num_speakers: int = 2
+    ) -> list:
+        segments = whisperx_result.get("segments", [])
+        waveform = torch.from_numpy(audio_array).unsqueeze(0).float()
+
+        embeddings = []
+        valid_segments = []
+
+        for seg in segments:
+            duration = seg["end"] - seg["start"]
+            if duration < 0.4:     
+                continue
+
+            start_sample = int(seg["start"] * sample_rate)
+            end_sample = int(seg["end"] * sample_rate)
+            segment_audio = waveform[:, start_sample:end_sample]
+
+            audio_input = {
+                "waveform": segment_audio,
+                "sample_rate": sample_rate
+            }
+
+            try:
+                embedding = self.embedding_model(audio_input)
+                embeddings.append(embedding)
+                valid_segments.append({
+                    "start": seg["start"],
+                    "end": seg["end"],
+                    "text": seg.get("text", "")
+                })
+            except Exception as e:
+                logger.warning(f"Embedding failed {seg['start']:.1f}-{seg['end']:.1f}s: {e}")
+                continue
+
+        if len(embeddings) < 2:
+            logger.warning("Not enough segments for clustering — returning empty")
+            return []
+
+        embeddings_matrix = np.vstack(embeddings)
+        norms = np.linalg.norm(embeddings_matrix, axis=1, keepdims=True)
+        embeddings_matrix = embeddings_matrix / (norms + 1e-8)
+
+        clustering = AgglomerativeClustering(
+            n_clusters=num_speakers,
+            metric="cosine",
+            linkage="average"
+        )
+        labels = clustering.fit_predict(embeddings_matrix)
+
+        return [
+            {
+                "start": seg["start"],
+                "end": seg["end"],
+                "speaker": f"SPEAKER_{label:02d}"
+            }
+            for seg, label in zip(valid_segments, labels)
+        ]
 
 class ASREngine:
-    def __init__(self, model_size="base.en", device="cpu", compute_type="int8"):
-        logger.info(f"Loading WhisperModel: {model_size} on {device} with {compute_type}")
-        self.model = WhisperModel(model_size, device=device, compute_type=compute_type)
-        self.model_size = model_size
+    def __init__(self):
         self.wx_model = None
         self.wx_align_model = None
         self.wx_metadata = None
-        self.wx_diarize_model = None
-        self.warmup()
+        self.hybrid_diarizer = None
+        self.summarizer = None
+        self.load_models()
 
-    def load_whisperx_models(self):
-        import whisperx
-        import os
-        logger.info("Loading WhisperX models into cache...")
-        self.wx_model = whisperx.load_model("base.en", device="cpu", compute_type="int8")
+    def load_models(self):
+        logger.info(f"Loading models on device: {DEVICE}")
+
+        
+        self.wx_model = whisperx.load_model(
+            "base.en",
+            device="cpu",           
+            compute_type="int8",    
+            asr_options={
+                "suppress_blank": True,
+                "suppress_tokens": [-1],
+            }
+        )
+
+        
         self.wx_align_model, self.wx_metadata = whisperx.load_align_model(
-            language_code="en", device="cpu"
-        )
-        self.wx_diarize_model = whisperx.diarize.DiarizationPipeline(
-            token=os.environ.get("HF_TOKEN"),
-            device="cpu"
-        )
-        logger.info("WhisperX models loaded and cached")
-
-    def warmup(self):
-        """Warm up the model with a second of silence."""
-        logger.info("Warming up model with silence...")
-        silence = np.zeros(16000, dtype=np.float32)
-        try:
-            # Call model.transcribe directly with numpy array for warmup
-            segments, _ = self.model.transcribe(silence, beam_size=1)
-            list(segments)
-            logger.info("Model warmup complete.")
-        except Exception as e:
-            logger.error(f"Warmup failed: {e}")
-
-    def transcribe_chunk(self, audio_data: bytes) -> dict:
-        audio_file = io.BytesIO(audio_data)
-
-        segments, info = self.model.transcribe(
-            audio_file,
-            language="en",
-            vad_filter=False,
-            word_timestamps=True,
-            condition_on_previous_text=False,
+            language_code="en",
+            device=DEVICE          
         )
 
-        text_parts = []
-        total_confidence = 0
-        word_count = 0
+       
+        self.hybrid_diarizer = HybridDiarizer(hf_token=os.environ.get("HF_TOKEN"))
+        self.summarizer = Summarizer()
 
-        for segment in segments:
-            t = segment.text.strip()
-            if t:
-                text_parts.append(t)
-                if segment.words:
-                    for w in segment.words:
-                        total_confidence += w.probability
-                        word_count += 1
+        logger.info("Models loaded: WhisperX base.en + Wav2Vec2 + ResNet34")
+        logger.info(f"Alignment and voiceprinting on: {DEVICE}")
+        logger.info("ASR and VAD on: CPU (int8)")
 
-        avg_confidence = total_confidence / word_count if word_count > 0 else 0
-
-        return {
-            "text": " ".join(text_parts),
-            "confidence": round(avg_confidence, 3),
-            "is_final": False,
-        }
-
-    def transcribe_pcm(self, audio_array: np.ndarray) -> dict:
-        if len(audio_array) < 1600:
-            return {"text": "", "confidence": 0, "segments": []}
-
-        segments, info = self.model.transcribe(
-            audio_array,
-            language="en",
-            beam_size=1,
-            vad_filter=False,
-            word_timestamps=True,
-            condition_on_previous_text=False,
-        )
-
-        text_parts = []
-        total_confidence = 0
-        word_count = 0
-        seg_list = []
-
-        for segment in segments:
-            t = segment.text.strip()
-            if t:
-                text_parts.append(t)
-                seg_confidence = 0
-                if segment.words:
-                    word_probs = [w.probability for w in segment.words]
-                    seg_confidence = sum(word_probs) / len(word_probs) if word_probs else 0
-                    word_count += len(segment.words)
-                    total_confidence += seg_confidence * len(segment.words)
-
-                seg_list.append({
-                    "text": t,
-                    "start": segment.start,
-                    "end": segment.end,
-                    "confidence": round(seg_confidence, 3),
-                    "words": [{
-                        "word": w.word,
-                        "start": w.start,
-                        "end": w.end,
-                        "probability": round(w.probability, 3),
-                    } for w in segment.words] if segment.words else [],
-                })
-
-        avg_confidence = total_confidence / word_count if word_count > 0 else 0
-
-        return {
-            "text": " ".join(text_parts),
-            "confidence": round(avg_confidence, 3),
-            "segments": seg_list,
-        }
-
-    def transcribe_pcm_simple(self, audio_array: np.ndarray) -> str:
-        """Fast transcription for live preview only — no word timestamps, no diarization."""
-        if len(audio_array) < 1600:
+    def transcribe_preview(self, audio_array: np.ndarray) -> str:
+        """
+        Live preview transcription — called during recording.
+        Uses WhisperX's built-in VAD.
+        """
+        if len(audio_array) < 1600: 
             return ""
+
         try:
-            segments, _ = self.model.transcribe(
+            result = self.wx_model.transcribe(
                 audio_array,
                 language="en",
-                beam_size=1,
-                vad_filter=True,
-                word_timestamps=False,
-                condition_on_previous_text=False,
+                batch_size=4,         
+                print_progress=False,
             )
-            return " ".join(seg.text.strip() for seg in segments if seg.text.strip())
+            segments = result.get("segments", [])
+            if not segments:
+                return ""
+            return " ".join(
+                s["text"].strip()
+                for s in segments
+                if s["text"].strip()
+            )
         except Exception as e:
-            logger.error(f"Live preview error: {e}")
+            logger.warning(f"Preview transcription failed: {e}")
             return ""
 
-    def transcribe_full(self, audio_data: bytes) -> dict:
-        audio_file = io.BytesIO(audio_data)
-
-        segments, info = self.model.transcribe(
-            audio_file,
-            language="en",
-            beam_size=5,
-            best_of=5,
-            vad_filter=True,
-            vad_parameters=dict(
-                min_silence_duration_ms=300,
-                speech_pad_ms=100,
-            ),
-            word_timestamps=True,
-        )
-
-        text_parts = []
-        total_confidence = 0
-        word_count = 0
-        seg_list = []
-
-        for segment in segments:
-            t = segment.text.strip()
-            if t:
-                text_parts.append(t)
-                seg_confidence = 0
-                if segment.words:
-                    word_probs = [w.probability for w in segment.words]
-                    seg_confidence = sum(word_probs) / len(word_probs) if word_probs else 0
-                    word_count += len(segment.words)
-                    total_confidence += seg_confidence * len(segment.words)
-
-                seg_list.append({
-                    "text": t,
-                    "start": segment.start,
-                    "end": segment.end,
-                    "confidence": round(seg_confidence, 3),
-                    "words": [{
-                        "word": w.word,
-                        "start": w.start,
-                        "end": w.end,
-                        "probability": round(w.probability, 3),
-                    } for w in segment.words] if segment.words else [],
-                })
-
-        avg_confidence = total_confidence / word_count if word_count > 0 else 0
-
-        return {
-            "text": " ".join(text_parts),
-            "confidence": round(avg_confidence, 3),
-            "is_final": True,
-            "segments": seg_list,
-        }
-
-    def transcribe_full_diarized(self, audio_data: bytes) -> dict:
+    def run_pipeline(self, audio: np.ndarray, doctor_name: str = "Doctor", patient_name: str = "Patient", should_summarize: bool = True) -> dict:
         """
-        Full transcription with speaker diarization.
-        Lazily loads the diarization pipeline on first call.
+        Full processing pipeline.
         """
-        result = self.transcribe_full(audio_data)
-
-        if not self.diarization.available:
-            self.init_diarization()
-
-        if not self.diarization.available:
-            logger.warning("Diarization not available, returning plain transcript")
-            return result
-
         try:
-            import av
+            logger.info("Step 1: Transcribing...")
+            t0 = time.time()
 
-            audio_stream = io.BytesIO(audio_data)
-            container = av.open(audio_stream)
-            pcm_samples = []
-            input_rate = None
+            result = self.wx_model.transcribe(
+                audio,
+                language="en",
+                batch_size=8,
+                print_progress=False,
+            )
 
-            for stream in container.streams.audio:
-                input_rate = stream.rate
+            if not result.get("segments"):
+                raise ValueError("Transcription returned no segments — audio may be silent")
 
-            for frame in container.decode(audio=0):
-                arr = frame.to_ndarray().flatten()
-                if frame.format.name != 'flt':
-                    arr = arr.astype(np.float32) / 32768.0
-                pcm_samples.append(arr)
+            logger.info(f"Step 1 done: {time.time()-t0:.1f}s  ({len(result['segments'])} segments)")
 
-            container.close()
+            logger.info("Step 2: Aligning phonemes...")
+            t0 = time.time()
 
-            if not pcm_samples:
-                logger.warning("No PCM samples decoded from audio data")
-                return result
+            aligned = whisperx.align(
+                result["segments"],
+                self.wx_align_model,
+                self.wx_metadata,
+                audio,
+                device=DEVICE,
+                return_char_alignments=False,
+            )
 
-            full_audio = np.concatenate(pcm_samples)
-            logger.info(f"Decoded {len(full_audio)} samples at {input_rate}Hz")
+            logger.info(f"Step 2 done: {time.time()-t0:.1f}s")
 
-            if input_rate and input_rate != SAMPLE_RATE:
-                from scipy.signal import resample
-                num_samples = int(len(full_audio) * SAMPLE_RATE / input_rate)
-                full_audio = resample(full_audio, num_samples).astype(np.float32)
+            logger.info("Step 3: Diarizing speakers...")
+            t0 = time.time()
+
+            raw_segments = self.hybrid_diarizer.diarize(
+                audio_array=audio,
+                whisperx_result=aligned,
+                sample_rate=16000,
+                num_speakers=2
+            )
+
+            if not raw_segments:
+                logger.warning("Diarization returned no segments — falling back to single speaker")
+                raw_segments = [{"start": s["start"], "end": s["end"], "speaker": "SPEAKER_00"} for s in aligned["segments"]]
+
+            diarize_df = pd.DataFrame(raw_segments)
+            logger.info(f"Step 3 done: {time.time()-t0:.1f}s  ({len(raw_segments)} segments)")
+
+            logger.info("Step 4: Assigning speakers...")
+            t0 = time.time()
+
+            final = whisperx.assign_word_speakers(diarize_df, aligned)
+
+            label_map = self.build_label_map(final["segments"])
+
+            role_to_name = {
+                "Doctor": doctor_name,
+                "Patient": patient_name,
+                "Companion": "Companion"
+            }
+            name_map = {
+                spk_id: role_to_name.get(role, role)
+                for spk_id, role in label_map.items()
+            }
+
+            dialogue = []
+            for seg in final["segments"]:
+                name = name_map.get(seg.get("speaker", ""), "Unknown")
+                text = seg.get("text", "").strip()
+                if not text:
+                    continue
+                if dialogue and dialogue[-1]["speaker"] == name:
+                    dialogue[-1]["text"] += " " + text
+                    dialogue[-1]["end"] = seg["end"]
+                else:
+                    dialogue.append({
+                        "speaker": name,
+                        "text": text,
+                        "start": seg["start"],
+                        "end": seg["end"]
+                    })
+
+            logger.info(f"Step 4+5 done: {time.time()-t0:.1f}s  ({len(dialogue)} turns)")
+
+            summary = {"issuesIdentified": [], "actionsPlan": []}
+            if should_summarize and self.summarizer:
+                logger.info("Step 6: Summarizing visit...")
+                t0 = time.time()
+                summary = self.summarizer.summarize_dialogue(dialogue)
+                logger.info(f"Step 6 done: {time.time()-t0:.1f}s")
+
+            return {
+                "status": "complete",
+                "dialogue": dialogue,
+                "summary": summary,
+                "raw_segments": final["segments"],
+                "speaker_samples": self.extract_speaker_samples(final["segments"])
+            }
 
         except Exception as e:
-            logger.error(f"Audio decode for diarization failed: {e}")
-            return result
+            logger.error(f"Pipeline failed: {e}", exc_info=True)
+            return {
+                "status": "error",
+                "error": str(e)
+            }
 
-        logger.info(f"Running speaker diarization on {len(full_audio)/SAMPLE_RATE:.1f}s of audio...")
-        speaker_segments = self.diarization.diarize_audio(full_audio, SAMPLE_RATE)
-        logger.info(f"Diarization found {len(speaker_segments)} speaker segments")
+    def build_label_map(self, segments):
+        speaker_order = []
+        for seg in segments:
+            speaker = seg.get("speaker")
+            if speaker and speaker not in speaker_order:
+                speaker_order.append(speaker)
+            if len(speaker_order) >= 3:
+                break
+        
+        roles = ["Doctor", "Patient", "Companion"]
+        return {
+            spk: roles[i] if i < len(roles) else f"Speaker {i+1}"
+            for i, spk in enumerate(speaker_order)
+        }
 
-        if not speaker_segments:
-            return result
-
-        all_words = []
-        for seg in result.get("segments", []):
-            for w in seg.get("words", []):
-                all_words.append(w)
-
-        if not all_words:
-            logger.warning("No words found in transcription segments for diarization alignment")
-            return result
-
-        logger.info(f"Aligning {len(all_words)} words to {len(speaker_segments)} speaker segments")
-        dialogue = align_words_to_speakers(all_words, speaker_segments)
-        logger.info(f"Dialogue alignment complete: {len(dialogue)} turns")
-
-        result["dialogue"] = dialogue
-        result["speaker_segments"] = speaker_segments
-
-        return result
+    def extract_speaker_samples(self, segments):
+        samples = {}
+        for seg in segments:
+            speaker = seg.get("speaker")
+            if speaker and speaker not in samples:
+                text = seg.get("text", "").strip()
+                if len(text.split()) >= 4:
+                    samples[speaker] = {
+                        "speaker_id": speaker,
+                        "sample_text": text[:100],
+                        "start": seg.get("start", 0)
+                    }
+            if len(samples) >= 3:
+                break
+        return list(samples.values())

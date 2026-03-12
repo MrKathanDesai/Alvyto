@@ -32,7 +32,7 @@ export interface DialogueTurn {
 
 
 // Visit Types
-export type VisitStatus = 'recording' | 'draft' | 'approved';
+export type VisitStatus = 'recording' | 'ready_to_summarize' | 'draft' | 'approved';
 
 export interface Visit {
   id: string;
@@ -68,6 +68,7 @@ export interface AtomicFact {
 export interface VisitSummary {
   issuesIdentified: SummaryItem[];
   actionsPlan: SummaryItem[];
+  keyFacts?: KeyFact[];
 }
 
 export interface SummaryItem {
@@ -75,6 +76,21 @@ export interface SummaryItem {
   text: string;
   sourceFactIds: string[];
   isEdited: boolean;
+}
+
+export type KeyFactCategory =
+  | 'symptom'
+  | 'duration'
+  | 'timing'
+  | 'medication'
+  | 'action'
+  | 'lifestyle'
+  | 'warning'
+  | 'negative';
+
+export interface KeyFact {
+  label: string;
+  category: KeyFactCategory;
 }
 
 // Recording State

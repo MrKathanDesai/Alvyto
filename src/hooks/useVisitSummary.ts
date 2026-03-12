@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Visit, VisitStatus, SummaryItem } from '@/types';
+import { Visit, VisitStatus, SummaryItem, KeyFact } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 
 interface UseVisitSummaryReturn {
@@ -10,6 +10,7 @@ interface UseVisitSummaryReturn {
     updateTranscript: (transcript: string, dialogue?: Visit['dialogue']) => void;
     updateIssues: (items: SummaryItem[]) => void;
     updateActions: (items: SummaryItem[]) => void;
+    updateKeyFacts: (items: KeyFact[]) => void;
     setVisitStatus: (status: VisitStatus) => void;
     approveVisit: () => Promise<void>;
     discardVisit: () => void;
@@ -59,6 +60,16 @@ export function useVisitSummary(): UseVisitSummaryReturn {
         } : null);
     }, []);
 
+    const updateKeyFacts = useCallback((items: KeyFact[]) => {
+        setCurrentVisit(prev => prev ? {
+            ...prev,
+            summary: {
+                ...prev.summary,
+                keyFacts: items,
+            },
+        } : null);
+    }, []);
+
     const setVisitStatus = useCallback((status: VisitStatus) => {
         setCurrentVisit(prev => prev ? { ...prev, status } : null);
     }, []);
@@ -83,6 +94,7 @@ export function useVisitSummary(): UseVisitSummaryReturn {
         updateTranscript,
         updateIssues,
         updateActions,
+        updateKeyFacts,
         setVisitStatus,
         approveVisit,
         discardVisit,

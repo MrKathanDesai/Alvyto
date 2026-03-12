@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRooms } from '@/contexts/RoomContext';
 import { api } from '@/services/api';
-import { Patient, MedicalHistory, Visit } from '@/types';
+import { Patient, MedicalHistory, Visit, SummaryItem, KeyFact, KeyFactCategory } from '@/types';
 import styles from './page.module.css';
 import PatientHeader from '@/components/PatientHeader';
 import MedicalSnapshot from '@/components/MedicalSnapshot';
@@ -109,6 +109,7 @@ export default function ExamRoom() {
   const {
     isRecording,
     isTranscribing,
+    isSummarizing,
     confirmedText,
     partialText,
     fullTranscript,
@@ -116,6 +117,7 @@ export default function ExamRoom() {
     dialogue,
     startRecording,
     stopRecording,
+    generateSummary,
     updateDialogue,
     clearTranscript,
     error: recordingError,
@@ -135,6 +137,7 @@ export default function ExamRoom() {
     updateTranscript,
     updateIssues,
     updateActions,
+    updateKeyFacts,
     setVisitStatus,
     approveVisit,
     discardVisit,
@@ -190,16 +193,71 @@ export default function ExamRoom() {
     }
   }, [currentVisit, dialogue, updateTranscript, updateDialogue]);
 
+  // Instantly derive chips from current issues + actions — no LLM call needed
+  const LIFESTYLE_KW = ['rest', 'sleep', 'water', 'drink', 'diet', 'exercise', 'stress', 'hydrat'];
+  const MED_KW = ['mg', 'prescribed', 'dose', 'tablet', 'syrup', 'antibiotic', 'ibuprofen', 'tylenol', 'aspirin', 'medication', 'paracetamol'];
+  const WARN_KW = ['come back', 'return if', 'watch for', 'seek', 'emergency', 'if fever', 'if pain', 'warning'];
+  const DURATION_KW = ['day', 'week', 'hour', 'month', 'since', 'ago', 'morning', 'yesterday', 'tonight'];
+
+  const classifyChip = (text: string, defaultCat: string): string => {
+    const l = text.toLowerCase();
+    if (WARN_KW.some(k => l.includes(k))) return 'warning';
+    if (MED_KW.some(k => l.includes(k))) return 'medication';
+    if (LIFESTYLE_KW.some(k => l.includes(k))) return 'lifestyle';
+    if (DURATION_KW.some(k => l.includes(k))) return 'duration';
+    return defaultCat;
+  };
+
+  const deriveChips = useCallback((issues: SummaryItem[], actions: SummaryItem[], existingFacts: KeyFact[] = []) => {
+    const chips: KeyFact[] = [];
+    const seen = new Set<string>();
+
+    const existingCatMap = new Map<string, KeyFactCategory>();
+    existingFacts.forEach(fact => {
+      existingCatMap.set(fact.label.toLowerCase(), fact.category);
+    });
+
+    const addChip = (text: string, defaultCat: string) => {
+      const label = text.trim().split(/\s+/).slice(0, 3).join(' ').toLowerCase().replace(/[.,;]$/, '');
+      if (label && !seen.has(label)) {
+        seen.add(label);
+        // Use the AI's existing category if we have it, otherwise fallback to heuristics
+        const category = existingCatMap.get(label) || (classifyChip(text, defaultCat) as KeyFactCategory);
+        chips.push({ label, category });
+      }
+    };
+    issues.forEach(item => addChip(item.text, 'symptom'));
+    actions.forEach(item => addChip(item.text, 'action'));
+    return chips;
+  }, []);
+
   // Handle stop recording
+  // Wait for diarization + optional speaker confirmation. Instead of summarizing
+  // immediately, drop into a 'ready_to_summarize' intermediate state so the user
+  // must manually click the "Summarize" button.
   const handleStopRecording = useCallback(async () => {
-    // Determine the true doctor name, not the room tablet name
     const doctorName = currentRoom?.assignedDoctor?.name || user?.name || "Doctor";
     const patientName = currentPatient?.name || "Patient";
 
-    const { text, dialogue } = await stopRecording(doctorName, patientName);
-    updateTranscript(text, dialogue);
-    setVisitStatus('draft');
+    const { text, dialogue: finalDialogue } = await stopRecording(doctorName, patientName);
+    updateTranscript(text, finalDialogue);
+    setVisitStatus('ready_to_summarize');
   }, [stopRecording, updateTranscript, setVisitStatus, user, currentPatient, currentRoom]);
+
+  // Handle manual summarize
+  const handleManualSummarize = useCallback(async () => {
+    // Generate summary from the correctly-labelled dialogue
+    const currentDialogue = currentVisit?.dialogue || dialogue;
+    const summary = await generateSummary(currentDialogue);
+
+    if (summary) {
+      if (summary.issuesIdentified) updateIssues(summary.issuesIdentified);
+      if (summary.actionsPlan) updateActions(summary.actionsPlan);
+      if (summary.keyFacts) updateKeyFacts(summary.keyFacts as KeyFact[]);
+      setVisitStatus('draft');
+    }
+  }, [generateSummary, updateIssues, updateActions, updateKeyFacts, setVisitStatus, currentVisit, dialogue]);
+
 
   // Handle approve
   const handleApprove = useCallback(async () => {
@@ -289,7 +347,7 @@ export default function ExamRoom() {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
-          <span>Whisper backend not running. Start it with: <code>cd backend && source venv/bin/activate && python server.py</code></span>
+          <span>Whisper backend not running. Start it with: <code>cd room-agent && ./start.sh</code></span>
         </div>
       )}
 
@@ -356,13 +414,25 @@ export default function ExamRoom() {
                 onReassign={handleReassignSpeaker}
               />
 
-              {/* Right Panel - Summary (Manual Entry in MVP1) */}
+              {/* Right Panel - Summary */}
               <SummaryPanel
                 issuesIdentified={currentVisit?.summary.issuesIdentified || []}
                 actionsPlan={currentVisit?.summary.actionsPlan || []}
+                keyFacts={currentVisit?.summary.keyFacts || []}
                 status={currentVisit?.status || (isRecording ? 'recording' : 'draft')}
-                onUpdateIssues={updateIssues}
-                onUpdateActions={updateActions}
+                isSummarizing={isSummarizing}
+                onUpdateIssues={(items) => {
+                  updateIssues(items);
+                  // Instantly re-derive chips from the edited items, preserving AI categories
+                  const newChips = deriveChips(items, currentVisit?.summary.actionsPlan || [], currentVisit?.summary.keyFacts || []);
+                  updateKeyFacts(newChips);
+                }}
+                onUpdateActions={(items) => {
+                  updateActions(items);
+                  // Instantly re-derive chips from the edited items, preserving AI categories
+                  const newChips = deriveChips(currentVisit?.summary.issuesIdentified || [], items, currentVisit?.summary.keyFacts || []);
+                  updateKeyFacts(newChips);
+                }}
               />
             </div>
           </div>
@@ -374,6 +444,7 @@ export default function ExamRoom() {
             visitStatus={currentVisit?.status || null}
             onStartRecording={handleStartRecording}
             onStopRecording={handleStopRecording}
+            onSummarize={handleManualSummarize}
             onApprove={handleApprove}
             onDiscard={handleDiscard}
           />

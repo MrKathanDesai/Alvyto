@@ -15,6 +15,19 @@ export interface SpeakerSample {
     start: number;
 }
 
+export interface SummaryItem {
+    id: string;
+    text: string;
+    sourceFactIds: string[];
+    isEdited: boolean;
+}
+
+export interface VisitSummary {
+    issuesIdentified: SummaryItem[];
+    actionsPlan: SummaryItem[];
+    keyFacts?: { label: string; category: string }[];
+}
+
 interface UseWhisperLiveOptions {
     whisperEndpoint?: string;
     onTranscriptUpdate?: (confirmed: string, partial: string) => void;
@@ -24,6 +37,7 @@ interface UseWhisperLiveOptions {
 export interface UseWhisperLiveReturn {
     isRecording: boolean;
     isTranscribing: boolean;
+    isSummarizing: boolean;
     confirmedText: string;
     partialText: string;
     fullTranscript: string;
@@ -31,6 +45,7 @@ export interface UseWhisperLiveReturn {
     dialogue: DialogueTurn[];
     startRecording: () => Promise<void>;
     stopRecording: (doctorName?: string, patientName?: string) => Promise<{ text: string; dialogue: DialogueTurn[] }>;
+    generateSummary: (dialogue: DialogueTurn[]) => Promise<VisitSummary | undefined>;
     updateDialogue: (newDialogue: DialogueTurn[]) => void;
     clearTranscript: () => void;
     error: string | null;
@@ -54,6 +69,7 @@ export function useWhisperLive(
 
     const [isRecording, setIsRecording] = useState(false);
     const [isTranscribing, setIsTranscribing] = useState(false);
+    const [isSummarizing, setIsSummarizing] = useState(false);
     const [confirmedText, setConfirmedText] = useState('');
     const [partialText, setPartialText] = useState('');
     const [confidence, setConfidence] = useState(0);
@@ -68,6 +84,7 @@ export function useWhisperLive(
     const [isConfirming, setIsConfirming] = useState(false);
     const [rawSegments, setRawSegments] = useState<any[]>([]);
     const [backendDialogue, setBackendDialogue] = useState<DialogueTurn[]>([]);
+    const [summary, setSummary] = useState<VisitSummary | undefined>(undefined);
 
     const wsRef = useRef<WebSocket | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
@@ -220,7 +237,7 @@ export function useWhisperLive(
 
 
     // Stop recording
-    const stopRecording = useCallback(async (doctorName?: string, patientName?: string): Promise<{ text: string; dialogue: DialogueTurn[] }> => {
+    const stopRecording = useCallback(async (doctorName?: string, patientName?: string): Promise<{ text: string; dialogue: DialogueTurn[]; summary?: VisitSummary }> => {
         console.log('[useWhisperLive] stopRecording called', doctorName, patientName);
         namesRef.current = { doctor: doctorName, patient: patientName };
         isRecordingRef.current = false;
@@ -255,6 +272,8 @@ export function useWhisperLive(
             return { text: confirmedText, dialogue: dialogue };
         }
 
+        setSummary(undefined);
+
         return new Promise(async (resolve) => {
             setIsTranscribing(true);
 
@@ -280,10 +299,12 @@ export function useWhisperLive(
                             const finalDialogue = data.dialogue || [];
                             const finalSamples = data.speaker_samples || [];
                             const rawSegs = data.raw_segments || [];
+                            const finalSummary = data.summary;
 
                             setRawSegments(rawSegs);
                             setBackendDialogue(finalDialogue);
                             setSpeakerSamples(finalSamples);
+                            setSummary(finalSummary);
 
                             // Let the UI confirmation take over if there are samples
                             if (finalSamples.length > 0) {
@@ -294,7 +315,7 @@ export function useWhisperLive(
                                 const finalText = finalDialogue.map((d: any) => d.text).join(' ');
                                 setConfirmedText(finalText);
                                 setDialogue(finalDialogue);
-                                resolve({ text: finalText, dialogue: finalDialogue });
+                                resolve({ text: finalText, dialogue: finalDialogue, summary: finalSummary });
                             }
                         } else if (statusData.status === 'error' || statusData.error) {
                             clearInterval(interval);
@@ -326,6 +347,7 @@ export function useWhisperLive(
         setSessionId(null);
         setIsConfirming(false);
         setRawSegments([]);
+        setSummary(undefined);
     }, []);
 
     const confirmSpeakersClientSide = useCallback((assignments: Record<string, string> | null) => {
@@ -380,11 +402,33 @@ export function useWhisperLive(
         }
     }, [rawSegments, backendDialogue]);
 
+    // Call this AFTER speaker confirmation to generate the summary from confirmed dialogue
+    const generateSummary = useCallback(async (confirmedDialogue: DialogueTurn[]): Promise<VisitSummary | undefined> => {
+        setIsSummarizing(true);
+        try {
+            const resp = await fetch(`${whisperEndpoint}/summarize`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dialogue: confirmedDialogue }),
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const result: VisitSummary = await resp.json();
+            setSummary(result);
+            return result;
+        } catch (e) {
+            console.error('[useWhisperLive] generateSummary failed', e);
+            return undefined;
+        } finally {
+            setIsSummarizing(false);
+        }
+    }, [whisperEndpoint]);
+
     const fullTranscript = confirmedText + (partialText ? ' ' + partialText : '');
 
     return {
         isRecording,
         isTranscribing,
+        isSummarizing,
         confirmedText,
         partialText,
         fullTranscript: fullTranscript.trim(),
@@ -392,6 +436,7 @@ export function useWhisperLive(
         dialogue,
         startRecording,
         stopRecording,
+        generateSummary,
         updateDialogue: setDialogue,
         clearTranscript,
         error,

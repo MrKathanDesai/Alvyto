@@ -2,20 +2,41 @@
 
 import { useState } from 'react';
 import styles from './SummaryPanel.module.css';
-import { SummaryItem, VisitStatus } from '@/types';
+import { SummaryItem, VisitStatus, KeyFact, KeyFactCategory } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 
 interface SummaryPanelProps {
     issuesIdentified: SummaryItem[];
     actionsPlan: SummaryItem[];
+    keyFacts?: KeyFact[];
+    isSummarizing?: boolean;
     status: VisitStatus;
     onUpdateIssues: (items: SummaryItem[]) => void;
     onUpdateActions: (items: SummaryItem[]) => void;
 }
 
+const CATEGORY_CONFIG: Record<KeyFactCategory, { label: string; className: string }> = {
+    symptom: { label: 'Symptom', className: styles.chipSymptom },
+    duration: { label: 'Duration', className: styles.chipDuration },
+    timing: { label: 'Timing', className: styles.chipTiming },
+    medication: { label: 'Med', className: styles.chipMedication },
+    action: { label: 'Action', className: styles.chipAction },
+    lifestyle: { label: 'Lifestyle', className: styles.chipLifestyle },
+    warning: { label: 'Warning', className: styles.chipWarning },
+    negative: { label: 'Negative', className: styles.chipNegative },
+};
+
+// Fixed sort order: symptoms first, then context, then plan
+const CATEGORY_ORDER: KeyFactCategory[] = [
+    'symptom', 'duration', 'timing', 'negative',
+    'lifestyle', 'medication', 'action', 'warning',
+];
+
 export default function SummaryPanel({
     issuesIdentified,
     actionsPlan,
+    keyFacts = [],
+    isSummarizing = false,
     status,
     onUpdateIssues,
     onUpdateActions,
@@ -170,24 +191,57 @@ export default function SummaryPanel({
                             The AI summary will be generated automatically when you stop recording.
                         </p>
                     </div>
-                ) : isEmpty && status === 'draft' ? (
-                    <div className={styles.placeholder}>
-                        <svg
-                            className={styles.placeholderIcon}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                        >
-                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                        <h3 className={styles.placeholderTitle}>No summary yet</h3>
-                        <p className={styles.placeholderText}>
-                            Start a recording to generate an AI-powered visit summary.
-                        </p>
-                    </div>
                 ) : (
                     <div className={styles.sections}>
+
+                        {/* ── Clinical Snapshot ── */}
+                        {(keyFacts.length > 0 || isSummarizing) && (
+                            <div className={styles.snapshotSection}>
+                                <div className={styles.snapshotHeader}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+                                    </svg>
+                                    <span className={styles.snapshotTitle}>
+                                        Clinical Snapshot
+                                    </span>
+                                    {isSummarizing && (
+                                        <span className={styles.generatingLabel}>
+                                            <span className={styles.generatingDot} />
+                                            Generating…
+                                        </span>
+                                    )}
+                                </div>
+                                {isSummarizing && keyFacts.length === 0 ? (
+                                    <div className={styles.shimmerStrip}>
+                                        {[80, 60, 90, 55, 70, 65].map((w, i) => (
+                                            <div key={i} className={styles.shimmerChip} style={{ width: w }} />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={styles.chipStrip}>
+                                        {[...keyFacts]
+                                            .sort((a, b) =>
+                                                CATEGORY_ORDER.indexOf(a.category as KeyFactCategory) -
+                                                CATEGORY_ORDER.indexOf(b.category as KeyFactCategory)
+                                            )
+                                            .map((fact, i) => {
+                                                const config = CATEGORY_CONFIG[fact.category] ?? CATEGORY_CONFIG.symptom;
+                                                return (
+                                                    <span
+                                                        key={i}
+                                                        className={`${styles.chip} ${config.className}`}
+                                                        title={config.label}
+                                                    >
+                                                        {fact.label}
+                                                    </span>
+                                                );
+                                            })}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* Warning Banner */}
                         {isDraft && (issuesIdentified.length === 0 || actionsPlan.length === 0) && (
                             <div className={styles.warningBanner}>
@@ -197,7 +251,7 @@ export default function SummaryPanel({
                                 <span className={styles.warningText}>
                                     {issuesIdentified.length === 0 ? 'No issues identified.' : ''}
                                     {actionsPlan.length === 0 ? 'No actions captured.' : ''}
-                                    Review before approving.
+                                    {' '}Review before approving.
                                 </span>
                             </div>
                         )}
@@ -209,6 +263,7 @@ export default function SummaryPanel({
                                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <h3 className={styles.sectionTitle}>Issues Identified</h3>
+                                <span className={styles.countBadge}>{issuesIdentified.length}</span>
                             </div>
 
                             {issuesIdentified.length > 0 ? (
@@ -239,6 +294,7 @@ export default function SummaryPanel({
                                     <path d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                                 <h3 className={styles.sectionTitle}>Actions / Plan</h3>
+                                <span className={styles.countBadge}>{actionsPlan.length}</span>
                             </div>
 
                             {actionsPlan.length > 0 ? (

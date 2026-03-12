@@ -9,11 +9,11 @@ import asyncio
 import time
 import uuid
 import numpy as np
-from typing import Dict, Any
+from typing import Dict, Any, List
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-from asr_engine import ASREngine
+from asr_engine import ASREngine, DEVICE
 
 # Configure Logging
 logging.basicConfig(
@@ -37,10 +37,10 @@ app.add_middleware(
 SAMPLE_RATE = 16000
 EMIT_INTERVAL_SECONDS = 1.0
 
-# Active WebSocket sessions (for tracking connected clients)
+# Active WebSocket sessions
 active_sessions: Dict[str, Any] = {}
 
-# Session audio buffer for WhisperX post-processing
+# Session audio buffer for post-processing
 pending_sessions: Dict[str, np.ndarray] = {}
 completed_sessions: Dict[str, Any] = {}
 session_metadata: Dict[str, Any] = {}
@@ -51,9 +51,8 @@ preview_executor = ThreadPoolExecutor(max_workers=1)
 @app.on_event("startup")
 def startup_event():
     global engine
-    logger.info("Starting up Local Room Agent base.en for preview and WhisperX caching...")
-    engine = ASREngine(model_size="base.en", device="cpu", compute_type="int8")
-    engine.load_whisperx_models()
+    logger.info("Starting up Local Room Agent with unified WhisperX pipeline...")
+    engine = ASREngine()
 
 @app.get("/health")
 def health():
@@ -63,9 +62,31 @@ def health():
         "service": "RoomAgent"
     }
 
-
 class SpeakerMapping(BaseModel):
     mapping: Dict[str, str]
+
+class DialogueTurn(BaseModel):
+    speaker: str
+    text: str
+    start: float = 0.0
+    end: float = 0.0
+
+class SummarizeRequest(BaseModel):
+    dialogue: List[DialogueTurn]
+
+@app.post("/summarize")
+async def summarize_dialogue(req: SummarizeRequest):
+    """Generate summary from a confirmed, speaker-labelled dialogue.
+    Called by the frontend AFTER the user has confirmed speaker assignments."""
+    if not engine or not engine.summarizer:
+        return JSONResponse({"error": "Summarizer not ready"}, status_code=503)
+    try:
+        dialogue_dicts = [{"speaker": t.speaker, "text": t.text} for t in req.dialogue]
+        result = engine.summarizer.summarize_dialogue(dialogue_dicts)
+        return result
+    except Exception as e:
+        logger.error(f"Summarization failed: {e}", exc_info=True)
+        return JSONResponse({"error": str(e)}, status_code=500)
 
 @app.post("/session/{session_id}/confirm_speakers")
 async def confirm_speakers(session_id: str, payload: SpeakerMapping):
@@ -84,11 +105,10 @@ async def process_session(
     doctor_name: str = "Doctor",
     patient_name: str = "Patient"
 ):
-    """Called when doctor hits Stop. Processes in background, streams result back."""
     if session_id not in pending_sessions:
         return JSONResponse({"error": "Session not found"}, status_code=404)
     
-    background_tasks.add_task(run_whisperx_pipeline, session_id, doctor_name, patient_name)
+    background_tasks.add_task(execute_pipeline, session_id, doctor_name, patient_name)
     return {"status": "processing", "session_id": session_id}
 
 @app.get("/session/{session_id}/status")
@@ -100,126 +120,34 @@ async def get_session_status(session_id: str):
     else:
         return JSONResponse({"error": "Session not found"}, status_code=404)
 
-def run_whisperx_pipeline(session_id: str, doctor_name: str = "Doctor", patient_name: str = "Patient"):
-    import whisperx
-    import gc
-    import torch
-    
-    logger.info(f"Starting WhisperX pipeline for session: {session_id}")
-    audio = pending_sessions[session_id]
-    
-    device = "cpu"
-    compute_type = "int8"
-    
+def execute_pipeline(session_id: str, doctor_name: str, patient_name: str):
+    logger.info(f"Starting pipeline for session: {session_id}")
+    audio = pending_sessions.get(session_id)
+    if audio is None:
+        logger.error(f"Session {session_id} not found in pending_sessions")
+        return
+
     try:
-        # Step 1: Transcribe
-        logger.info("Step 1: Transcribing...")
-        result = engine.wx_model.transcribe(audio, batch_size=8, language="en")
+        # ASREngine handles transcription + diarization only (no summarization)
+        # Summary is generated separately after the user confirms speaker labels
+        result = engine.run_pipeline(audio, doctor_name, patient_name, should_summarize=False)
         
-        # Step 2: Align
-        logger.info("Step 2: Aligning phonemes...")
-        result = whisperx.align(
-            result["segments"], engine.wx_align_model, engine.wx_metadata, audio, device=device
-        )
-        
-        # Step 3: Diarize
-        logger.info("Step 3: Diarizing speakers...")
-        # Note: whisperx.diarize.DiarizationPipeline expects a numpy array
-        # and wraps it into the Pyannote tensor dict internally.
-        diarize_segments = engine.wx_diarize_model(
-            audio, min_speakers=2, max_speakers=2
-        )
-        
-        # Step 4: Assign speakers
-        logger.info("Step 4: Assigning speakers...")
-        result = whisperx.assign_word_speakers(diarize_segments, result)
-        
-        # Extract speaker confirmation samples
-        def extract_speaker_samples(segments):
-            """Return one representative line per detected speaker for confirmation UI."""
-            samples = {}
-            for seg in segments:
-                speaker = seg.get("speaker")
-                if speaker and speaker not in samples:
-                    text = seg.get("text", "").strip()
-                    if len(text.split()) >= 4:  # skip very short segments
-                        samples[speaker] = {
-                            "speaker_id": speaker,
-                            "sample_text": text[:100],
-                            "start": seg.get("start", 0)
-                        }
-                if len(samples) >= 3:  # max 3 speakers
-                    break
-            return list(samples.values())
-            
-        speaker_samples = extract_speaker_samples(result["segments"])
-                
-        # Apply label map if available
+        # Apply confirmed label mapping if it arrived while processing
         meta = session_metadata.get(session_id, {})
-        label_map = meta.get("speaker_label_map", {})
+        label_map = meta.get("speaker_label_map")
         
-        # Assign default map if missing, using word count heuristic
-        if not label_map:
-            from collections import defaultdict
-            word_count = defaultdict(int)
-            for seg in result["segments"]:
-                speaker = seg.get("speaker")
-                if speaker:
-                    word_count[speaker] += len(seg.get("text", "").split())
-            
-            sorted_speakers = sorted(word_count, key=word_count.get, reverse=True)
-            roles = ["Doctor", "Patient", "Companion"]
-            label_map = {spk: roles[i] if i < len(roles) else f"Speaker {i+1}" 
-                         for i, spk in enumerate(sorted_speakers)}
+        if label_map and result.get("status") == "complete":
+             # We could re-map here if needed, but for now we follow the engine default
+             # or the user can confirm in the UI. 
+             pass
 
-        # Apply the map to dialogue and merge consecutive same-speaker turns
-        dialogue = []
-        
-        role_to_name = {
-            "Doctor": doctor_name,
-            "Patient": patient_name,
-            "Companion": "Companion"
-        }
-        
-        name_map = {
-            spk_id: role_to_name.get(role, role)
-            for spk_id, role in label_map.items()
-        }
-        
-        for seg in result["segments"]:
-            if "speaker" in seg:
-                raw_spk = seg["speaker"]
-                role = label_map.get(raw_spk, "Unknown")
-                name = name_map.get(raw_spk, "Unknown")
-                text = seg.get("text", "").strip()
-                
-                if dialogue and dialogue[-1]["speaker"] == name:
-                    dialogue[-1]["text"] += " " + text
-                    dialogue[-1]["end"] = seg.get("end", 0)
-                else:
-                    dialogue.append({
-                        "speaker": name, 
-                        "text": text, 
-                        "start": seg.get("start", 0), 
-                        "end": seg.get("end", 0)
-                    })
-                    
-        completed_sessions[session_id] = {
-            "status": "complete",
-            "dialogue": dialogue,
-            "raw_segments": result["segments"],
-            "speaker_samples": speaker_samples,
-            "session_id": session_id
-        }
-        logger.info(f"WhisperX pipeline completed for {session_id}")
+        completed_sessions[session_id] = result
+        logger.info(f"Pipeline complete for {session_id}")
     except Exception as e:
-        logger.error(f"WhisperX pipeline failed: {e}")
-        completed_sessions[session_id] = {"error": str(e)}
-
-
-
-
-
+        logger.error(f"Pipeline execution failed for {session_id}: {e}", exc_info=True)
+        completed_sessions[session_id] = {"status": "error", "error": str(e)}
+    finally:
+        pending_sessions.pop(session_id, None)
 
 @app.websocket("/ws/transcribe")
 async def websocket_transcribe(websocket: WebSocket):
@@ -230,13 +158,10 @@ async def websocket_transcribe(websocket: WebSocket):
 
     logger.info(f"WebSocket recording session started: {session_id}")
 
-    # Send session info
     await websocket.send_json({
         "type": "session_start",
         "session_id": session_id,
-        "config": {
-            "sample_rate": SAMPLE_RATE,
-        }
+        "config": {"sample_rate": SAMPLE_RATE}
     })
 
     audio_chunks = []
@@ -249,7 +174,6 @@ async def websocket_transcribe(websocket: WebSocket):
         while True:
             data = await websocket.receive_bytes()
 
-            # Decode audio — expect float32 PCM
             try:
                 audio_chunk = np.frombuffer(data, dtype=np.float32)
             except Exception:
@@ -261,7 +185,6 @@ async def websocket_transcribe(websocket: WebSocket):
             audio_chunks.append(audio_chunk)
             preview_chunks.append(audio_chunk)
 
-            # Emit duration progress at intervals
             current_time = time.time()
             duration = sum(len(c) for c in audio_chunks) / SAMPLE_RATE
 
@@ -275,7 +198,6 @@ async def websocket_transcribe(websocket: WebSocket):
             if current_time - last_preview_time >= LIVE_PREVIEW_INTERVAL:
                 last_preview_time = current_time
                 
-                # Use last 8 seconds only — enough for a sentence
                 preview_audio = np.concatenate(preview_chunks)
                 max_preview_samples = 8 * SAMPLE_RATE
                 if len(preview_audio) > max_preview_samples:
@@ -285,7 +207,7 @@ async def websocket_transcribe(websocket: WebSocket):
                     loop = asyncio.get_running_loop()
                     preview_text = await loop.run_in_executor(
                         preview_executor,
-                        engine.transcribe_pcm_simple,
+                        engine.transcribe_preview,
                         preview_audio
                     )
                     
@@ -297,7 +219,6 @@ async def websocket_transcribe(websocket: WebSocket):
                             "duration": round(duration, 1)
                         })
                 
-                # Roll the preview buffer — keep last 3s for continuity
                 keep_samples = 3 * SAMPLE_RATE
                 flat = np.concatenate(preview_chunks)
                 if len(flat) > keep_samples:
@@ -306,10 +227,9 @@ async def websocket_transcribe(websocket: WebSocket):
                     preview_chunks = [flat]
 
     except WebSocketDisconnect:
-        logger.info(f"WebSocket disconnected, saving audio for processing: {session_id}")
+        logger.info(f"WebSocket disconnected, saving audio: {session_id}")
         if audio_chunks:
-            full_audio = np.concatenate(audio_chunks)
-            pending_sessions[session_id] = full_audio
+            pending_sessions[session_id] = np.concatenate(audio_chunks)
     except Exception as e:
         logger.error(f"WebSocket error: {e}")
     finally:

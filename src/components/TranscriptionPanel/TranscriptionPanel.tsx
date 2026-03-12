@@ -138,8 +138,9 @@ export default function TranscriptionPanel({
 
                     {isProcessing && (
                         <div className={styles.liveIndicator} style={{ backgroundColor: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={styles.spinIcon}>
-                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className={styles.spinIcon}>
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.25" />
+                                <path d="M12 2C6.47715 2 2 6.47715 2 12" />
                             </svg>
                             Processing...
                         </div>
