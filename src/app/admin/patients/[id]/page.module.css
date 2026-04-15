@@ -1,0 +1,397 @@
+.container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loading,
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1rem;
+  color: var(--text-2);
+}
+
+.errorInline {
+  min-height: auto;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--red) 20%, transparent);
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.backLink {
+  color: var(--text-2);
+  text-decoration: none;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.backLink:hover {
+  color: var(--blue-primary);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.editButton {
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-1);
+  font-family: var(--font-family);
+  transition: all var(--transition-fast);
+}
+
+.editButton:hover:not(:disabled) {
+  border-color: var(--border-2);
+  background: var(--surface-2);
+}
+
+.editButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatarLarge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--blue-glow);
+  border: 1px solid var(--blue-subtle);
+  color: var(--blue-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: var(--text-2);
+  font-size: 0.875rem;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.clinicalColumn,
+.historyColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  height: 100%;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0;
+}
+
+.visitCount {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0.2rem 0.65rem;
+}
+
+.visitsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.visitCard {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+  user-select: none;
+}
+
+.visitCard:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-2);
+}
+
+.visitHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visitHeaderLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.visitHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.visitDate {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-1);
+}
+
+.visitTime {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+}
+
+.chevron,
+.chevronOpen {
+  color: var(--text-3);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.visitBody {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.visitSummaryText {
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.visitFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.factChip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+}
+
+.visitRx {
+  font-size: 0.82rem;
+  color: var(--text-2);
+}
+
+.editMedsBtn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.32rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--blue-primary);
+  color: var(--blue-primary);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: 0.45rem;
+  align-self: flex-start;
+}
+
+.editMedsBtn:hover:not(:disabled) {
+  background: var(--blue-glow);
+}
+
+.editMedsBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.medsEditActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.saveMedsBtn {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--blue-primary);
+  background: var(--blue-primary);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.saveMedsBtn:hover:not(:disabled) {
+  background: var(--blue-hover);
+  border-color: var(--blue-hover);
+}
+
+.saveMedsBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelMedsBtn {
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cancelMedsBtn:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--border-2);
+  color: var(--text-1);
+}
+
+.downloadRxBtn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--blue-primary);
+  color: var(--blue-primary);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.downloadRxBtn:hover:not(:disabled) {
+  background: var(--blue-primary);
+  color: var(--color-text-inverse);
+}
+
+.downloadRxBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.25rem 1rem;
+  color: var(--text-2);
+  font-size: 0.9rem;
+  gap: 0.25rem;
+}
+
+.emptyIcon {
+  opacity: 0.35;
+  margin-bottom: 0.5rem;
+  color: var(--text-3);
+}
+
+.emptyHelper {
+  font-size: 0.8rem;
+  color: var(--text-3);
+}
+
+@media (max-width: 980px) {
+  .container {
+    padding: 1.25rem;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .headerTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

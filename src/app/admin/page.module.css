@@ -1,0 +1,444 @@
+/* Admin dashboard */
+
+.page {
+    max-width: 1280px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-3);
+    margin: 0;
+}
+
+.refreshBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.25rem;
+    padding: 0 14px;
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: var(--font-family);
+    white-space: nowrap;
+}
+
+.refreshBtn:hover { border-color: var(--border-3); color: var(--text-1); background: var(--surface-3); }
+.refreshBtn:disabled { opacity: 0.4; pointer-events: none; }
+
+/* ── Error Banner ─────────────────────── */
+.errorBanner {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--red-bg);
+    border: 1px solid color-mix(in srgb, var(--red) 18%, transparent);
+    color: var(--red);
+    border-radius: 8px;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.errorBanner:hover {
+    background: color-mix(in srgb, var(--red-bg) 80%, var(--red) 20%);
+}
+
+/* ── Stat Row ─────────────────────────── */
+.statsRow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--blue-primary);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.stat:hover { border-color: var(--border-2); box-shadow: var(--shadow-sm); }
+.stat:hover::after { opacity: 1; }
+
+.statNum {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-3);
+}
+
+/* ── Sections ─────────────────────────── */
+.section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.section + .section {
+    margin-top: 20px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.sectionTitle {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-1);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.sectionLink {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-3);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sectionLink:hover { color: var(--blue-primary); }
+
+/* ── Room Grid ────────────────────────── */
+.roomGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--border);
+}
+
+.roomCard {
+    background: var(--surface);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: background var(--transition-base);
+    position: relative;
+}
+
+.roomCard:hover {
+    background: var(--surface-2);
+}
+
+.roomCardHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.roomNameRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.statusDot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--text-3);
+}
+
+.statusDotIdle { background: var(--green); }
+.statusDotInUse { background: var(--blue-primary); }
+.statusDotCleaning { background: var(--amber); }
+.statusDotOffline { background: var(--text-3); }
+
+.roomName {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-1);
+    letter-spacing: -0.01em;
+}
+
+.roomFloor {
+    font-size: 0.6875rem;
+    color: var(--text-3);
+    margin-top: 2px;
+}
+
+.statusBadge {
+    padding: 3px 8px;
+    border-radius: 100px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: 1px solid;
+}
+
+.statusBadgeIdle {
+    color: var(--green);
+    border-color: color-mix(in srgb, var(--green) 25%, transparent);
+    background: var(--green-bg);
+}
+
+.statusBadgeInUse {
+    color: var(--blue-primary);
+    border-color: color-mix(in srgb, var(--blue-primary) 25%, transparent);
+    background: var(--blue-bg);
+}
+
+.statusBadgeCleaning {
+    color: var(--amber);
+    border-color: color-mix(in srgb, var(--amber) 25%, transparent);
+    background: var(--amber-bg);
+}
+
+.statusBadgeOffline {
+    color: var(--text-2);
+    border-color: color-mix(in srgb, var(--text-3) 25%, transparent);
+    background: var(--surface-3);
+}
+
+.roomPatient {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.patientAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--teal-subtle);
+    border: 1px solid var(--blue-glow);
+    color: var(--teal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.patientInfo { min-width: 0; }
+
+.patientName {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.patientMrn {
+    font-size: 0.6875rem;
+    color: var(--text-3);
+    font-family: var(--font-mono);
+    margin-top: 1px;
+}
+
+.roomEmpty {
+    font-size: 0.8125rem;
+    color: var(--text-3);
+    font-style: italic;
+}
+
+.roomDoctor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.doctorDot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.doctorName {
+    font-size: 0.8125rem;
+    color: var(--text-2);
+    font-weight: 500;
+}
+
+.doctorSpec {
+    font-size: 0.6875rem;
+    color: var(--text-3);
+    margin-top: 1px;
+}
+
+.roomFooter {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.queueBadge {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-3);
+}
+
+.nextPatient {
+    font-size: 0.75rem;
+    color: var(--text-2);
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Queue List ───────────────────────── */
+.queueList {
+    display: flex;
+    flex-direction: column;
+}
+
+.queueRow {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) 100px 64px;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background var(--transition-fast);
+}
+
+.queueRow:last-child { border-bottom: none; }
+.queueRow:hover { background: var(--surface-2); }
+
+.queueRow:hover .queuePos { color: var(--blue-primary); }
+
+.queuePos {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-3);
+    font-family: var(--font-mono);
+}
+
+.queuePatient {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.queueStatus {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: var(--text-3);
+    text-align: right;
+}
+
+.queueWait {
+    font-size: 0.6875rem;
+    color: var(--text-3);
+    text-align: right;
+    font-family: var(--font-mono);
+}
+
+.emptyQueue {
+    padding: 36px 20px;
+    color: var(--text-3);
+    font-size: 0.8125rem;
+    text-align: center;
+    font-style: italic;
+}
+
+/* ── Skeletons ────────────────────────── */
+.loadingGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--border);
+}
+
+.roomCardSkeleton {
+    background: var(--surface);
+    height: 180px;
+    animation: shimmer 1.2s linear infinite;
+    background: linear-gradient(110deg, var(--surface) 8%, var(--surface-2) 18%, var(--surface) 33%);
+    background-size: 220% 100%;
+}
+
+@keyframes shimmer { to { background-position-x: -220%; } }
+
+/* ── Responsive ───────────────────────── */
+@media (max-width: 1150px) {
+    .roomGrid, .loadingGrid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .statsRow { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 860px) {
+    .statsRow { grid-template-columns: repeat(2, 1fr); }
+    .roomGrid, .loadingGrid { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,0 +1,664 @@
+/* ── Summary Panel ───────────────────────── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--spacing-5);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.draftBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  background-color: var(--amber-bg);
+  color: var(--amber);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+}
+
+.approvedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  background-color: var(--green-bg);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-4) var(--spacing-5);
+}
+
+/* ── Placeholder ─────────────────────────── */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-3);
+}
+
+.placeholderIcon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--spacing-4);
+  opacity: 0.2;
+  color: var(--text-3);
+}
+
+.placeholderTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.placeholderText {
+  font-size: var(--font-size-xs);
+  max-width: 260px;
+  line-height: var(--line-height-relaxed);
+  color: var(--text-3);
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+.overviewCard {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overviewHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.overviewLabel {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: var(--font-weight-semibold);
+}
+
+.overviewValue {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-1);
+  font-weight: var(--font-weight-semibold);
+}
+
+.qualityWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.qualityBadge {
+  font-size: 10px;
+  color: var(--blue-primary);
+  background: var(--blue-glow);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.qualityText {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.topFindingsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.missingFields {
+  font-size: 11px;
+  color: var(--amber);
+}
+
+.sectionCompact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Clinical Snapshot ───────────────────── */
+.snapshotSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.snapshotHeader {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-2);
+}
+
+.snapshotTitle {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+
+.chipStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* Base chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: default;
+  transition: opacity 0.15s;
+  border: none;
+}
+
+.chip:hover {
+  opacity: 0.75;
+}
+
+/* Chip color variants — muted pastels ───── */
+.chipSymptom {
+  background-color: #FEF2F2;
+  color: #991B1B;
+}
+
+.chipDuration {
+  background-color: #F1F5F9;
+  color: #475569;
+}
+
+.chipTiming {
+  background-color: #FFF7ED;
+  color: #9A3412;
+}
+
+.chipMedication {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+}
+
+.chipAction {
+  background-color: #F0FDF4;
+  color: #166534;
+}
+
+.chipLifestyle {
+  background-color: #FAF5FF;
+  color: #6B21A8;
+}
+
+.chipWarning {
+  background-color: #FFFBEB;
+  color: #92400E;
+}
+
+.chipNegative {
+  background-color: #F0FDFA;
+  color: #115E59;
+}
+
+/* ── Sections ────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-1);
+}
+
+.sectionIcon {
+  width: 15px;
+  height: 15px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  flex: 1;
+}
+
+.countBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background-color: var(--surface-3);
+  color: var(--text-3);
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+/* ── Bullet List ─────────────────────────── */
+.bulletList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: 8px 10px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.bulletItem:hover {
+  border-color: var(--border);
+  background-color: var(--surface-3);
+}
+
+.bulletItem.editable:hover {
+  border-color: rgba(37,99,235,0.2);
+}
+
+.bulletMarker {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  margin-top: 6px;
+  background-color: var(--blue-primary);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.bulletText {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-2);
+}
+
+.bulletInput {
+  flex: 1;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-1);
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.bulletActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.bulletItem:hover .bulletActions {
+  opacity: 1;
+}
+
+.bulletBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bulletBtn:hover {
+  background-color: var(--surface-3);
+  color: var(--text-2);
+}
+
+.bulletBtn.delete:hover {
+  background-color: var(--red-bg);
+  color: var(--red);
+}
+
+.addItemBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family);
+}
+
+.addItemBtn:hover {
+  border-color: var(--blue-primary);
+  color: var(--blue-primary);
+  background-color: var(--blue-glow);
+}
+
+.emptySection {
+  padding: var(--spacing-4);
+  text-align: center;
+  color: var(--text-3);
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border);
+}
+
+/* ── Warning Banner ──────────────────────── */
+.warningBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: 8px 12px;
+  background-color: #FFFBEB;
+  border-radius: var(--radius-md);
+  border: 1px solid #FDE68A;
+}
+
+.warningIcon {
+  flex-shrink: 0;
+  color: var(--amber);
+  opacity: 0.8;
+}
+
+.warningText {
+  flex: 1;
+  font-size: var(--font-size-xs);
+  color: var(--amber);
+}
+
+.locked {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* ── Generating / Shimmer ────────────────── */
+.generatingLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  font-size: 10px;
+  color: var(--blue-primary);
+  font-weight: 500;
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+.generatingDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue-primary);
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.shimmerStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 2px 0;
+}
+
+.shimmerChip {
+  height: 24px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ── Chip delete button ──────────────────── */
+.chipDelete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 3px;
+  padding: 0 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.4;
+  border-radius: 50%;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.chipDelete:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.08);
+}
+
+/* ── Add chip button ─────────────────────── */
+.addChipBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1px dashed var(--border);
+  background: none;
+  cursor: pointer;
+  color: var(--text-3);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.addChipBtn:hover {
+  border-color: var(--blue-primary);
+  color: var(--blue-primary);
+  background-color: var(--blue-glow);
+}
+
+.addChipInput {
+  display: inline-block;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid var(--blue-primary);
+  background: var(--surface);
+  font-size: 11px;
+  color: var(--text-1);
+  outline: none;
+  width: 100px;
+  font-family: var(--font-family);
+}
+
+/* ── Expanding badge ─────────────────────── */
+.expandingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  font-size: 10px;
+  color: var(--green);
+  font-weight: 500;
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+/* ── Paragraph sections ──────────────────── */
+.paragraphText {
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  color: var(--text-2);
+  padding: 10px 14px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin: 0;
+  white-space: pre-wrap;
+  transition: opacity 0.3s ease;
+}
+
+.paragraphUpdating {
+  opacity: 0.45;
+}
+
+/* ── Shimmer paragraph ───────────────────── */
+.shimmerParagraph {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 14px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.shimmerList {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: var(--spacing-2) 0;
+}
+
+.shimmerLine {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ── AI confidence warnings ──────────────── */
+.unsupportedBadge {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 6px;
+  padding: 1px 6px;
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--red);
+  background-color: var(--red-bg);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chipUnsupported {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  width: 14px;
+  height: 14px;
+  font-size: 0.6rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--red);
+  background-color: var(--red-bg);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}

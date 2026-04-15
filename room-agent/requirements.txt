@@ -1,0 +1,15 @@
+whisperx
+pyannote.audio
+torch
+scikit-learn
+numpy
+pandas
+soundfile
+fastapi
+uvicorn
+av
+scipy
+python-multipart
+websockets
+python-dotenv
+httpx

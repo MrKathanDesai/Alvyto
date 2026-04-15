@@ -1,0 +1,207 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: border-color var(--transition-fast);
+}
+
+.row:hover {
+  border-color: var(--border-2);
+}
+
+.rowHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nameWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.nameInput {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.42rem 0.55rem;
+  background: var(--color-background);
+}
+
+.nameInput::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.suggestionItem {
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.suggestionItem:hover,
+.suggestionItemActive {
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+}
+
+.removeButton {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.removeButton:hover:not(:disabled) {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field > span {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.01em;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.36rem 0.5rem;
+  font-size: 0.78rem;
+  color: var(--color-text-primary);
+  background: var(--color-background);
+}
+
+.field input:focus,
+.field select:focus,
+.nameInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.frequencyField {
+  grid-column: span 2;
+}
+
+.frequencyInputs {
+  display: grid;
+  grid-template-columns: 64px auto minmax(120px, 1fr);
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.frequencyMultiplier {
+  font-size: 0.77rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.instructionsField {
+  grid-column: span 2;
+}
+
+.emptyState {
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  background: var(--color-background);
+}
+
+.addButton {
+  align-self: flex-start;
+  border: 1px dashed var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  border-radius: 8px;
+  padding: 0.38rem 0.72rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addButton:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-primary) 10%, white);
+}
+
+.addButton:disabled,
+.removeButton:disabled,
+.field input:disabled,
+.field select:disabled,
+.nameInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.compact .row {
+  padding: 0.65rem;
+}
+
+@media (max-width: 768px) {
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .frequencyField,
+  .instructionsField {
+    grid-column: span 1;
+  }
+
+  .frequencyInputs {
+    grid-template-columns: 54px auto 1fr;
+  }
+}

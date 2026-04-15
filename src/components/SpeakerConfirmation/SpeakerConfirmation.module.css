@@ -1,0 +1,203 @@
+/* ============================================================
+   SpeakerConfirmation — Modal overlay for speaker identification
+   ============================================================ */
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(248, 250, 252, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    animation: fadeIn 0.25s ease-out;
+    backdrop-filter: blur(8px);
+}
+
+.card {
+    background: var(--surface);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-8);
+    width: 90%;
+    max-width: 560px;
+    box-shadow: var(--shadow-float);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.header h3 {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-1);
+    margin-bottom: var(--spacing-2);
+    letter-spacing: -0.01em;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--text-2);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+}
+
+.speakersList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.speakerRow {
+    background: var(--surface-2);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-4);
+    border: 1px solid var(--border);
+    transition: border-color var(--transition-fast);
+}
+
+.speakerRow:hover {
+    border-color: var(--border-2);
+}
+
+.speakerSample {
+    margin-bottom: var(--spacing-3);
+}
+
+.speakerLabel {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.sampleText {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-1);
+    line-height: var(--line-height-relaxed);
+    font-style: italic;
+}
+
+.rolePills {
+    display: flex;
+    gap: var(--spacing-2);
+    flex-wrap: wrap;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.75rem;
+    padding: 0 var(--spacing-4);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.pill:hover {
+    border-color: var(--border-2);
+    background: var(--surface-3);
+}
+
+.pillActive {
+    background: var(--blue-primary);
+    color: white;
+    border-color: var(--blue-primary);
+}
+
+.pillActive:hover {
+    background: var(--blue-hover);
+    border-color: var(--blue-hover);
+}
+
+.pillDisabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text-3);
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-2);
+    border-top: 1px solid var(--border);
+    padding-top: var(--spacing-5);
+}
+
+.btnSkip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.25rem;
+    padding: 0 var(--spacing-5);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.btnSkip:hover {
+    background: var(--surface-3);
+    color: var(--text-1);
+    border-color: var(--border-2);
+}
+
+.btnConfirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.25rem;
+    padding: 0 var(--spacing-6);
+    border-radius: var(--radius-lg);
+    border: none;
+    background: var(--blue-primary);
+    color: white;
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.btnConfirm:hover:not(:disabled) {
+    background: var(--blue-hover);
+}
+
+.btnConfirm:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}

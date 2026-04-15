@@ -1,0 +1,194 @@
+{
+  "qwen2.5:3b": [
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 4,
+      "categories_valid": 6,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 10.3,
+      "test": "GP visit \u2014 headache + BP",
+      "task": "summarize",
+      "raw_snippet": "{     \"clinicalSnapshot\": [         {\"label\": \"headache\", \"category\": \"symptom\"},         {\"label\": \"bending down\", \"cat"
+    },
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 3,
+      "categories_valid": 5,
+      "support_rate": 0.89,
+      "paragraphs_ok": true,
+      "elapsed": 7.4,
+      "test": "Diabetes follow-up \u2014 medication adjustment",
+      "task": "summarize",
+      "raw_snippet": "{     \"clinicalSnapshot\": [         { \"label\": \"feeling tired\", \"category\": \"symptom\" },         { \"label\": \"feet tingli"
+    },
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 4,
+      "categories_valid": 5,
+      "support_rate": 0.9,
+      "paragraphs_ok": true,
+      "elapsed": 6.9,
+      "test": "Short visit \u2014 sore throat",
+      "task": "summarize",
+      "raw_snippet": "{     \"clinicalSnapshot\": [         { \"label\": \"throat soreness\", \"category\": \"symptom\" },         { \"label\": \"fever\", \""
+    },
+    {
+      "valid_json": true,
+      "paragraphs_ok": true,
+      "elapsed": 3.8,
+      "test": "Expand paragraphs after editing",
+      "task": "expand"
+    }
+  ],
+  "qwen3:4b": [
+    {
+      "valid_json": false,
+      "schema_ok": false,
+      "snapshot_count": 0,
+      "actions_count": 0,
+      "categories_valid": 0,
+      "support_rate": 0.0,
+      "paragraphs_ok": false,
+      "elapsed": 41.5,
+      "test": "GP visit \u2014 headache + BP",
+      "task": "summarize",
+      "raw_snippet": ""
+    },
+    {
+      "valid_json": false,
+      "schema_ok": false,
+      "snapshot_count": 0,
+      "actions_count": 0,
+      "categories_valid": 0,
+      "support_rate": 0.0,
+      "paragraphs_ok": false,
+      "elapsed": 30.0,
+      "test": "Diabetes follow-up \u2014 medication adjustment",
+      "task": "summarize",
+      "raw_snippet": ""
+    },
+    {
+      "valid_json": false,
+      "schema_ok": false,
+      "snapshot_count": 0,
+      "actions_count": 0,
+      "categories_valid": 0,
+      "support_rate": 0.0,
+      "paragraphs_ok": false,
+      "elapsed": 30.7,
+      "test": "Short visit \u2014 sore throat",
+      "task": "summarize",
+      "raw_snippet": ""
+    },
+    {
+      "valid_json": false,
+      "paragraphs_ok": false,
+      "elapsed": 31.5,
+      "test": "Expand paragraphs after editing",
+      "task": "expand"
+    }
+  ],
+  "phi4-mini": [
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 4,
+      "categories_valid": 6,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 25.4,
+      "test": "GP visit \u2014 headache + BP",
+      "task": "summarize",
+      "raw_snippet": "```json {   \"clinicalSnapshot\": [     {\"label\": \"headache\", \"category\": \"symptom\"},     {\"label\": \"right side\", \"categor"
+    },
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 3,
+      "categories_valid": 6,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 7.6,
+      "test": "Diabetes follow-up \u2014 medication adjustment",
+      "task": "summarize",
+      "raw_snippet": "```json {   \"clinicalSnapshot\": [     {\"label\": \"feeling tired\", \"category\": \"symptom\"},     {\"label\": \"feet tingling\", "
+    },
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 5,
+      "actions_count": 5,
+      "categories_valid": 5,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 9.2,
+      "test": "Short visit \u2014 sore throat",
+      "task": "summarize",
+      "raw_snippet": "```json {   \"clinicalSnapshot\": [     {       \"label\": \"sore throat\",       \"category\": \"symptom\"     },     {       \"la"
+    },
+    {
+      "valid_json": true,
+      "paragraphs_ok": true,
+      "elapsed": 6.1,
+      "test": "Expand paragraphs after editing",
+      "task": "expand"
+    }
+  ],
+  "llama3.1:8b": [
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 3,
+      "categories_valid": 6,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 22.4,
+      "test": "GP visit \u2014 headache + BP",
+      "task": "summarize",
+      "raw_snippet": "{   \"clinicalSnapshot\": [     {\"label\": \"headache for three\", \"category\": \"symptom\"},     {\"label\": \"throbbing feeling\","
+    },
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 3,
+      "categories_valid": 6,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 16.0,
+      "test": "Diabetes follow-up \u2014 medication adjustment",
+      "task": "summarize",
+      "raw_snippet": "{   \"clinicalSnapshot\": [     {\"label\": \"Pretty tired\", \"category\": \"symptom\"},     {\"label\": \"Feet tingling\", \"category"
+    },
+    {
+      "valid_json": true,
+      "schema_ok": true,
+      "snapshot_count": 6,
+      "actions_count": 3,
+      "categories_valid": 5,
+      "support_rate": 1.0,
+      "paragraphs_ok": true,
+      "elapsed": 12.3,
+      "test": "Short visit \u2014 sore throat",
+      "task": "summarize",
+      "raw_snippet": "{   \"clinicalSnapshot\": [     {\"label\": \"throat sore\", \"category\": \"symptom\"},     {\"label\": \"hurts swallow\", \"category\""
+    },
+    {
+      "valid_json": true,
+      "paragraphs_ok": true,
+      "elapsed": 10.5,
+      "test": "Expand paragraphs after editing",
+      "task": "expand"
+    }
+  ]
+}

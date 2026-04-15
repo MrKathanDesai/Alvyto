@@ -1,0 +1,294 @@
+/* ── Exam Room Main Layout ───────────────── */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+}
+
+/* ── Top Bar ─────────────────────────────── */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 var(--spacing-6);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.roomInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.roomName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+}
+
+.roomStatus {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--surface-3);
+  color: var(--text-3);
+  border: 1px solid var(--border);
+}
+
+.doctorBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: var(--surface-3);
+  color: var(--text-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--border);
+}
+
+.selectRoomLink {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 1px 8px;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--blue-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family);
+}
+
+.selectRoomLink:hover {
+  background: var(--blue-glow);
+  border-color: rgba(37,99,235,0.2);
+}
+
+.logoutButton {
+  padding: 5px 14px;
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family);
+}
+
+.logoutButton:hover {
+  background-color: var(--surface-3);
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+/* ── Workspace ───────────────────────────── */
+.workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-5) var(--spacing-6);
+  padding-bottom: 120px;
+}
+
+.splitView {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: var(--spacing-5);
+  min-height: 480px;
+}
+
+@media (max-width: 1024px) {
+  .splitView {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Loading State ───────────────────────── */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--spacing-4);
+}
+
+.loadingSpinner {
+  width: 36px;
+  height: 36px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--blue-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: var(--font-size-sm);
+  color: var(--text-3);
+}
+
+/* ── Error State ─────────────────────────── */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--spacing-4);
+  padding: var(--spacing-8);
+  text-align: center;
+}
+
+.errorIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--red);
+}
+
+.errorTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-1);
+}
+
+.errorMessage {
+  font-size: var(--font-size-sm);
+  color: var(--text-2);
+  max-width: 360px;
+}
+
+.retryBtn {
+  margin-top: var(--spacing-4);
+}
+
+/* ── Banners ─────────────────────────────── */
+.warningBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: 10px var(--spacing-5);
+  background-color: #FFFBEB;
+  color: var(--amber);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-bottom: 1px solid #FDE68A;
+}
+
+.warningBanner svg {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.warningBanner code {
+  background-color: rgba(0, 0, 0, 0.06);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: 10px var(--spacing-5);
+  background-color: #FEF2F2;
+  color: var(--red);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-bottom: 1px solid #FECACA;
+}
+
+.bannerDismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--red);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+.bannerDismiss:hover { opacity: 1; }
+
+/* ── Queue Container ─────────────────────── */
+.queueContainer {
+  max-width: 720px;
+  margin: var(--spacing-8) auto;
+  padding: 0 var(--spacing-6);
+}
+
+.queueChiefComplaintBanner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin: 0 var(--spacing-6) var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+}
+
+.queueChiefComplaintLabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: var(--font-weight-semibold);
+}
+
+.queueChiefComplaintValue {
+  font-size: var(--font-size-sm);
+  color: var(--text-1);
+  font-weight: var(--font-weight-medium);
+}
+
+.welcomeMessage {
+  text-align: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.welcomeMessage h2 {
+  font-size: var(--font-size-2xl);
+  color: var(--text-1);
+  margin-bottom: var(--spacing-2);
+  font-weight: var(--font-weight-semibold);
+}
+
+.welcomeMessage p {
+  color: var(--text-3);
+  font-size: var(--font-size-sm);
+}

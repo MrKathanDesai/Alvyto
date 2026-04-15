@@ -1,0 +1,703 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+}
+
+.header {
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.03em;
+  margin: 0 0 4px;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: var(--blue-primary);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--blue-primary);
+  border-radius: var(--radius-lg);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.addButton:hover {
+  background: var(--blue-hover);
+  border-color: var(--blue-hover);
+}
+
+.calendarWrapper {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem 1rem;
+  background: var(--surface-2);
+}
+
+.rosterBar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.rosterTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.rosterSubtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-3);
+}
+
+.rosterCount {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0.3rem 0.65rem;
+  font-weight: 600;
+}
+
+.rosterList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.65rem;
+}
+
+.rosterItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.7rem;
+  align-items: start;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: inherit;
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.rosterItem:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.rosterTime {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 2.9rem;
+  color: var(--text-1);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.rosterDuration {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-3);
+  margin-top: 0.2rem;
+}
+
+.rosterDetails {
+  min-width: 0;
+}
+
+.rosterPatient {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.rosterMeta {
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+.rosterComplaint {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rosterStatus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.24rem 0.5rem;
+}
+
+.rosterStatus[data-status='checked_in'] {
+  background: var(--blue-bg);
+  border-color: var(--blue-primary);
+  color: var(--blue);
+}
+
+.rosterStatus[data-status='in_progress'] {
+  background: var(--violet-bg);
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.rosterStatus[data-status='completed'] {
+  background: var(--green-bg);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.rosterStatus[data-status='cancelled'] {
+  background: var(--red-bg);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.rosterStatus[data-status='no_show'] {
+  background: var(--amber-bg);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.rosterEmpty {
+  grid-column: 1 / -1;
+  border: 1px dashed var(--border-2);
+  background: var(--surface);
+  color: var(--text-3);
+  border-radius: 10px;
+  padding: 0.9rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.eventCard {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.eventPatient {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: currentColor;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eventMeta {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.62rem;
+  line-height: 1.1;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eventDoctor {
+  max-width: 48%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eventDivider {
+  opacity: 0.65;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text-3);
+  font-size: 0.875rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--text-1) 40%, transparent);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: var(--z-modal);
+}
+
+.modal {
+  background: var(--surface);
+  width: min(600px, 95vw);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modalHeader {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0;
+}
+
+.closeButton {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.closeButton:hover {
+  background: var(--surface-3);
+  color: var(--text-1);
+  border-color: var(--border-2);
+}
+
+.modalBody {
+  padding: 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.modalError {
+  margin: 0 1.5rem 1rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+}
+
+.label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-3);
+  margin-bottom: 0.5rem;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-1);
+  font-family: var(--font-family);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-3);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 3px var(--blue-glow);
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.comboDropdown {
+  margin-top: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.comboItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  gap: 8px;
+}
+
+.comboItem:hover {
+  background: var(--surface-2);
+}
+
+.comboName {
+  font-size: 0.875rem;
+  color: var(--text-1);
+  font-weight: 500;
+}
+
+.comboEmpty {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 0.8125rem;
+}
+
+.selectedIndicator {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--green);
+  font-weight: 500;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--blue);
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-glow);
+}
+
+.detailValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.detailMeta {
+  margin-top: 3px;
+  font-size: 0.85rem;
+  color: var(--text-3);
+}
+
+.detailNote {
+  padding: 0.75rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-2);
+}
+
+.modalFooter {
+  padding: 1rem 1.5rem;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.primaryBtn {
+  background: var(--blue-primary);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--blue-primary);
+  height: 2.5rem;
+  padding: 0 1.25rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: var(--blue-hover);
+  border-color: var(--blue-hover);
+}
+
+.secondaryBtn {
+  background: var(--surface);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  height: 2.5rem;
+  padding: 0 1.25rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.secondaryBtn:hover:not(:disabled) {
+  background: var(--surface-3);
+  color: var(--text-1);
+  border-color: var(--border-2);
+}
+
+.dangerBtn {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid color-mix(in srgb, var(--amber) 28%, transparent);
+  height: 2.5rem;
+  padding: 0 1.25rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.dangerBtn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--amber-bg) 76%, var(--amber) 24%);
+}
+
+.dangerBtn[data-align='left'] {
+  margin-right: auto;
+}
+
+.dangerBtn:disabled,
+.secondaryBtn:disabled,
+.primaryBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* react-big-calendar overrides */
+:global(.rbc-calendar) {
+  font-family: var(--font-family);
+  min-height: 640px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+:global(.rbc-header) {
+  padding: 10px 3px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+}
+
+:global(.rbc-today) {
+  background-color: var(--blue-glow);
+}
+
+:global(.rbc-event) {
+  padding: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  min-height: 34px;
+}
+
+:global(.rbc-event-content) {
+  font-size: 0.75rem;
+  padding: 4px 6px;
+  height: 100%;
+}
+
+:global(.rbc-day-slot .rbc-event) {
+  min-height: 40px;
+}
+
+:global(.rbc-day-slot .rbc-events-container) {
+  margin-right: 0;
+}
+
+:global(.rbc-day-slot .rbc-event.rbc-selected) {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-primary) 45%, transparent);
+}
+
+:global(.rbc-time-slot) {
+  border-top: 1px dashed color-mix(in srgb, var(--border) 75%, transparent);
+}
+
+:global(.rbc-month-view) {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:global(.rbc-month-row) {
+  border-top: 1px solid var(--border);
+}
+
+:global(.rbc-date-cell) {
+  padding: 5px;
+  text-align: right;
+}
+
+:global(.rbc-day-bg) {
+  background-color: var(--surface);
+}
+
+:global(.rbc-off-range-bg) {
+  background-color: var(--surface-2);
+}
+
+:global(.rbc-toolbar) {
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-2) 70%, white 30%);
+}
+
+:global(.rbc-toolbar button) {
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+:global(.rbc-toolbar button:hover) {
+  background: var(--surface-3);
+  color: var(--text-1);
+}
+
+:global(.rbc-toolbar button.rbc-active) {
+  background: var(--blue-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--blue-primary);
+}
+
+:global(.rbc-toolbar label) {
+  flex-grow: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-1);
+}
+
+:global(.rbc-time-header-content),
+:global(.rbc-time-content) {
+  min-width: 780px;
+}
+
+:global(.rbc-slot-selection) {
+  background-color: var(--blue-glow);
+}
+
+:global(.rbc-current-time-indicator) {
+  background-color: var(--red);
+  height: 2px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@media (max-width: 880px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modalFooter {
+    flex-wrap: wrap;
+  }
+
+  .calendarWrapper {
+    padding: 0.75rem;
+  }
+
+  .rosterList {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,640 @@
+/* ============================================================
+   HistoryPanel — clinical visit history with compare mode
+   ============================================================ */
+
+.panel {
+    width: 100%;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    max-height: 420px;
+    min-height: 320px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    animation: panelSlideDown 0.2s ease;
+    overflow: hidden;
+}
+
+@keyframes panelSlideDown {
+    from { opacity: 0; max-height: 0; }
+    to   { opacity: 1; max-height: 420px; }
+}
+
+/* ── Panel Header ── */
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    flex-shrink: 0;
+}
+
+.panelHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panelTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+}
+
+.panelCount {
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 2px 8px;
+    background: var(--color-surface-hover);
+    color: var(--color-text-secondary);
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+}
+
+.compareLabel {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    border-radius: 99px;
+    border: 1px solid #bfdbfe;
+    letter-spacing: 0.02em;
+}
+
+.panelHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.clearCompareBtn {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #2563eb;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.closeBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.closeBtn:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+}
+
+/* ── Panel Body ── */
+.panelBody {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ── Left: Timeline ── */
+.timeline {
+    width: 220px;
+    min-width: 220px;
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+    padding: 8px 0;
+    background: var(--color-surface);
+}
+
+.timeline::-webkit-scrollbar { width: 4px; }
+.timeline::-webkit-scrollbar-track { background: transparent; }
+.timeline::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+.timelineYear {
+    padding: 0 0 4px;
+}
+
+.timelineYearLabel {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    padding: 6px 16px 4px;
+}
+
+.timelineItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 14px 8px 14px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.12s ease;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.timelineItem:hover {
+    background: var(--color-surface-hover);
+}
+
+.timelineItemSelected {
+    background: #EFF6FF !important;
+}
+
+.timelineItemPrimary .timelineDot {
+    background: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.timelineItemSecondary {
+    background: #FAF5FF !important;
+}
+
+.timelineItemSecondary .timelineDot {
+    background: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+}
+
+.timelineDot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-border);
+    flex-shrink: 0;
+    margin-top: 5px;
+    transition: background 0.12s, box-shadow 0.12s;
+}
+
+.timelineItemSelected .timelineDot {
+    background: #2563eb;
+}
+
+.timelineContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.timelineItemHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.timelineItemNum {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.timelineItemDate {
+    font-size: 10.5px;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+.timelineItemStatus {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+.timelineChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.timelineMore {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    align-self: center;
+    padding: 1px 5px;
+    background: var(--color-surface-hover);
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+}
+
+.compareBadge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.compareBadge1 {
+    background: #2563eb;
+    color: white;
+}
+
+.compareBadge2 {
+    background: #7c3aed;
+    color: white;
+}
+
+/* ── Right: Detail Area ── */
+.detailArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    min-width: 0;
+}
+
+.detailArea::-webkit-scrollbar { width: 4px; }
+.detailArea::-webkit-scrollbar-track { background: transparent; }
+.detailArea::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+.detailAreaCompare {
+    display: flex;
+    gap: 16px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.singleColumn {
+    width: 100%;
+}
+
+.compareColumn {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.compareColumn::-webkit-scrollbar { width: 4px; }
+.compareColumn::-webkit-scrollbar-track { background: transparent; }
+.compareColumn::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+.compareColumnHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--color-surface);
+}
+
+.compareColHeaderA {
+    background: #f0f7ff;
+    color: #1d4ed8;
+    border-bottom-color: #bfdbfe;
+}
+
+.compareColHeaderB {
+    background: #faf5ff;
+    color: #6d28d9;
+    border-bottom-color: #ddd6fe;
+}
+
+.compareColBadge {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.compareColHeaderA .compareColBadge  { background: #2563eb; color: white; }
+.compareColHeaderB .compareColBadge  { background: #7c3aed; color: white; }
+
+/* ── Visit Detail Card ── */
+.detailCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.detailHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* In single view, header has extra top padding */
+.singleColumn .detailHeader {
+    padding-top: 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.detailHeaderLeft {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.detailVisitNum {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+}
+
+.detailDate {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+}
+
+.detailStatus {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.summaryStrip {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--color-border-subtle, #f3f4f6);
+    background: var(--color-surface-hover);
+}
+
+.summaryItem {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.summaryItemPrimary {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summaryKey {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-text-muted);
+    font-weight: 700;
+}
+
+.summaryVal {
+    font-size: 12px;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.summaryValPrimary {
+    font-size: 13px;
+    color: var(--color-text-primary);
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.summaryMeta {
+    font-size: 10.5px;
+    color: var(--color-text-muted);
+}
+
+/* ── Detail Sections ── */
+.detailSection {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border-subtle, #f3f4f6);
+}
+
+.detailSection:last-child {
+    border-bottom: none;
+}
+
+.detailSectionLabel {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+
+.detailChipRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.chip {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 99px;
+    border: 1px solid;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.chipSymptom {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.chipWarning {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.chipNegative {
+    background: #dcfce7;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.chipTiming {
+    background: #f3e8ff;
+    border-color: #e9d5ff;
+    color: #6b21a8;
+}
+
+.chipMedication {
+    background: #dbeafe;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+
+.chipLifestyle {
+    background: #ccfbf1;
+    border-color: #99f6e4;
+    color: #115e59;
+}
+
+.chipCondition {
+    background: #ffedd5;
+    border-color: #fed7aa;
+    color: #9a3412;
+}
+
+.chipResult {
+    background: #e0e7ff;
+    border-color: #c7d2fe;
+    color: #3730a3;
+}
+
+.chipAction {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #374151;
+}
+.detailActionList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detailActionItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-primary);
+    line-height: 1.5;
+}
+
+.detailBullet {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+    flex-shrink: 0;
+    margin-top: 7px;
+}
+
+.detailNumberedList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.detailNumberedItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-primary);
+    line-height: 1.5;
+}
+
+.detailNumber {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-top: 1px;
+}
+.detailParagraph {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.medTable {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.medRow {
+    padding: 8px 10px;
+    background: var(--surface-2);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+.medName {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 3px;
+}
+.medMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.medMeta span {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+.medInstructions {
+    font-size: 11px;
+    color: var(--color-text-muted, #9ca3af);
+    margin-top: 4px;
+    font-style: italic;
+}
+.detailBulletList {
+    margin: 0;
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.detailBulletList li {
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}

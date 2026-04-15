@@ -1,0 +1,278 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background: var(--surface-1);
+  border-radius: 12px;
+  border: 1px solid var(--border-1);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-1);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.headerInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  font-size: 14px;
+}
+
+.infoItem {
+  display: flex;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.value {
+  color: var(--text-1);
+}
+
+.alertBox {
+  padding: 12px 16px;
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+}
+
+.alertTitle {
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+
+.alertList {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-1);
+}
+
+.alertList li {
+  margin: 4px 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--blue-primary);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-1);
+}
+
+.list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-1);
+}
+
+.list li {
+  margin: 6px 0;
+}
+
+.medicationsTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface-2);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.medicationsTable thead {
+  background: var(--surface-3);
+  border-bottom: 1px solid var(--border-1);
+}
+
+.medicationsTable th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.medicationsTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-1);
+  color: var(--text-1);
+  word-break: break-word;
+}
+
+.medicationsTable tbody tr:hover {
+  background: var(--surface-1);
+}
+
+.medicationsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.medicineName {
+  font-weight: 600;
+  color: var(--blue-primary);
+}
+
+.instructions {
+  font-style: italic;
+  color: var(--text-2);
+}
+
+.investigationsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.investigationItem {
+  padding: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.investigationName {
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.investigationDetail {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.adviceList {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adviceItem {
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-1);
+}
+
+.warningsList {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.warningItem {
+  padding: 10px 12px;
+  background: rgba(220, 38, 38, 0.05);
+  border-left: 4px solid #dc2626;
+  border-radius: 4px;
+  color: var(--text-1);
+}
+
+.reportSummary {
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.followUpItem {
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  color: var(--text-1);
+  border-left: 4px solid #16a34a;
+  margin: 4px 0;
+}
+
+.emptyState {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 1px dashed var(--border-1);
+}
+
+/* Print styles */
+@media print {
+  .container {
+    border: none;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+
+  .medicationsTable {
+    page-break-inside: avoid;
+  }
+
+  .section {
+    page-break-inside: avoid;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .headerInfo {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .medicationsTable {
+    font-size: 12px;
+  }
+
+  .medicationsTable th,
+  .medicationsTable td {
+    padding: 8px;
+  }
+
+  .investigationsList {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,477 @@
+/* ── Transcription Panel ─────────────────── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--spacing-5);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.draftLabel {
+  font-size: 10px;
+  font-weight: var(--font-weight-normal);
+  color: var(--amber);
+  text-transform: lowercase;
+  letter-spacing: normal;
+  margin-left: 4px;
+}
+
+.statusGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background-color: var(--red-bg);
+  color: var(--red);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  letter-spacing: 0.04em;
+}
+
+.liveDot {
+  width: 5px;
+  height: 5px;
+  background-color: var(--red);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Confidence indicator */
+.confidenceIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  min-width: 56px;
+}
+
+.confidenceBar {
+  height: 3px;
+  border-radius: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  flex: 1;
+}
+
+.confidenceText {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-3);
+  min-width: 26px;
+  text-align: right;
+}
+
+.spinIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Content ─────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-4) var(--spacing-5);
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-3);
+}
+
+.placeholderIcon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--spacing-4);
+  opacity: 0.25;
+  color: var(--text-3);
+}
+
+.placeholderTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.placeholderText {
+  font-size: var(--font-size-xs);
+  max-width: 260px;
+  line-height: var(--line-height-relaxed);
+  color: var(--text-3);
+}
+
+/* ── Transcript Text ─────────────────────── */
+.transcript {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.confirmedText {
+  color: var(--text-1);
+}
+
+.partialText {
+  color: var(--text-3);
+  background-color: var(--blue-glow);
+  padding: 0 3px;
+  border-radius: var(--radius-sm);
+  font-style: italic;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background-color: var(--blue-primary);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ── Footer ──────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px var(--spacing-4);
+  border-top: 1px solid var(--border);
+  background-color: var(--surface-2);
+}
+
+.footerHint {
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Dialogue View ───────────────────────── */
+.dialogue {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dialogueTurn {
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  animation: fadeIn 0.2s ease;
+  transition: background-color var(--transition-fast);
+}
+
+.speakerDoctor {
+  background-color: #F0F7FF;
+  border-color: rgba(37,99,235,0.08);
+}
+
+.speakerPatient {
+  background-color: var(--surface-2);
+  border-color: var(--border);
+}
+
+.speakerUnknown {
+  background-color: var(--surface-2);
+  border-color: var(--border);
+}
+
+.speakerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.labelDoctor {
+  color: var(--blue-primary);
+}
+
+.labelPatient {
+  color: var(--text-2);
+}
+
+.labelUnknown {
+  color: var(--text-3);
+}
+
+.turnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  gap: var(--spacing-2);
+}
+
+.turnHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.reassignSelect {
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: var(--font-family);
+}
+
+.reassignSelect:hover,
+.reassignSelect:focus {
+  border-color: var(--blue-primary);
+}
+
+.turnText {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-1);
+  margin: 0;
+}
+
+.editBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.editBtn:hover {
+  color: var(--blue-primary);
+  background-color: var(--surface-2);
+}
+
+.editTextarea {
+  width: 100%;
+  display: block;
+  margin-top: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+  color: var(--text-1);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  resize: vertical;
+  min-height: calc(var(--line-height-relaxed) * 2em);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.editTextarea:focus {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 3px var(--blue-glow);
+}
+
+.editActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+}
+
+.saveBtn {
+  height: 1.8rem;
+  padding: 0 var(--spacing-3);
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--blue-primary);
+  color: white;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.saveBtn:hover {
+  background-color: var(--blue-hover);
+}
+
+.cancelBtn {
+  height: 1.8rem;
+  padding: 0 var(--spacing-2);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-3);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.cancelBtn:hover {
+  color: var(--text-2);
+  background-color: var(--surface-2);
+}
+
+.addTurnBtn {
+  margin-top: var(--spacing-2);
+  width: 100%;
+  border: 1px dashed var(--border-2);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--text-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-2) var(--spacing-3);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.addTurnBtn:hover {
+  border-color: var(--blue-primary);
+  color: var(--blue-primary);
+  background-color: var(--blue-glow);
+}
+
+/* ── Live Preview ────────────────────────── */
+.livePreviewBanner {
+  background-color: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  margin-top: 10px;
+  color: var(--text-2);
+  font-style: italic;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.previewLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  font-style: normal;
+}
+
+.previewText {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.previewNote {
+  display: block;
+  font-size: 10px;
+  margin-top: 6px;
+  opacity: 0.6;
+  font-style: normal;
+}
+
+/* ── Recording Pulse Animation ───────────── */
+.recordingPulse {
+  width: 52px;
+  height: 52px;
+  background-color: var(--red-bg);
+  border-radius: 50%;
+  margin-bottom: var(--spacing-4);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recordingPulse::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--red);
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: recordingPulseGrow 1.5s ease-out infinite;
+}
+
+@keyframes recordingPulseGrow {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.loadingSpinner {
+  width: 36px;
+  height: 36px;
+  border: 2.5px solid var(--border);
+  border-top: 2.5px solid var(--blue-primary);
+  border-radius: 50%;
+  margin-bottom: var(--spacing-4);
+  animation: spin 0.8s linear infinite;
+}

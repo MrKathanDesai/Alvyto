@@ -1,0 +1,365 @@
+INFO:     Started server process [48489]
+INFO:     Waiting for application startup.
+2026-02-16 12:42:29,641 - RoomAgent - INFO - Starting up Local Room Agent...
+2026-02-16 12:42:29,641 - asr_engine - INFO - Loading WhisperModel: base.en on cpu with int8
+2026-02-16 12:42:30,008 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/Systran/faster-whisper-base.en/revision/main "HTTP/1.1 200 OK"
+2026-02-16 12:42:30,141 - asr_engine - INFO - Warming up model with silence...
+2026-02-16 12:42:30,141 - faster_whisper - INFO - Processing audio with duration 00:01.000
+2026-02-16 12:42:30,442 - asr_engine - INFO - Model warmup complete.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:56978 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56998 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56998 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57007 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 12:43:14,916 - RoomAgent - INFO - WebSocket session started: 90bc6c1c-fd92-4ee6-bf9d-c3b009be1f4b
+INFO:     connection open
+2026-02-16 12:43:16,263 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 12:43:17,285 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 12:43:18,316 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 12:43:19,334 - faster_whisper - INFO - Processing audio with duration 00:04.352
+2026-02-16 12:43:20,354 - faster_whisper - INFO - Processing audio with duration 00:05.376
+2026-02-16 12:43:21,385 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:22,405 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:23,435 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:24,459 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:29,630 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:30,866 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:31,889 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:32,916 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:33,935 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:34,954 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 12:43:35,783 - RoomAgent - INFO - Final transcription: 323109 bytes, diarize=True
+2026-02-16 12:43:35,783 - RoomAgent - INFO - Saved debug_audio.webm (323109 bytes)
+2026-02-16 12:43:35,860 - faster_whisper - INFO - Processing audio with duration 00:20.040
+2026-02-16 12:43:35,930 - faster_whisper - INFO - VAD filter removed 00:03.436 of audio
+/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/pyannote/audio/core/io.py:47: UserWarning: 
+torchcodec is not installed correctly so built-in audio decoding will fail. Solutions are:
+* use audio preloaded in-memory as a {'waveform': (channel, time) torch.Tensor, 'sample_rate': int} dictionary;
+* fix torchcodec installation. Error message was:
+
+Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+    ~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 433, in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 473, in _load_library
+    return _dlopen(name, mode)
+OSError: dlopen(/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core8.dylib, 0x0006): Library not loaded: @rpath/libavutil.60.dylib
+  Referenced from: <3365974D-D53F-34E6-B193-C5DFB3D20F06> /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core8.dylib
+  Reason: tried: '/opt/homebrew/opt/ffmpeg/lib/libavutil.60.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.60.dylib' (no such file), '/opt/homebrew/opt/ffmpeg/lib/libavutil.60.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.60.dylib' (no such file), '/opt/homebrew/lib/libavutil.60.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.60.dylib' (no such file), '/opt/homebrew/lib/libavutil.60.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.60.dylib' (no such file)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/_core/ops.py", line 57, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core8.dylib
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+    ~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 433, in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 473, in _load_library
+    return _dlopen(name, mode)
+OSError: dlopen(/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core7.dylib, 0x0006): Library not loaded: @rpath/libavutil.59.dylib
+  Referenced from: <FA0B0109-4ABD-30E4-87A4-C99B0BAB99EC> /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core7.dylib
+  Reason: tried: '/opt/homebrew/opt/ffmpeg/lib/libavutil.59.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.59.dylib' (no such file), '/opt/homebrew/opt/ffmpeg/lib/libavutil.59.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.59.dylib' (no such file), '/opt/homebrew/lib/libavutil.59.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.59.dylib' (no such file), '/opt/homebrew/lib/libavutil.59.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.59.dylib' (no such file)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/_core/ops.py", line 57, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core7.dylib
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+    ~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 433, in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 473, in _load_library
+    return _dlopen(name, mode)
+OSError: dlopen(/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core6.dylib, 0x0006): Library not loaded: @rpath/libavutil.58.dylib
+  Referenced from: <4598D43B-CEDC-3210-B9EC-CB93312171EF> /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core6.dylib
+  Reason: tried: '/opt/homebrew/opt/ffmpeg/lib/libavutil.58.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.58.dylib' (no such file), '/opt/homebrew/opt/ffmpeg/lib/libavutil.58.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.58.dylib' (no such file), '/opt/homebrew/lib/libavutil.58.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.58.dylib' (no such file), '/opt/homebrew/lib/libavutil.58.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.58.dylib' (no such file)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/_core/ops.py", line 57, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core6.dylib
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+    ~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 433, in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 473, in _load_library
+    return _dlopen(name, mode)
+OSError: dlopen(/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core5.dylib, 0x0006): Library not loaded: @rpath/libavutil.57.dylib
+  Referenced from: <57DC4C74-02F9-3DA5-A7C7-03891F49C90B> /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core5.dylib
+  Reason: tried: '/opt/homebrew/opt/ffmpeg/lib/libavutil.57.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.57.dylib' (no such file), '/opt/homebrew/opt/ffmpeg/lib/libavutil.57.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.57.dylib' (no such file), '/opt/homebrew/lib/libavutil.57.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.57.dylib' (no such file), '/opt/homebrew/lib/libavutil.57.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.57.dylib' (no such file)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/_core/ops.py", line 57, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core5.dylib
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+    ~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 433, in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ctypes/__init__.py", line 473, in _load_library
+    return _dlopen(name, mode)
+OSError: dlopen(/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core4.dylib, 0x0006): Library not loaded: @rpath/libavutil.56.dylib
+  Referenced from: <4B476814-6845-332A-9101-6DA61B4076B2> /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core4.dylib
+  Reason: tried: '/opt/homebrew/opt/ffmpeg/lib/libavutil.56.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.56.dylib' (no such file), '/opt/homebrew/opt/ffmpeg/lib/libavutil.56.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/ffmpeg/lib/libavutil.56.dylib' (no such file), '/opt/homebrew/lib/libavutil.56.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.56.dylib' (no such file), '/opt/homebrew/lib/libavutil.56.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/lib/libavutil.56.dylib' (no such file)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/_core/ops.py", line 57, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/torchcodec/libtorchcodec_core4.dylib
+[end of libtorchcodec loading traceback].
+  warnings.warn(
+2026-02-16 12:43:39,016 - asr_engine - INFO - Loading pyannote speaker-diarization pipeline (CPU)...
+2026-02-16 12:43:39,382 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/pyannote/speaker-diarization-3.1/resolve/main/config.yaml "HTTP/1.1 200 OK"
+2026-02-16 12:43:40,181 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/pyannote/segmentation-3.0/resolve/main/pytorch_model.bin "HTTP/1.1 302 Found"
+2026-02-16 12:43:40,495 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/pyannote/speaker-diarization-community-1/resolve/main/plda/xvec_transform.npz "HTTP/1.1 302 Found"
+2026-02-16 12:43:40,727 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/pyannote/speaker-diarization-community-1/resolve/main/plda/plda.npz "HTTP/1.1 302 Found"
+2026-02-16 12:43:40,959 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/pyannote/wespeaker-voxceleb-resnet34-LM/resolve/main/pytorch_model.bin "HTTP/1.1 302 Found"
+2026-02-16 12:43:41,011 - asr_engine - INFO - Diarization pipeline loaded successfully
+2026-02-16 12:43:41,045 - asr_engine - INFO - Running speaker diarization on 20.0s of audio...
+/Users/kathandesai/alvyto/room-agent/venv/lib/python3.14/site-packages/pyannote/audio/models/blocks/pooling.py:103: UserWarning: std(): degrees of freedom is <= 0. Correction should be strictly less than the reduction factor (input numel divided by output numel). (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/aten/src/ATen/native/ReduceOps.cpp:1857.)
+  std = sequences.std(dim=-1, correction=1)
+2026-02-16 12:43:48,780 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 12:43:48,781 - RoomAgent - INFO - Final result: 261 chars, confidence: 0.952
+INFO:     127.0.0.1:57010 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+2026-02-16 12:43:48,786 - RoomAgent - INFO - WebSocket disconnected: 90bc6c1c-fd92-4ee6-bf9d-c3b009be1f4b
+INFO:     connection closed
+INFO:     127.0.0.1:57060 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57108 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57115 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:09:34,477 - RoomAgent - INFO - WebSocket session started: 397d717d-3426-49d6-a21f-98b30c1c9de6
+INFO:     connection open
+2026-02-16 15:09:35,822 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:09:36,842 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 15:09:37,872 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 15:09:38,892 - faster_whisper - INFO - Processing audio with duration 00:04.352
+2026-02-16 15:09:39,913 - faster_whisper - INFO - Processing audio with duration 00:05.376
+2026-02-16 15:09:40,943 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:09:41,963 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:09:42,930 - RoomAgent - INFO - Final transcription: 134563 bytes, diarize=True
+2026-02-16 15:09:42,931 - RoomAgent - INFO - Saved debug_audio.webm (134563 bytes)
+2026-02-16 15:09:43,635 - faster_whisper - INFO - Processing audio with duration 00:08.340
+2026-02-16 15:09:43,652 - faster_whisper - INFO - VAD filter removed 00:04.716 of audio
+2026-02-16 15:09:44,268 - asr_engine - INFO - Running speaker diarization on 8.3s of audio...
+2026-02-16 15:09:44,721 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 15:09:44,721 - RoomAgent - INFO - Final result: 58 chars, confidence: 0.665
+INFO:     127.0.0.1:57118 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+2026-02-16 15:09:44,721 - RoomAgent - INFO - WebSocket disconnected: 397d717d-3426-49d6-a21f-98b30c1c9de6
+INFO:     connection closed
+INFO:     127.0.0.1:57231 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:09:57,878 - RoomAgent - INFO - WebSocket session started: c62ae338-5c33-43c6-bb0b-020808e2113c
+INFO:     connection open
+2026-02-16 15:09:59,222 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:10:00,243 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 15:10:01,273 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 15:10:02,294 - faster_whisper - INFO - Processing audio with duration 00:04.352
+2026-02-16 15:10:02,943 - RoomAgent - INFO - WebSocket disconnected: c62ae338-5c33-43c6-bb0b-020808e2113c
+INFO:     connection closed
+2026-02-16 15:10:02,947 - RoomAgent - INFO - Final transcription: 80403 bytes, diarize=True
+2026-02-16 15:10:02,948 - RoomAgent - INFO - Saved debug_audio.webm (80403 bytes)
+2026-02-16 15:10:03,104 - faster_whisper - INFO - Processing audio with duration 00:04.980
+2026-02-16 15:10:03,114 - faster_whisper - INFO - VAD filter removed 00:03.116 of audio
+2026-02-16 15:10:03,525 - asr_engine - INFO - Running speaker diarization on 5.0s of audio...
+2026-02-16 15:10:03,871 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 15:10:03,871 - RoomAgent - INFO - Final result: 23 chars, confidence: 0.887
+INFO:     127.0.0.1:57280 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57470 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:10:45,091 - RoomAgent - INFO - WebSocket session started: f331ce5e-e371-4b71-beb7-881c2be98405
+INFO:     connection open
+2026-02-16 15:10:46,421 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:10:50,985 - faster_whisper - INFO - Processing audio with duration 00:01.536
+2026-02-16 15:10:52,052 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:10:58,279 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:11:03,006 - RoomAgent - INFO - Final transcription: 149069 bytes, diarize=True
+2026-02-16 15:11:03,007 - RoomAgent - INFO - Saved debug_audio.webm (149069 bytes)
+2026-02-16 15:11:03,160 - faster_whisper - INFO - Processing audio with duration 00:09.240
+2026-02-16 15:11:03,177 - faster_whisper - INFO - VAD filter removed 00:08.636 of audio
+2026-02-16 15:11:10,778 - asr_engine - INFO - Running speaker diarization on 9.2s of audio...
+2026-02-16 15:11:10,824 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 15:11:10,824 - RoomAgent - INFO - Final result: 0 chars, confidence: 0
+INFO:     127.0.0.1:57487 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+INFO:     connection closed
+2026-02-16 15:11:10,824 - RoomAgent - INFO - WebSocket disconnected: f331ce5e-e371-4b71-beb7-881c2be98405
+INFO:     127.0.0.1:57504 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57621 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:11:44,904 - RoomAgent - INFO - WebSocket session started: 35628c87-1ed2-4719-b2ca-9d2a9675e255
+INFO:     connection open
+2026-02-16 15:11:46,249 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:11:47,635 - faster_whisper - INFO - Processing audio with duration 00:01.536
+2026-02-16 15:11:48,980 - faster_whisper - INFO - Processing audio with duration 00:01.792
+2026-02-16 15:11:50,304 - faster_whisper - INFO - Processing audio with duration 00:02.048
+2026-02-16 15:11:51,667 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 15:11:52,987 - faster_whisper - INFO - Processing audio with duration 00:02.560
+2026-02-16 15:11:54,333 - faster_whisper - INFO - Processing audio with duration 00:02.816
+2026-02-16 15:11:56,055 - faster_whisper - INFO - Processing audio with duration 00:03.072
+2026-02-16 15:11:57,471 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 15:11:58,811 - RoomAgent - INFO - WebSocket disconnected: 35628c87-1ed2-4719-b2ca-9d2a9675e255
+INFO:     connection closed
+INFO:     127.0.0.1:57636 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57643 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:12:01,503 - RoomAgent - INFO - WebSocket session started: b4f446dd-39df-4dac-b9aa-16813332ac59
+INFO:     connection open
+2026-02-16 15:12:02,848 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:12:03,870 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 15:12:04,897 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 15:12:05,918 - faster_whisper - INFO - Processing audio with duration 00:04.352
+2026-02-16 15:12:06,938 - faster_whisper - INFO - Processing audio with duration 00:05.376
+2026-02-16 15:12:07,968 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:08,989 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:10,019 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:11,041 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:12,058 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:13,088 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:14,108 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:15,138 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:16,158 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:17,178 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:18,208 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:19,230 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:20,261 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:21,279 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:12:22,256 - RoomAgent - INFO - WebSocket disconnected: b4f446dd-39df-4dac-b9aa-16813332ac59
+INFO:     connection closed
+2026-02-16 15:12:22,270 - RoomAgent - INFO - Final transcription: 333751 bytes, diarize=True
+2026-02-16 15:12:22,270 - RoomAgent - INFO - Saved debug_audio.webm (333751 bytes)
+2026-02-16 15:12:22,451 - faster_whisper - INFO - Processing audio with duration 00:20.700
+2026-02-16 15:12:22,489 - faster_whisper - INFO - VAD filter removed 00:04.276 of audio
+2026-02-16 15:12:23,875 - asr_engine - INFO - Running speaker diarization on 20.7s of audio...
+2026-02-16 15:12:31,487 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 15:12:31,487 - RoomAgent - INFO - Final result: 261 chars, confidence: 0.945
+INFO:     127.0.0.1:57754 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60284 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60295 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:19:06,742 - RoomAgent - INFO - WebSocket session started: a33c579d-1402-4bb6-a522-9a2596c22c72
+INFO:     connection open
+2026-02-16 15:19:08,088 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:19:09,107 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 15:19:10,138 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 15:19:11,158 - faster_whisper - INFO - Processing audio with duration 00:04.352
+2026-02-16 15:19:12,178 - faster_whisper - INFO - Processing audio with duration 00:05.376
+2026-02-16 15:19:13,213 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:14,230 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:15,258 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:16,280 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:17,298 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:18,329 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:19,348 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:20,380 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:21,399 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:22,432 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:23,459 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:24,479 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:25,498 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:19:25,935 - RoomAgent - INFO - Final transcription: 302807 bytes, diarize=True
+2026-02-16 15:19:25,935 - RoomAgent - INFO - Saved debug_audio.webm (302807 bytes)
+2026-02-16 15:19:26,162 - faster_whisper - INFO - Processing audio with duration 00:18.780
+2026-02-16 15:19:26,198 - faster_whisper - INFO - VAD filter removed 00:03.356 of audio
+2026-02-16 15:19:27,454 - asr_engine - INFO - Running speaker diarization on 18.8s of audio...
+2026-02-16 15:19:34,210 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 15:19:34,211 - RoomAgent - INFO - Final result: 240 chars, confidence: 0.928
+INFO:     127.0.0.1:60336 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+2026-02-16 15:19:34,211 - RoomAgent - INFO - WebSocket disconnected: a33c579d-1402-4bb6-a522-9a2596c22c72
+INFO:     connection closed
+INFO:     127.0.0.1:60548 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60795 - "WebSocket /ws/transcribe" [accepted]
+2026-02-16 15:26:44,105 - RoomAgent - INFO - WebSocket session started: 7ddc7277-77d5-4a7a-bcb3-85f311a7d842
+INFO:     connection open
+2026-02-16 15:26:45,449 - faster_whisper - INFO - Processing audio with duration 00:01.280
+2026-02-16 15:26:46,470 - faster_whisper - INFO - Processing audio with duration 00:02.304
+2026-02-16 15:26:47,500 - faster_whisper - INFO - Processing audio with duration 00:03.328
+2026-02-16 15:26:48,520 - faster_whisper - INFO - Processing audio with duration 00:04.352
+2026-02-16 15:26:49,540 - faster_whisper - INFO - Processing audio with duration 00:05.376
+2026-02-16 15:26:50,570 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:51,592 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:52,620 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:53,641 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:54,662 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:56,196 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:57,220 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:58,256 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:26:59,272 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:27:00,300 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:27:01,320 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:27:02,341 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:27:03,369 - faster_whisper - INFO - Processing audio with duration 00:06.000
+2026-02-16 15:27:04,104 - RoomAgent - INFO - WebSocket disconnected: 7ddc7277-77d5-4a7a-bcb3-85f311a7d842
+INFO:     connection closed
+2026-02-16 15:27:04,124 - RoomAgent - INFO - Final transcription: 321177 bytes, diarize=True
+2026-02-16 15:27:04,125 - RoomAgent - INFO - Saved debug_audio.webm (321177 bytes)
+2026-02-16 15:27:04,374 - faster_whisper - INFO - Processing audio with duration 00:19.920
+2026-02-16 15:27:04,412 - faster_whisper - INFO - VAD filter removed 00:03.644 of audio
+2026-02-16 15:27:06,087 - asr_engine - INFO - Running speaker diarization on 19.9s of audio...
+2026-02-16 15:27:13,506 - asr_engine - INFO - Diarization found 0 speaker segments
+2026-02-16 15:27:13,508 - RoomAgent - INFO - Final result: 241 chars, confidence: 0.95
+INFO:     127.0.0.1:61012 - "POST /transcribe?diarize=true HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [48489]

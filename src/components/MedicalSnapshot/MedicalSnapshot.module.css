@@ -1,0 +1,284 @@
+/* ── Medical Snapshot ─────────────────────── */
+
+.snapshot {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  margin-top: 0;
+  transition: all var(--transition-base);
+}
+
+.snapshotHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px var(--spacing-6);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.snapshotHeader:hover {
+  background-color: var(--surface-3);
+}
+
+.snapshotTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.snapshotIcon {
+  color: var(--text-3);
+  opacity: 1;
+}
+
+.expandBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: none;
+  border: none;
+  font-size: 11px;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  font-family: var(--font-family);
+}
+
+.expandBtn:hover {
+  color: var(--text-2);
+}
+
+.chevronIcon {
+  transition: transform var(--transition-fast);
+}
+
+.chevronIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.snapshotContent {
+  padding: 0 var(--spacing-6) var(--spacing-4);
+  animation: slideDown var(--transition-base);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.snapshotGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: var(--spacing-5);
+}
+
+@media (max-width: 1024px) {
+  .snapshotGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .snapshotGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.sectionTitle {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sectionTitle.danger {
+  color: var(--red);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.chipCondition {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+}
+
+.chipAllergy {
+  background-color: #FEF2F2;
+  color: #991B1B;
+}
+
+.allergyIcon {
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+}
+
+.medicationList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.medicationItem {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 8px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.medicationName {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-1);
+}
+
+.medicationDetails {
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+.notesText {
+  font-size: var(--font-size-xs);
+  color: var(--text-2);
+  line-height: var(--line-height-relaxed);
+}
+
+.emptyState {
+  font-size: var(--font-size-xs);
+  color: var(--text-3);
+  font-style: italic;
+}
+
+.collapsed {
+  display: none;
+}
+
+/* ── Editor Mode ─────────────────────────── */
+.editorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-3);
+  gap: var(--spacing-2);
+}
+
+.liveBadge {
+  margin-right: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  background: #ecfdf5;
+  color: #166534;
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.editorActions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.editBtn {
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family);
+}
+
+.editBtn:hover {
+  border-color: var(--border-2);
+  color: var(--text-1);
+}
+
+.cancelBtn {
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  color: var(--text-3);
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.saveBtn {
+  padding: 4px 10px;
+  background: var(--blue-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+
+.textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--text-1);
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 2px var(--blue-glow);
+}
+
+.textarea::placeholder {
+  color: var(--text-3);
+}

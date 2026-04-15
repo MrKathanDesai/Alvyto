@@ -1,0 +1,271 @@
+/* ============================================================
+   RecordingButton — Floating action bar with state transitions
+   ============================================================ */
+
+.container {
+    position: fixed;
+    bottom: var(--spacing-8);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-4);
+    z-index: var(--z-sticky);
+}
+
+.actionRow {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.recordingBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    height: 3.5rem; /* Standard large floating action height */
+    padding: 0 var(--spacing-8);
+    font-family: var(--font-family);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-float);
+    min-width: 240px;
+    backdrop-filter: blur(12px);
+    white-space: nowrap;
+}
+
+.secondaryBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    height: 3rem;
+    padding: 0 var(--spacing-5);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.secondaryBtn:hover:not(:disabled) {
+    border-color: var(--blue-primary);
+    color: var(--blue-primary);
+    transform: translateY(-1px);
+}
+
+.secondaryBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.recordingBtn:focus {
+    outline: none;
+}
+
+.recordingBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Idle — solid blue, no gradient */
+.idle {
+    background: var(--blue-primary);
+    color: white;
+}
+
+.idle:hover:not(:disabled) {
+    background: var(--blue-hover);
+    transform: scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+.idle:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+/* Recording — solid red with controlled pulse */
+.recording {
+    background: var(--red);
+    color: white;
+    animation: recordingPulse 2s ease-in-out infinite;
+}
+
+.recording:hover:not(:disabled) {
+    background: #B91C1C;
+}
+
+@keyframes recordingPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.35), var(--shadow-float);
+    }
+    70% {
+        box-shadow: 0 0 0 14px rgba(220, 38, 38, 0), var(--shadow-float);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0), var(--shadow-float);
+    }
+}
+
+/* Processing — solid amber */
+.processing {
+    background: var(--amber);
+    color: white;
+    cursor: wait;
+}
+
+.micIcon {
+    width: 22px;
+    height: 22px;
+}
+
+.stopIcon {
+    width: 18px;
+    height: 18px;
+}
+
+.processingIcon {
+    width: 22px;
+    height: 22px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Timer pill */
+.timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    height: 2rem;
+    padding: 0 var(--spacing-4);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-2);
+    box-shadow: var(--shadow-md);
+    white-space: nowrap;
+}
+
+.timerDot {
+    width: 7px;
+    height: 7px;
+    background-color: var(--red);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.pausedLabel {
+    color: var(--amber);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Approve container — frosted glass bar */
+.approveContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-5);
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-float);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Approve — solid green, no gradient */
+.approveBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    height: 2.75rem; /* btn-lg equivalent */
+    padding: 0 var(--spacing-6);
+    background: var(--green);
+    color: white;
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.approveBtn:hover {
+    background: #15803D;
+    transform: scale(1.02);
+}
+
+.approveBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.discardBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    height: 2.5rem;
+    padding: 0 var(--spacing-4);
+    background: transparent;
+    color: var(--text-3);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.discardBtn:hover {
+    background-color: var(--red-bg);
+    color: var(--red);
+}
+
+.approvedMessage {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-6);
+    background-color: var(--green-bg);
+    color: var(--green);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+}
