@@ -48,7 +48,15 @@ def login(req: LoginRequest, request: Request, db: DBSession = Depends(get_db)):
         if not req.room_id or not req.pin:
             raise HTTPException(status_code=400, detail="room_id and pin required")
         room = db.query(models.Room).filter(models.Room.id == req.room_id).first()
-        if not room or not verify_password(req.pin, room.device_pin):
+        if not room or not room.device_pin:
+            raise HTTPException(status_code=401, detail="Invalid room credentials")
+        verified = verify_password(req.pin, room.device_pin)
+        if not verified and room.device_pin == req.pin:
+            # Upgrade legacy plaintext room PINs in place after a successful login attempt.
+            room.device_pin = hash_password(req.pin)
+            db.commit()
+            verified = True
+        if not verified:
             raise HTTPException(status_code=401, detail="Invalid room credentials")
         token, expires_at = create_access_token(
             subject=room.id, role="room_device",

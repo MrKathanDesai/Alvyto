@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, WebSocket, WebSocketDisconnect, Query
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi import BackgroundTasks
@@ -12,7 +12,6 @@ import json
 import numpy as np
 from typing import Dict, Any, List, Optional
 import os
-import tempfile
 from concurrent.futures import ThreadPoolExecutor
 import requests
 
@@ -24,13 +23,19 @@ logging.basicConfig(
     level=logging.INFO
 )
 logger = logging.getLogger("RoomAgent")
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8080")
 
 
-def _save_progress_to_backend(visit_id: str, transcript: str, dialogue: list, status: str = None) -> None:
+def _save_progress_to_backend(
+    visit_id: str,
+    transcript: str,
+    dialogue: list,
+    auth_token: Optional[str] = None,
+    status: str = None,
+) -> None:
     """Fire-and-forget: persist transcript + dialogue to the EMR backend.
     Called after the ASR pipeline finishes so data survives browser crashes."""
-    backend_url = os.environ.get("BACKEND_URL", "http://localhost:8080")
-    token = os.environ.get("ROOM_TOKEN", "")
+    token = auth_token or os.environ.get("ROOM_TOKEN", "")
     if not visit_id:
         return
     try:
@@ -41,7 +46,7 @@ def _save_progress_to_backend(visit_id: str, transcript: str, dialogue: list, st
         if token:
             headers["Authorization"] = f"Bearer {token}"
         resp = requests.patch(
-            f"{backend_url}/api/visits/{visit_id}/progress",
+            f"{BACKEND_URL}/api/visits/{visit_id}/progress",
             json=payload,
             headers=headers,
             timeout=10,
@@ -52,6 +57,36 @@ def _save_progress_to_backend(visit_id: str, transcript: str, dialogue: list, st
             logger.info(f"Saved progress for visit {visit_id}: {len(dialogue)} turns")
     except Exception as e:
         logger.warning(f"Could not save progress to backend: {e}")
+
+
+def _extract_bearer_token(authorization: Optional[str]) -> Optional[str]:
+    if not authorization:
+        return None
+    prefix = "bearer "
+    if authorization.lower().startswith(prefix):
+        return authorization[len(prefix):].strip() or None
+    return None
+
+
+def _validate_room_agent_token(token: Optional[str]) -> None:
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Room agent authentication required")
+
+    try:
+        resp = requests.get(
+            f"{BACKEND_URL}/api/auth/me",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=5,
+        )
+    except Exception as exc:
+        logger.warning("Room agent auth check failed: %s", exc)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Unable to validate room agent session",
+        ) from exc
+
+    if resp.status_code != 200:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid room agent session")
 
 
 app = FastAPI(title="Local Room Agent")
@@ -102,15 +137,13 @@ def startup_event():
                 logger.info(f"Recovered stranded session from disk: {session_id}")
 
 @app.get("/health")
-def health():
+def health(authorization: Optional[str] = Header(default=None)):
+    _validate_room_agent_token(_extract_bearer_token(authorization))
     status = "ok" if engine else "loading"
     return {
         "status": status,
         "service": "RoomAgent"
     }
-
-class SpeakerMapping(BaseModel):
-    mapping: Dict[str, str]
 
 class DialogueTurn(BaseModel):
     speaker: str
@@ -128,9 +161,10 @@ class ExpandRequest(BaseModel):
     transcript: str
 
 @app.post("/summarize")
-async def summarize_dialogue(req: SummarizeRequest):
+async def summarize_dialogue(req: SummarizeRequest, authorization: Optional[str] = Header(default=None)):
     """Generate summary from a confirmed, speaker-labelled dialogue.
     Called by the frontend AFTER the user has confirmed speaker assignments."""
+    _validate_room_agent_token(_extract_bearer_token(authorization))
     if not engine or not engine.summarizer:
         return JSONResponse({"error": "Summarizer not ready"}, status_code=503)
     try:
@@ -142,9 +176,10 @@ async def summarize_dialogue(req: SummarizeRequest):
         return JSONResponse({"error": str(e)}, status_code=500)
 
 @app.post("/expand")
-async def expand_summary(req: ExpandRequest):
+async def expand_summary(req: ExpandRequest, authorization: Optional[str] = Header(default=None)):
     """Regenerate issuesParagraph and actionsParagraph when the doctor edits bullets.
     Called by the frontend after the user adds/edits clinical snapshot chips or doctor action bullets."""
+    _validate_room_agent_token(_extract_bearer_token(authorization))
     if not engine or not engine.summarizer:
         return JSONResponse({"error": "Summarizer not ready"}, status_code=503)
     try:
@@ -158,30 +193,32 @@ async def expand_summary(req: ExpandRequest):
         logger.error(f"Expand failed: {e}", exc_info=True)
         return JSONResponse({"error": str(e)}, status_code=500)
 
-@app.post("/session/{session_id}/confirm_speakers")
-async def confirm_speakers(session_id: str, payload: SpeakerMapping):
-    if session_id in pending_sessions or session_id in active_sessions or session_id in session_metadata:
-        if session_id not in session_metadata:
-            session_metadata[session_id] = {}
-        session_metadata[session_id]["speaker_label_map"] = payload.mapping
-        session_metadata[session_id]["speaker_confirmed"] = True
-        return {"status": "ok"}
-    return JSONResponse({"error": "Session not found"}, status_code=404)
 @app.post("/process/{session_id}")
 async def process_session(
     session_id: str,
     background_tasks: BackgroundTasks,
     doctor_name: str = "Doctor",
-    patient_name: str = "Patient"
+    patient_name: str = "Patient",
+    visit_id: Optional[str] = Query(None),
+    authorization: Optional[str] = Header(default=None),
 ):
+    token = _extract_bearer_token(authorization)
+    _validate_room_agent_token(token)
     if session_id not in pending_sessions:
         return JSONResponse({"error": "Session not found"}, status_code=404)
+    if session_id not in session_metadata:
+        session_metadata[session_id] = {}
+    if visit_id:
+        session_metadata[session_id]["visit_id"] = visit_id
+    if token:
+        session_metadata[session_id]["token"] = token
 
     background_tasks.add_task(execute_pipeline, session_id, doctor_name, patient_name)
     return {"status": "processing", "session_id": session_id}
 
 @app.get("/session/{session_id}/status")
-async def get_session_status(session_id: str):
+async def get_session_status(session_id: str, authorization: Optional[str] = Header(default=None)):
+    _validate_room_agent_token(_extract_bearer_token(authorization))
     if session_id in completed_sessions:
         return {"status": "completed", "data": completed_sessions[session_id]}
     elif session_id in pending_sessions:
@@ -220,19 +257,24 @@ def execute_pipeline(session_id: str, doctor_name: str, patient_name: str):
         meta = session_metadata.get(session_id, {})
         label_map = meta.get("speaker_label_map")
 
-        if label_map and result.get("status") == "complete":
-            # We could re-map here if needed, but for now we follow the engine default
-            # or the user can confirm in the UI.
-            pass
+        # Speaker remapping is done client-side in confirmSpeakersClientSide().
+        # The label_map stored here is unused at the server level.
 
         completed_sessions[session_id] = result
 
         # Persist transcript + dialogue to backend so browser refresh can restore session
-        visit_id = session_metadata.get(session_id, {}).get("visit_id")
+        visit_meta = session_metadata.get(session_id, {})
+        visit_id = visit_meta.get("visit_id")
         if visit_id and isinstance(result, dict):
             _transcript = result.get("transcript", "")
             _dialogue = result.get("dialogue", [])
-            _save_progress_to_backend(visit_id, _transcript, _dialogue, "in_progress")
+            _save_progress_to_backend(
+                visit_id,
+                _transcript,
+                _dialogue,
+                auth_token=visit_meta.get("token"),
+                status="in_progress",
+            )
 
         if result.get("dialogue"):
             session_transcripts[session_id] = " ".join(
@@ -258,8 +300,15 @@ def execute_pipeline(session_id: str, doctor_name: str, patient_name: str):
 async def websocket_transcribe(
     websocket: WebSocket,
     session_id: str = Query(None),
-    visit_id: Optional[str] = Query(None)
+    visit_id: Optional[str] = Query(None),
+    token: Optional[str] = Query(None),
 ):
+    try:
+        _validate_room_agent_token(token)
+    except HTTPException:
+        await websocket.close(code=4401)
+        return
+
     await websocket.accept()
 
     if not session_id:
@@ -273,6 +322,8 @@ async def websocket_transcribe(
         session_metadata[session_id] = {}
     if visit_id:
         session_metadata[session_id]["visit_id"] = visit_id
+    if token:
+        session_metadata[session_id]["token"] = token
 
     logger.info(f"WebSocket recording session started: {session_id}")
 
@@ -340,11 +391,18 @@ async def websocket_transcribe(
                             completed_sessions[session_id] = result
 
                             # Persist transcript + dialogue to backend so browser refresh can restore session
-                            visit_id = session_metadata.get(session_id, {}).get("visit_id")
+                            visit_meta = session_metadata.get(session_id, {})
+                            visit_id = visit_meta.get("visit_id")
                             if visit_id and isinstance(result, dict):
                                 _transcript = result.get("transcript", "")
                                 _dialogue = result.get("dialogue", [])
-                                _save_progress_to_backend(visit_id, _transcript, _dialogue, "in_progress")
+                                _save_progress_to_backend(
+                                    visit_id,
+                                    _transcript,
+                                    _dialogue,
+                                    auth_token=visit_meta.get("token"),
+                                    status="in_progress",
+                                )
 
                             if isinstance(result, dict) and result.get("dialogue"):
                                 session_transcripts[session_id] = " ".join(

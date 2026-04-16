@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { KeyFactCategory, VisitSummary } from '@/types';
 import { saveVisitProgress } from '@/services/api';
+import { getRoomAgentHeaders, withRoomAgentToken } from '@/utils/roomAgentAuth';
 export interface DialogueTurn {
     speaker: 'Doctor' | 'Patient' | 'Unknown' | string;
     text: string;
@@ -14,6 +15,7 @@ export interface SpeakerSample {
     speaker_id: string;
     sample_text: string;
     start: number;
+    backend_role?: string; // Current server-side display label for this detected speaker
 }
 interface UseWhisperLiveOptions {
     whisperEndpoint?: string;
@@ -31,7 +33,7 @@ export interface UseWhisperLiveReturn {
     fullTranscript: string;
     confidence: number;
     dialogue: DialogueTurn[];
-    startRecording: (customSessionId?: string | null) => Promise<void>;
+    startRecording: (customSessionId?: string | null, customVisitId?: string | null) => Promise<void>;
     pauseRecording: () => void;
     resumeRecording: () => void;
     stopRecording: (doctorName?: string, patientName?: string) => Promise<{ text: string; dialogue: DialogueTurn[] }>;
@@ -70,11 +72,108 @@ function compactText(input: string): string {
     return input.replace(/\s+/g, ' ').trim();
 }
 
-function extractStructuredFindings(dialogue: DialogueTurn[]): NonNullable<VisitSummary['structuredFindings']> {
+function normalizeText(input: string): string {
+    return input
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function trimFactLabel(input: string): string {
+    return compactText(input).slice(0, 100);
+}
+
+const NOISE_PATTERNS = [
+    /^(all right|alright|okay|ok|hmm|uh|um|sure|thanks|thank you)\b/i,
+    /^(good (morning|afternoon|evening|bye))\b/i,
+    /^(how are you|how long have|what'?s the problem|what brings you)\b/i,
+    /^(do you have|are you|did you|have you|does it)\b/i,
+    /^(you'?ll be (fine|ok)|take care|feel better|get well)\b/i,
+    /^please have a seat\b/i,
+    /^let'?s do this\b/i,
+    /^(symptom|issue|regular words?)$/i,
+    /\?$/,
+];
+
+const GENERIC_SNAPSHOT_LABELS = new Set([
+    'symptom',
+    'symptoms',
+    'issue',
+    'have',
+    'had',
+    'just',
+    'problem',
+    'complaint',
+    'duration',
+    'timing',
+    'finding',
+    'findings',
+    'inquiry',
+    'question',
+    'fever inquiry',
+    'headache inquiry',
+    'pain inquiry',
+    'duration of symptoms',
+    'location of pain',
+    'associated symptom with food/drink',
+    'lifestyle factor related to symptoms',
+    'symptom relief attempts',
+]);
+
+const COMPLAINT_HINT_PATTERNS = [
+    /\b(pain|burning|cough|fever|breathless|breathlessness|nausea|vomiting|headache|dizziness|tightness|reflux|acidity|itching|swelling)\b/i,
+    /\b(since|for\s+\d+|worse|worsened|night|after meals|after food)\b/i,
+];
+
+function isNoiseChunk(chunk: string): boolean {
+    const text = compactText(chunk);
+    if (!text || text.length < 6) return true;
+    return NOISE_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function inferChiefComplaintFromDialogue(dialogue: DialogueTurn[]): string {
+    const patientTurns = dialogue
+        .filter((turn) => turn.speaker.toLowerCase().includes('patient'))
+        .map((turn) => compactText(turn.text))
+        .filter(Boolean);
+
+    for (const turn of patientTurns) {
+        const sentences = turn.split(/[.!?]/).map((part) => compactText(part)).filter(Boolean);
+        for (const sentence of sentences) {
+            if (isNoiseChunk(sentence)) continue;
+            if (COMPLAINT_HINT_PATTERNS.some((pattern) => pattern.test(sentence))) {
+                return sentence.slice(0, 100);
+            }
+        }
+    }
+
+    const firstMeaningful = patientTurns.find((turn) => !isNoiseChunk(turn));
+    return firstMeaningful ? firstMeaningful.slice(0, 100) : '';
+}
+
+function normalizeSpeakerRole(speaker: string, doctorName?: string, patientName?: string): string {
+    const value = compactText(speaker);
+    const lower = value.toLowerCase();
+    const normalizedDoctor = compactText(doctorName || '').toLowerCase();
+    const normalizedPatient = compactText(patientName || '').toLowerCase();
+
+    if (!value) return 'Unknown';
+    if (lower.includes('doctor') || (normalizedDoctor && lower === normalizedDoctor)) return 'Doctor';
+    if (lower.includes('patient') || (normalizedPatient && lower === normalizedPatient)) return 'Patient';
+    return value;
+}
+
+function isPatientTurn(turn: DialogueTurn, doctorName?: string, patientName?: string): boolean {
+    return normalizeSpeakerRole(turn.speaker, doctorName, patientName) === 'Patient';
+}
+
+function extractStructuredFindings(dialogue: DialogueTurn[], doctorName?: string, patientName?: string): NonNullable<VisitSummary['structuredFindings']> {
     const seen = new Set<string>();
     const findings: NonNullable<VisitSummary['structuredFindings']> = [];
 
     dialogue.forEach((turn, idx) => {
+        if (!isPatientTurn(turn, doctorName, patientName)) return;
         const text = compactText(turn.text || '');
         if (!text) return;
 
@@ -85,7 +184,7 @@ function extractStructuredFindings(dialogue: DialogueTurn[]): NonNullable<VisitS
             .slice(0, 3);
 
         chunks.forEach((chunk, cIdx) => {
-            if (chunk.length < 4) return;
+            if (chunk.length < 8 || isNoiseChunk(chunk)) return;
             const normalized = chunk.toLowerCase();
             if (seen.has(normalized)) return;
             seen.add(normalized);
@@ -99,7 +198,7 @@ function extractStructuredFindings(dialogue: DialogueTurn[]): NonNullable<VisitS
 
             findings.push({
                 id: `f-${idx}-${cIdx}`,
-                label: chunk.slice(0, 140),
+                label: trimFactLabel(chunk),
                 category,
                 status,
                 confidence: clamp01(status === 'probable' ? 0.62 : status === 'denied' ? 0.76 : 0.84),
@@ -111,18 +210,19 @@ function extractStructuredFindings(dialogue: DialogueTurn[]): NonNullable<VisitS
     return findings.slice(0, 24);
 }
 
-function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[]): VisitSummary {
-    const extracted = extractStructuredFindings(dialogue);
+function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[], doctorName?: string, patientName?: string): VisitSummary {
+    const extracted = extractStructuredFindings(dialogue, doctorName, patientName);
 
     const enrichedSnapshot = (result.clinicalSnapshot ?? []).map((item) => ({
         ...item,
+        label: trimFactLabel(item.label),
         confidence: item.confidence ?? 0.8,
         evidence: item.evidence ?? extracted.find((f) => f.label.toLowerCase().includes(item.label.toLowerCase()) || item.label.toLowerCase().includes(f.label.toLowerCase()))?.evidence,
         status: item.status ?? (item.category === 'negative' ? 'denied' : 'confirmed'),
     }));
 
     const fallbackSnapshot = extracted.map((f) => ({
-        label: f.label,
+        label: trimFactLabel(f.label),
         category: f.category,
         isSupported: true,
         confidence: f.confidence,
@@ -130,12 +230,31 @@ function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[]): Vis
         status: f.status,
     }));
 
-    const clinicalSnapshot = enrichedSnapshot.length > 0 ? enrichedSnapshot : fallbackSnapshot;
+    const filteredSnapshot = enrichedSnapshot.filter((item) => {
+        const normalized = normalizeText(item.label);
+        return !GENERIC_SNAPSHOT_LABELS.has(normalized) && !isNoiseChunk(item.label);
+    });
 
-    const chiefComplaint = result.chiefComplaint?.trim()
+    const snapshotWithFallback = filteredSnapshot.length > 0 ? filteredSnapshot : fallbackSnapshot;
+
+    const clinicalSnapshot = snapshotWithFallback.map((item) => {
+        if (item.category === 'symptom' && !item.label.includes(' - ') && item.evidence) {
+            return {
+                ...item,
+                label: trimFactLabel(`${item.label} - ${item.evidence}`),
+            };
+        }
+        return item;
+    });
+
+    const candidateChiefComplaint = result.chiefComplaint?.trim()
         || clinicalSnapshot.find((f) => f.category === 'symptom' && (f.status ?? 'confirmed') !== 'denied')?.label
-        || dialogue.find((turn) => turn.speaker.toLowerCase().includes('patient'))?.text.split(/[.!?]/)[0]?.trim()
+        || inferChiefComplaintFromDialogue(dialogue)
         || '';
+
+    const chiefComplaint = isNoiseChunk(candidateChiefComplaint)
+        ? inferChiefComplaintFromDialogue(dialogue)
+        : candidateChiefComplaint;
 
     const structuredFindings = (result.structuredFindings && result.structuredFindings.length > 0)
         ? result.structuredFindings
@@ -156,26 +275,36 @@ function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[]): Vis
         generatedAt: new Date().toISOString(),
     };
 
+    const mergedDoctorActions = [...(result.doctorActions ?? [])].reduce<VisitSummary['doctorActions']>((acc, action) => {
+        const text = compactText(action.text || '');
+        if (!text) return acc;
+        const key = text.toLowerCase();
+        if (acc.some((item) => compactText(item.text).toLowerCase() === key)) return acc;
+        acc.push({ ...action, text });
+        return acc;
+    }, []).slice(0, 8);
+
     return {
         ...result,
         clinicalSnapshot,
+        doctorActions: mergedDoctorActions,
         chiefComplaint,
         structuredFindings,
         quality,
     };
 }
 
-function buildQuickSummary(dialogue: DialogueTurn[]): VisitSummary {
-    const extracted = extractStructuredFindings(dialogue);
+function buildQuickSummary(dialogue: DialogueTurn[], doctorName?: string, patientName?: string): VisitSummary {
+    const extracted = extractStructuredFindings(dialogue, doctorName, patientName);
     const positiveFindings = extracted.filter((item) => item.status !== 'denied');
 
     const chiefComplaint =
         positiveFindings.find((item) => item.category === 'symptom')?.label
-        || dialogue.find((turn) => turn.speaker.toLowerCase().includes('patient'))?.text.split(/[.!?]/)[0]?.trim()
+        || inferChiefComplaintFromDialogue(dialogue)
         || '';
 
     const doctorTurns = dialogue
-        .filter((turn) => turn.speaker.toLowerCase().includes('doctor'))
+        .filter((turn) => normalizeSpeakerRole(turn.speaker, doctorName, patientName) === 'Doctor')
         .map((turn) => compactText(turn.text))
         .filter(Boolean);
 
@@ -188,7 +317,7 @@ function buildQuickSummary(dialogue: DialogueTurn[]): VisitSummary {
     }));
 
     const clinicalSnapshot = extracted.slice(0, 10).map((item) => ({
-        label: item.label,
+        label: trimFactLabel(item.label),
         category: item.category,
         isSupported: true,
         confidence: item.confidence,
@@ -267,7 +396,9 @@ export function useWhisperLive(
     useEffect(() => {
         const checkHealth = async () => {
             try {
-                const res = await fetch(`${whisperEndpoint}/health`);
+                const res = await fetch(`${whisperEndpoint}/health`, {
+                    headers: getRoomAgentHeaders(),
+                });
                 if (res.ok) {
                     await res.json();
                     setIsWhisperAvailable(true);
@@ -352,13 +483,18 @@ export function useWhisperLive(
     }, []);
 
     // Connect WebSocket
-    const connectWebSocket = useCallback((customSessionId?: string | null): Promise<WebSocket> => {
+    const connectWebSocket = useCallback((customSessionId?: string | null, customVisitId?: string | null): Promise<WebSocket> => {
         return new Promise((resolve, reject) => {
-            setConnectionStatus('connecting');            
-            let url = wsUrl;
+            setConnectionStatus('connecting');
+            const nextUrl = new URL(wsUrl, window.location.origin);
             if (customSessionId) {
-                url += `?session_id=${customSessionId}`;
+                nextUrl.searchParams.set('session_id', customSessionId);
             }
+            const effectiveVisitId = customVisitId ?? visitIdRef.current;
+            if (effectiveVisitId) {
+                nextUrl.searchParams.set('visit_id', effectiveVisitId);
+            }
+            const url = withRoomAgentToken(nextUrl.toString());
 
             const ws = new WebSocket(url);
             ws.binaryType = 'arraybuffer';
@@ -409,7 +545,7 @@ export function useWhisperLive(
     }, [wsUrl]);
 
     // Start recording with WebSocket streaming
-    const startRecording = useCallback(async (customSessionId?: string | null) => {
+    const startRecording = useCallback(async (customSessionId?: string | null, customVisitId?: string | null) => {
         try {
             setError(null);
             setConfirmedText('');
@@ -432,7 +568,7 @@ export function useWhisperLive(
             });
             streamRef.current = stream;
 
-            await connectWebSocket(customSessionId);
+            await connectWebSocket(customSessionId, customVisitId);
 
             if (wsRef.current) {
                 // Setup audio processing for WebSocket streaming
@@ -518,7 +654,21 @@ export function useWhisperLive(
             streamRef.current = null;
         }
 
-        if (wsRef.current) {
+        let triggeredViaWs = false;
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && sessionId) {
+            try {
+                wsRef.current.send(JSON.stringify({
+                    type: 'stop_recording',
+                    doctor_name: 'Doctor',
+                    patient_name: 'Patient',
+                }));
+                triggeredViaWs = true;
+            } catch (sendErr) {
+                console.warn('[useWhisperLive] Failed stop_recording over WS, will fallback to REST:', sendErr);
+            }
+        }
+
+        if (!triggeredViaWs && wsRef.current) {
             wsRef.current.close();
             wsRef.current = null;
         }
@@ -547,33 +697,57 @@ export function useWhisperLive(
                 const params = new URLSearchParams();
                 params.append('doctor_name', 'Doctor');
                 params.append('patient_name', 'Patient');
+                const effectiveVisitId = visitIdRef.current;
+                if (effectiveVisitId) {
+                    params.append('visit_id', effectiveVisitId);
+                }
                 const queryStr = `?${params.toString()}`;
 
-                // Retry POST up to 5× with 600ms gaps to handle the race between
-                // WebSocket disconnect (server-side) and the process trigger (client-side).
-                let processResp: Response | null = null;
-                for (let attempt = 0; attempt < 5; attempt++) {
-                    if (attempt > 0) {
-                        await new Promise(r => setTimeout(r, 600));
+                if (!triggeredViaWs) {
+                    // Retry POST to handle disconnect/process race when WS stop trigger was not sent.
+                    let processResp: Response | null = null;
+                    for (let attempt = 0; attempt < 12; attempt++) {
+                        if (attempt > 0) {
+                            await new Promise(r => setTimeout(r, 500));
+                        }
+                        processResp = await fetch(`${whisperEndpoint}/process/${sessionId}${queryStr}`, {
+                            method: 'POST',
+                            headers: getRoomAgentHeaders(),
+                        });
+                        if (processResp.ok) break;
+                        if (processResp.status !== 404) break;
                     }
-                    processResp = await fetch(`${whisperEndpoint}/process/${sessionId}${queryStr}`, { method: 'POST' });
-                    if (processResp.ok || processResp.status !== 404) break;
+
+                    if (!processResp || !processResp.ok) {
+                        // Last chance: if status endpoint exists, pipeline may already be active.
+                        const statusProbe = await fetch(`${whisperEndpoint}/session/${sessionId}/status`, {
+                            headers: getRoomAgentHeaders(),
+                        });
+                        if (!statusProbe.ok) {
+                            throw new Error(`HTTP ${processResp?.status}`);
+                        }
+                    }
                 }
-                if (!processResp || !processResp.ok) throw new Error(`HTTP ${processResp?.status}`);
 
                 const interval = setInterval(async () => {
                     pollCount++;
-                    if (pollCount >= MAX_POLLS) {
-                        clearInterval(interval);
-                        setIsTranscribing(false);
-                        setProcessingStage(null);
-                        setError('Transcription timed out after 5 minutes. Please try again.');
-                        resolve({ text: confirmedText, dialogue });
-                        return;
-                    }
+                        if (pollCount >= MAX_POLLS) {
+                            clearInterval(interval);
+                            setIsTranscribing(false);
+                            setProcessingStage(null);
+                            setError('Transcription timed out after 5 minutes. Please try again.');
+                            if (wsRef.current) {
+                                wsRef.current.close();
+                                wsRef.current = null;
+                            }
+                            resolve({ text: confirmedText, dialogue });
+                            return;
+                        }
 
                     try {
-                        const statusResp = await fetch(`${whisperEndpoint}/session/${sessionId}/status`);
+                        const statusResp = await fetch(`${whisperEndpoint}/session/${sessionId}/status`, {
+                            headers: getRoomAgentHeaders(),
+                        });
                         const statusData = await statusResp.json();
 
                         if (statusData.status === 'completed') {
@@ -587,6 +761,10 @@ export function useWhisperLive(
                                 console.error('[useWhisperLive] Pipeline error:', data?.error);
                                 setError(`Transcription failed: ${data?.error || 'Unknown error'}`);
                                 setProcessingStage(null);
+                                if (wsRef.current) {
+                                    wsRef.current.close();
+                                    wsRef.current = null;
+                                }
                                 resolve({ text: confirmedText, dialogue });
                                 return;
                             }
@@ -604,27 +782,24 @@ export function useWhisperLive(
                                 setIsConfirming(true);
                                 confirmationResolverRef.current = resolve;
                             } else {
-                                // No confirmation needed — rename generic "Doctor"/"Patient" labels
-                                // to actual names (backendDialogue always uses generic role labels
-                                // because we pass "Doctor"/"Patient" to the process API).
-                                const drName = namesRef.current.doctor || "Doctor";
-                                const ptName = namesRef.current.patient || "Patient";
-                                const renamedDialogue = finalDialogue.map((d: DialogueTurn) => ({
-                                    ...d,
-                                    speaker: d.speaker === "Doctor" ? drName
-                                           : d.speaker === "Patient" ? ptName
-                                           : d.speaker,
-                                }));
-                                const finalText = renamedDialogue.map((d: DialogueTurn) => d.text).join(' ');
+                                const finalText = finalDialogue.map((d: DialogueTurn) => d.text).join(' ');
                                 setConfirmedText(finalText);
-                                setDialogue(renamedDialogue);
-                                resolve({ text: finalText, dialogue: renamedDialogue, summary: finalSummary });
+                                setDialogue(finalDialogue);
+                                if (wsRef.current) {
+                                    wsRef.current.close();
+                                    wsRef.current = null;
+                                }
+                                resolve({ text: finalText, dialogue: finalDialogue, summary: finalSummary });
                             }
                         } else if (statusData.status === 'error' || statusData.error) {
                             clearInterval(interval);
                             setIsTranscribing(false);
                             setError(statusData.error || "WhisperX processing failed");
                             setProcessingStage(null);
+                            if (wsRef.current) {
+                                wsRef.current.close();
+                                wsRef.current = null;
+                            }
                             resolve({ text: confirmedText, dialogue: dialogue });
                         } else if (statusData.stage) {
                             setProcessingStage(statusData.stage);
@@ -639,6 +814,10 @@ export function useWhisperLive(
                 console.error("Error starting WhisperX post-processing", e);
                 setIsTranscribing(false);
                 setProcessingStage(null);
+                if (wsRef.current) {
+                    wsRef.current.close();
+                    wsRef.current = null;
+                }
                 resolve({ text: confirmedText, dialogue });
             }
         });
@@ -666,9 +845,6 @@ export function useWhisperLive(
         const doctorName = namesRef.current.doctor || "Doctor";
         const patientName = namesRef.current.patient || "Patient";
 
-        // backendDialogue always has "Doctor"/"Patient" as generic speaker labels
-        // (because we pass those fixed strings to the process API).
-        // We just need to rename them to actual names, respecting any manual corrections.
         const roleToName: Record<string, string> = {
             Doctor: doctorName,
             Patient: patientName,
@@ -678,24 +854,18 @@ export function useWhisperLive(
         let finalDialogue: DialogueTurn[];
 
         if (!assignments) {
-            // "Use Auto-Detection" — trust backend's speaker ordering, just rename labels.
+            // No explicit remapping provided — keep detected speaker labels as-is.
             finalDialogue = backendDialogue.map(turn => ({
                 ...turn,
-                speaker: roleToName[turn.speaker] ?? turn.speaker,
+                speaker: turn.speaker,
             }));
         } else {
-            // Manual confirmation — user mapped each SPEAKER_XX to a role.
-            // speakerSamples are ordered by first-appearance, matching build_label_map,
-            // so speakerSamples[0] is the "Doctor" in backendDialogue, etc.
-            const backendRoleOrder = ["Doctor", "Patient", "Companion"];
             const backendRoleOfSpeaker: Record<string, string> = {};
-            speakerSamples.forEach((s, i) => {
-                backendRoleOfSpeaker[s.speaker_id] = backendRoleOrder[i] ?? "Unknown";
+            speakerSamples.forEach((s) => {
+                backendRoleOfSpeaker[s.speaker_id] = s.backend_role ?? s.speaker_id;
             });
 
-            // Build: backendRole → actualName based on user's corrections.
-            // Start with the identity mapping, then override with user selections.
-            const backendRoleToActualName: Record<string, string> = { ...roleToName };
+            const backendRoleToActualName: Record<string, string> = {};
             for (const [speakerId, userRole] of Object.entries(assignments)) {
                 const backendRole = backendRoleOfSpeaker[speakerId] ?? speakerId;
                 backendRoleToActualName[backendRole] = roleToName[userRole] ?? userRole;
@@ -723,10 +893,15 @@ export function useWhisperLive(
     const generateSummary = useCallback(async (confirmedDialogue: DialogueTurn[], medicalHistory?: Record<string, unknown> | null): Promise<VisitSummary | undefined> => {
         setIsSummarizing(true);
         try {
+            const normalizedDialogue = confirmedDialogue.map((turn) => ({
+                ...turn,
+                speaker: normalizeSpeakerRole(turn.speaker, namesRef.current.doctor, namesRef.current.patient),
+            }));
+
             const resp = await fetch(`${whisperEndpoint}/summarize`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ dialogue: confirmedDialogue, medical_history: medicalHistory ?? null }),
+                headers: getRoomAgentHeaders({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify({ dialogue: normalizedDialogue, medical_history: medicalHistory ?? null }),
             });
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
@@ -743,7 +918,7 @@ export function useWhisperLive(
                 quality: data.quality ?? undefined,
             };
 
-            const hybrid = buildHybridSummary(result, confirmedDialogue);
+            const hybrid = buildHybridSummary(result, confirmedDialogue, namesRef.current.doctor, namesRef.current.patient);
             return hybrid;
         } catch (e) {
             console.error('[useWhisperLive] generateSummary failed', e);
@@ -769,7 +944,8 @@ export function useWhisperLive(
         resumeRecording,
         stopRecording,
         generateSummary,
-        generateQuickSummary: buildQuickSummary,
+        generateQuickSummary: (inputDialogue: DialogueTurn[]) =>
+            buildQuickSummary(inputDialogue, namesRef.current.doctor, namesRef.current.patient),
         updateDialogue: setDialogue,
         clearTranscript,
         error,

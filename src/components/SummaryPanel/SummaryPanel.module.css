@@ -105,72 +105,6 @@
   gap: var(--spacing-5);
 }
 
-.overviewCard {
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-2);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.overviewHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.overviewLabel {
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-3);
-  font-weight: var(--font-weight-semibold);
-}
-
-.overviewValue {
-  margin-top: 4px;
-  font-size: 14px;
-  color: var(--text-1);
-  font-weight: var(--font-weight-semibold);
-}
-
-.qualityWrap {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.qualityBadge {
-  font-size: 10px;
-  color: var(--blue-primary);
-  background: var(--blue-glow);
-  border: 1px solid rgba(37, 99, 235, 0.2);
-  border-radius: var(--radius-full);
-  padding: 2px 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.qualityText {
-  font-size: 11px;
-  color: var(--text-3);
-}
-
-.topFindingsRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.missingFields {
-  font-size: 11px;
-  color: var(--amber);
-}
-
 .sectionCompact {
   display: flex;
   flex-direction: column;
@@ -587,6 +521,17 @@
   animation: fadeInOut 1.5s ease-in-out infinite;
 }
 
+/* ── Expand error badge ──────────────────── */
+.expandError {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--red, #e53e3e);
+  cursor: help;
+}
+
 /* ── Paragraph sections ──────────────────── */
 .paragraphText {
   font-size: var(--font-size-sm);
@@ -631,34 +576,43 @@
   animation: shimmer 1.4s ease-in-out infinite;
 }
 
-/* ── AI confidence warnings ──────────────── */
-.unsupportedBadge {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 6px;
-  padding: 1px 6px;
-  font-size: 0.7rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--red);
-  background-color: var(--red-bg);
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  flex-shrink: 0;
+/* ── Medication list ─────────────────────────── */
+.medList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.chipUnsupported {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 4px;
-  width: 14px;
-  height: 14px;
-  font-size: 0.6rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--red);
-  background-color: var(--red-bg);
-  border: 1px solid rgba(220, 38, 38, 0.25);
-  border-radius: var(--radius-full);
-  flex-shrink: 0;
+.medItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.medItem:hover {
+  border-color: var(--border);
+}
+
+.medName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-1);
+}
+
+.medMeta {
+  font-size: var(--font-size-xs);
+  color: var(--text-3);
+  letter-spacing: 0.01em;
+}
+
+.medInstructions {
+  font-size: var(--font-size-xs);
+  color: var(--text-2);
+  font-style: italic;
 }

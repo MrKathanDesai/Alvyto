@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session as DBSession
 from backend.database import get_db
 from backend import models
 from backend.schemas import RoomCreate, RoomUpdate, RoomOut, RoomAssignRequest, RoomStatusOut, PatientOut, DoctorOut
-from backend.auth import require_admin, require_any_auth, audit, RequestContext
+from backend.auth import require_admin, require_any_auth, audit, hash_password, RequestContext
 
 router = APIRouter(prefix="/api/rooms", tags=["rooms"])
 
@@ -104,7 +104,9 @@ def create_room(
     ctx: RequestContext = Depends(require_admin),
     db: DBSession = Depends(get_db),
 ):
-    room = models.Room(**body.model_dump())
+    payload = body.model_dump()
+    payload["device_pin"] = hash_password(body.device_pin)
+    room = models.Room(**payload)
     db.add(room)
     db.commit()
     db.refresh(room)
@@ -158,7 +160,10 @@ def update_room(
     room = db.query(models.Room).filter(models.Room.id == room_id).first()
     if not room:
         raise HTTPException(404, "Room not found")
-    for k, v in body.model_dump(exclude_unset=True).items():
+    payload = body.model_dump(exclude_unset=True)
+    if "device_pin" in payload and payload["device_pin"] is not None:
+        payload["device_pin"] = hash_password(payload["device_pin"])
+    for k, v in payload.items():
         setattr(room, k, v)
     db.commit()
     db.refresh(room)

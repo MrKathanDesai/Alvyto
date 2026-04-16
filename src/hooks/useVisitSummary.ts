@@ -36,7 +36,7 @@ interface UseVisitSummaryReturn {
     updateDoctorActions: (items: SummaryItem[]) => void;
     updateParagraphs: (issuesParagraph: string, actionsParagraph: string) => void;
     setVisitStatus: (status: VisitStatus) => void;
-    approveVisit: (visitId: string) => Promise<void>;
+    approveVisit: (visitId: string, summaryOverride?: VisitSummary) => Promise<void>;
     discardVisit: (visitId?: string) => Promise<void>;
 }
 const createEmptySummary = (): VisitSummary => ({
@@ -65,6 +65,15 @@ const createDraftVisit = (patientId: string): ActiveVisitSession => ({
     status: 'pending',
     createdAt: new Date().toISOString(),
 });
+
+function coerceParagraphText(value: unknown): string {
+    if (typeof value === 'string') return value.trim();
+    if (value && typeof value === 'object') {
+        const maybeText = (value as { text?: unknown }).text;
+        if (typeof maybeText === 'string') return maybeText.trim();
+    }
+    return '';
+}
 
 
 export function useVisitSummary(): UseVisitSummaryReturn {
@@ -156,7 +165,11 @@ export function useVisitSummary(): UseVisitSummaryReturn {
         (summary: VisitSummary) => {
             patchVisit(visit => ({
                 ...visit,
-                summary,
+                summary: {
+                    ...summary,
+                    issuesParagraph: coerceParagraphText(summary.issuesParagraph),
+                    actionsParagraph: coerceParagraphText(summary.actionsParagraph),
+                },
             }));
         },
         [patchVisit]
@@ -181,8 +194,8 @@ export function useVisitSummary(): UseVisitSummaryReturn {
                 ...visit,
                 summary: {
                     ...visit.summary,
-                    issuesParagraph,
-                    actionsParagraph,
+                    issuesParagraph: coerceParagraphText(issuesParagraph),
+                    actionsParagraph: coerceParagraphText(actionsParagraph),
                 },
             }));
         },
@@ -199,13 +212,13 @@ export function useVisitSummary(): UseVisitSummaryReturn {
         [patchVisit]
     );
 
-    const approveVisit = useCallback(async (visitId: string) => {
+    const approveVisit = useCallback(async (visitId: string, summaryOverride?: VisitSummary) => {
         const activeVisit = currentVisitRef.current;
         if (!activeVisit || !visitId) {
             return;
         }
 
-        await approveVisitApi(visitId, activeVisit.summary);
+        await approveVisitApi(visitId, summaryOverride ?? activeVisit.summary);
         setVisit(null);
     }, [setVisit]);
 

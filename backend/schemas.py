@@ -434,23 +434,3 @@ class AuditLogOut(BaseModel):
     detail: Optional[Dict[str, Any]] = None
     success: bool
     model_config = {"from_attributes": True}
-
-
-# ── Admin User ────────────────────────────────────────────────────────────────
-
-class AdminUserCreate(BaseModel):
-    name: str
-    email: str
-    password: str
-    role: str = "admin"
-
-
-class AdminUserOut(BaseModel):
-    id: str
-    name: str
-    email: str
-    role: str
-    is_active: bool
-    created_at: datetime
-    last_login_at: Optional[datetime] = None
-    model_config = {"from_attributes": True}

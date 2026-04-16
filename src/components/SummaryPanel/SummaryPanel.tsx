@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useRef } from 'react';
 import styles from './SummaryPanel.module.css';
-import { SummaryItem, VisitStatus, KeyFact, KeyFactCategory, VisitSummary } from '@/types';
+import { SummaryItem, VisitStatus, KeyFact, KeyFactCategory, VisitSummary, PrescriptionMedicationDetail } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
+import { getRoomAgentHeaders } from '@/utils/roomAgentAuth';
 
 interface SummaryPanelProps {
     summary: VisitSummary;
@@ -33,6 +34,48 @@ const CATEGORY_ORDER: KeyFactCategory[] = [
 ];
 
 const WHISPER_ENDPOINT = process.env.NEXT_PUBLIC_WHISPER_ENDPOINT || 'http://localhost:8000';
+
+// Patterns that indicate a chip is conversational noise, not clinical data
+const JUNK_CHIP_RE = [
+    /\?$/,                                                                          // questions
+    /^(what|how|do|does|did|are|is|was|were|have|has|can|could|would|should|will)\b/i,
+    /^(you'?ll|take care|feel better|no worries|don'?t worry|see you|get well|stay well|hope you)/i,
+    /^(ok(ay)?|yes|no|sure|right|alright|of course|absolutely|exactly)\b/i,
+    /^(i'?m|i am|we'?re|i see|i think|i believe)\b/i,
+    /\s?(inquiry|question|asked?)$/i,                                               // meta-label suffix
+];
+
+// Single-word meta-labels the AI extracts as categories instead of values
+// These are clinical category names, NOT actual clinical findings
+const GENERIC_CHIP_TERMS = new Set([
+    'complaint', 'duration', 'timing', 'symptom', 'symptoms', 'issue', 'issues',
+    'finding', 'findings', 'history', 'inquiry', 'question', 'condition',
+    'examination', 'assessment', 'diagnosis', 'treatment', 'prescription',
+]);
+
+function isJunkChip(label: string): boolean {
+    const text = label.trim();
+    if (!text) return true;
+    if (text.split(/\s+/).length > 8) return true;
+    if (GENERIC_CHIP_TERMS.has(text.toLowerCase())) return true;
+    return JUNK_CHIP_RE.some(re => re.test(text));
+}
+
+// Patterns for notes/advice that are social closings, not clinical guidance
+const JUNK_NOTE_RE = [
+    /^(take care|you'?ll be (fine|ok(ay)?)|feel better|get well|no worries|don'?t worry|see you|bye|goodbye)\b/i,
+    /^(good (morning|afternoon|evening|bye))\b/i,
+    /^(thank you|thanks)\b/i,
+];
+
+function coerceParagraphText(value: unknown): string {
+    if (typeof value === 'string') return value.trim();
+    if (value && typeof value === 'object') {
+        const maybeText = (value as { text?: unknown }).text;
+        if (typeof maybeText === 'string') return maybeText.trim();
+    }
+    return '';
+}
 
 function normalizeText(value: string): string {
     return value
@@ -64,49 +107,6 @@ function dedupeStrings(values: string[], threshold = 0.72): string[] {
     return out;
 }
 
-function inferChiefComplaint(summary: VisitSummary): string {
-    const explicit = summary.chiefComplaint?.trim();
-    if (explicit) return explicit;
-    const symptom = summary.clinicalSnapshot.find((item) => item.category === 'symptom' && (item.status ?? 'confirmed') !== 'denied')?.label;
-    if (symptom) return symptom;
-    const issueLead = summary.issuesParagraph.split(/[.!?]/).map((s) => s.trim()).find(Boolean);
-    return issueLead ?? '';
-}
-
-function deriveQuality(summary: VisitSummary, chiefComplaint: string): NonNullable<VisitSummary['quality']> {
-    if (summary.quality && Number.isFinite(summary.quality.score) && summary.quality.score > 0) {
-        return {
-            score: Math.max(0, Math.min(100, summary.quality.score)),
-            confidence: Math.max(0, Math.min(1, summary.quality.confidence)),
-            missingFields: summary.quality.missingFields ?? [],
-            mode: summary.quality.mode ?? 'hybrid',
-            generatedAt: summary.quality.generatedAt,
-        };
-    }
-
-    const missingFields: string[] = [];
-    if (!chiefComplaint) missingFields.push('chiefComplaint');
-    if ((summary.doctorActions?.length ?? 0) === 0 && !summary.actionsParagraph.trim()) missingFields.push('doctorActions');
-    if ((summary.prescriptionDraft?.medications?.length ?? 0) === 0) missingFields.push('medications');
-
-    const richness =
-        (summary.clinicalSnapshot.length > 0 ? 1 : 0)
-        + (summary.doctorActions.length > 0 ? 1 : 0)
-        + (summary.issuesParagraph.trim() ? 1 : 0)
-        + (summary.actionsParagraph.trim() ? 1 : 0)
-        + ((summary.prescriptionDraft?.diagnoses?.length ?? 0) > 0 ? 1 : 0)
-        + ((summary.prescriptionDraft?.medications?.length ?? 0) > 0 ? 1 : 0)
-        + (chiefComplaint ? 1 : 0);
-
-    return {
-        score: Math.max(32, Math.min(93, 34 + richness * 8 - missingFields.length * 7)),
-        confidence: Math.max(0.45, Math.min(0.9, 0.5 + richness * 0.05 - missingFields.length * 0.05)),
-        missingFields,
-        mode: 'hybrid',
-        generatedAt: new Date().toISOString(),
-    };
-}
-
 export default function SummaryPanel({
     summary,
     isSummarizing = false,
@@ -122,25 +122,22 @@ export default function SummaryPanel({
     const [addingChip, setAddingChip] = useState(false);
     const [newChipText, setNewChipText] = useState('');
     const [isExpandingLocal, setIsExpandingLocal] = useState(false);
+    const [expandError, setExpandError] = useState<string | null>(null);
     const expandDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
     const isExpanding = isExpandingProp || isExpandingLocal;
     const isLocked = status === 'approved';
     const isDraft = status === 'draft';
-    const isEmpty = summary.clinicalSnapshot.length === 0 && summary.doctorActions.length === 0;
 
     const {
         clinicalSnapshot,
         doctorActions,
         issuesParagraph,
         actionsParagraph,
-        structuredFindings = [],
     } = summary;
 
-    const derivedChiefComplaint = inferChiefComplaint(summary);
-    const quality = deriveQuality(summary, derivedChiefComplaint);
-
     const dedupedDoctorActions = dedupeStrings(doctorActions.map((item) => item.text))
+        .filter((text) => !JUNK_NOTE_RE.some(re => re.test(text.trim())))
         .map((text, index) => doctorActions.find((item) => item.text === text) ?? {
             id: `deduped-${index}`,
             text,
@@ -154,34 +151,24 @@ export default function SummaryPanel({
         return first === index;
     });
 
+    // Filter out conversational noise from clinical snapshot chips
+    const filteredClinicalSnapshot = dedupedClinicalSnapshot.filter(
+        (fact) => !isJunkChip(fact.label)
+    );
+
     const uniqueAdvice = dedupeStrings(summary.prescriptionDraft?.advice ?? [])
-        .filter((text) => !dedupedDoctorActions.some((action) => tokenSimilarity(action.text, text) >= 0.7));
+        .filter((text) => !dedupedDoctorActions.some((action) => tokenSimilarity(action.text, text) >= 0.7))
+        .filter((text) => !JUNK_NOTE_RE.some(re => re.test(text.trim())));
 
-    const mergedNarrative = dedupeStrings([issuesParagraph, actionsParagraph], 0.55).join('\n\n').trim();
+    const safeIssuesParagraph = coerceParagraphText(issuesParagraph);
+    const safeActionsParagraph = coerceParagraphText(actionsParagraph);
+    const mergedNarrative = dedupeStrings([safeIssuesParagraph, safeActionsParagraph], 0.55).join('\n\n').trim();
 
-    const topFindings = (structuredFindings.length > 0
-        ? structuredFindings
-        : (dedupedClinicalSnapshot ?? []).map((item, idx) => ({
-            id: `snapshot-${idx}`,
-            label: item.label,
-            category: item.category,
-            status: item.status ?? (item.category === 'negative' ? 'denied' : 'confirmed'),
-            confidence: item.confidence ?? 0.8,
-            evidence: item.evidence,
-        })))
-        .filter((item) => item.status !== 'denied')
-        .slice(0, 6);
+    const prescriptionMeds: PrescriptionMedicationDetail[] = summary.prescriptionDraft?.medications ?? [];
 
-    const hasSummaryContent =
-        dedupedClinicalSnapshot.length > 0
-        || dedupedDoctorActions.length > 0
-        || mergedNarrative.length > 0
-        || topFindings.length > 0
-        || !!derivedChiefComplaint
-        || (summary.prescriptionDraft?.diagnoses?.length ?? 0) > 0
-        || (summary.prescriptionDraft?.medications?.length ?? 0) > 0;
+    const isEmpty = filteredClinicalSnapshot.length === 0 && dedupedDoctorActions.length === 0 && prescriptionMeds.length === 0 && !mergedNarrative;
 
-    // ── Trigger /expand after any bullet edit ──────────────────────────────
+    // ── Trigger /expand after any edit ────────────────────────────────────
     const triggerExpand = useCallback(async (
         snapshot: KeyFact[],
         actions: SummaryItem[]
@@ -191,10 +178,11 @@ export default function SummaryPanel({
         if (expandDebounceRef.current) clearTimeout(expandDebounceRef.current);
         expandDebounceRef.current = setTimeout(async () => {
             setIsExpandingLocal(true);
+            setExpandError(null);
             try {
                 const resp = await fetch(`${WHISPER_ENDPOINT}/expand`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getRoomAgentHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({
                         clinical_snapshot: snapshot,
                         doctor_actions: actions.map(a => a.text),
@@ -203,17 +191,22 @@ export default function SummaryPanel({
                 });
                 if (resp.ok) {
                     const data = await resp.json();
+                    const nextIssues = coerceParagraphText(data.issuesParagraph ?? '');
+                    const nextActions = coerceParagraphText(data.actionsParagraph ?? '');
                     onUpdateParagraphs(
-                        data.issuesParagraph ?? '',
-                        data.actionsParagraph ?? ''
+                        nextIssues,
+                        nextActions
                     );
+                } else {
+                    setExpandError('Failed to regenerate narrative — room agent may be unavailable.');
                 }
             } catch (e) {
                 console.error('expand failed', e);
+                setExpandError('Failed to regenerate narrative — room agent may be unavailable.');
             } finally {
                 setIsExpandingLocal(false);
             }
-        }, 900); // debounce 900ms so rapid edits only fire once
+        }, 900);
     }, [transcript, onUpdateParagraphs]);
 
     // ── Clinical snapshot chip editing ─────────────────────────────────────
@@ -278,15 +271,6 @@ export default function SummaryPanel({
         return (
             <li key={item.id} className={`${styles.bulletItem} ${!isLocked ? styles.editable : ''}`}>
                 <span className={styles.bulletMarker} />
-                {item.isSupported === false && (
-                    <span
-                        className={styles.unsupportedBadge}
-                        aria-label="Not found in transcript — verify before approving"
-                        title="AI Confidence Low: This claim was not explicitly found in the transcript."
-                    >
-                        Not in transcript
-                    </span>
-                )}
                 {isEditing ? (
                     <input
                         type="text"
@@ -358,11 +342,15 @@ export default function SummaryPanel({
                             Updating…
                         </span>
                     )}
+                    {expandError && !isExpanding && (
+                        <span className={styles.expandError} title={expandError}>
+                            Narrative update failed
+                        </span>
+                    )}
                 </div>
             </div>
 
             <div className={styles.content}>
-                {/* ── Recording placeholder ───────────────────────────────── */}
                 {status === 'recording' ? (
                     <div className={styles.placeholder}>
                         <svg className={styles.placeholderIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -374,52 +362,8 @@ export default function SummaryPanel({
                 ) : (
                     <div className={styles.sections}>
 
-                        <div className={styles.overviewCard}>
-                            <div className={styles.overviewHeader}>
-                                <div>
-                                    <div className={styles.overviewLabel}>Chief Complaint</div>
-                                    <div className={styles.overviewValue}>{derivedChiefComplaint || 'No summary generated yet'}</div>
-                                </div>
-                                {hasSummaryContent && (
-                                    <div className={styles.qualityWrap}>
-                                        <span className={styles.qualityBadge}>
-                                            {(quality?.mode ?? 'hybrid').replace('_', ' ')}
-                                        </span>
-                                        <span className={styles.qualityText}>Quality {Math.round(quality?.score ?? 0)}%</span>
-                                        <span className={styles.qualityText}>Confidence {Math.round((quality?.confidence ?? 0) * 100)}%</span>
-                                    </div>
-                                )}
-                            </div>
-
-                            {topFindings.length > 0 && (
-                                <div className={styles.topFindingsRow}>
-                                    {topFindings.map((item) => {
-                                        const config = CATEGORY_CONFIG[item.category as KeyFactCategory] ?? CATEGORY_CONFIG.symptom;
-                                        return (
-                                            <span key={item.id} className={`${styles.chip} ${config.className}`} title={item.evidence || config.label}>
-                                                {item.label}
-                                            </span>
-                                        );
-                                    })}
-                                </div>
-                            )}
-
-                            {hasSummaryContent && quality?.missingFields?.length ? (
-                                <div className={styles.missingFields}>
-                                    Missing: {quality.missingFields.join(', ')}
-                                </div>
-                            ) : null}
-                        </div>
-
-                        <div className={styles.sectionCompact}>
-                            <div className={styles.sectionHeader}>
-                                <h3 className={styles.sectionTitle}>Clinical Summary</h3>
-                            </div>
-                            <p className={styles.paragraphText}>{mergedNarrative || 'No summary generated yet.'}</p>
-                        </div>
-
-                        {/* ── Section 1: Clinical Snapshot ────────────────────── */}
-                        {(dedupedClinicalSnapshot.length > 0 || isSummarizing) && (
+                        {/* ── Clinical Snapshot ───────────────────────────── */}
+                        {(filteredClinicalSnapshot.length > 0 || isSummarizing) && (
                             <div className={styles.snapshotSection}>
                                 <div className={styles.snapshotHeader}>
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -435,7 +379,7 @@ export default function SummaryPanel({
                                     )}
                                 </div>
 
-                                {isSummarizing && dedupedClinicalSnapshot.length === 0 ? (
+                                {isSummarizing && filteredClinicalSnapshot.length === 0 ? (
                                     <div className={styles.shimmerStrip}>
                                         {[80,60,90,55,70,65].map((w,i) => (
                                             <div key={i} className={styles.shimmerChip} style={{ width: w }} />
@@ -443,7 +387,7 @@ export default function SummaryPanel({
                                     </div>
                                 ) : (
                                     <div className={styles.chipStrip}>
-                                        {[...dedupedClinicalSnapshot]
+                                        {[...filteredClinicalSnapshot]
                                             .sort((a,b) =>
                                                 CATEGORY_ORDER.indexOf(a.category as KeyFactCategory) -
                                                 CATEGORY_ORDER.indexOf(b.category as KeyFactCategory)
@@ -454,16 +398,9 @@ export default function SummaryPanel({
                                                     <span
                                                         key={i}
                                                         className={`${styles.chip} ${config.className}`}
-                                                        title={fact.isSupported === false ? "AI Confidence Low: This claim was not explicitly found in the transcript." : config.label}
+                                                        title={config.label}
                                                     >
                                                         {fact.label}
-                                                        {fact.isSupported === false && (
-                                                            <span
-                                                                className={styles.chipUnsupported}
-                                                                aria-label="Not found in transcript"
-                                                                title="AI Confidence Low: This claim was not explicitly found in the transcript."
-                                                            >!</span>
-                                                        )}
                                                         {!isLocked && (
                                                             <button
                                                                 className={styles.chipDelete}
@@ -475,7 +412,6 @@ export default function SummaryPanel({
                                                 );
                                             })}
 
-                                        {/* Add chip input */}
                                         {!isLocked && (
                                             addingChip ? (
                                                 <input
@@ -507,46 +443,37 @@ export default function SummaryPanel({
                             </div>
                         )}
 
-                        {uniqueAdvice.length > 0 && (
-                            <div className={styles.section}>
-                                <div className={styles.sectionHeader}>
-                                    <h3 className={styles.sectionTitle}>Advice</h3>
-                                    <span className={styles.countBadge}>{uniqueAdvice.length}</span>
-                                </div>
-                                <ul className={styles.bulletList}>
-                                    {uniqueAdvice.slice(0, 5).map((item, index) => (
-                                        <li key={`${item}-${index}`} className={styles.bulletItem}>
-                                            <span className={styles.bulletMarker} />
-                                            <span className={styles.bulletText}>{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {/* ── Section 2: Doctor's Actions ──────────────────────── */}
-                        {(dedupedDoctorActions.length > 0 || isSummarizing || isDraft) && (
+                        {/* ── Doctor's Notes ───────────────────────────────── */}
+                        {(dedupedDoctorActions.length > 0 || uniqueAdvice.length > 0 || isSummarizing || isDraft) && (
                             <div className={styles.section}>
                                 <div className={styles.sectionHeader}>
                                     <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
-                                    <h3 className={styles.sectionTitle}>Doctor Actions</h3>
-                                    <span className={styles.countBadge}>{dedupedDoctorActions.length}</span>
+                                    <h3 className={styles.sectionTitle}>Doctor Notes</h3>
+                                    {(dedupedDoctorActions.length + uniqueAdvice.length) > 0 && (
+                                        <span className={styles.countBadge}>{dedupedDoctorActions.length + uniqueAdvice.length}</span>
+                                    )}
                                 </div>
 
-                                {isSummarizing && dedupedDoctorActions.length === 0 ? (
+                                {isSummarizing && dedupedDoctorActions.length === 0 && uniqueAdvice.length === 0 ? (
                                     <div className={styles.shimmerList}>
                                         {[200,160,220].map((w,i) => (
                                             <div key={i} className={styles.shimmerLine} style={{ width: w }} />
                                         ))}
                                     </div>
-                                ) : dedupedDoctorActions.length > 0 ? (
+                                ) : (dedupedDoctorActions.length > 0 || uniqueAdvice.length > 0) ? (
                                     <ul className={styles.bulletList}>
                                         {dedupedDoctorActions.map(item => renderActionBullet(item))}
+                                        {uniqueAdvice.map((text, index) => (
+                                            <li key={`advice-${index}`} className={styles.bulletItem}>
+                                                <span className={styles.bulletMarker} />
+                                                <span className={styles.bulletText}>{text}</span>
+                                            </li>
+                                        ))}
                                     </ul>
                                 ) : (
-                                    <div className={styles.emptySection}>No actions captured</div>
+                                    <div className={styles.emptySection}>No notes captured</div>
                                 )}
 
                                 {!isLocked && (
@@ -554,12 +481,57 @@ export default function SummaryPanel({
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <path d="M12 5v14m-7-7h14" />
                                         </svg>
-                                        Add item
+                                        Add note
                                     </button>
                                 )}
                             </div>
                         )}
 
+                        {/* ── Prescription ─────────────────────────────────── */}
+                        {prescriptionMeds.length > 0 && (
+                            <div className={styles.section}>
+                                <div className={styles.sectionHeader}>
+                                    <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+                                    </svg>
+                                    <h3 className={styles.sectionTitle}>Prescription</h3>
+                                    <span className={styles.countBadge}>{prescriptionMeds.length}</span>
+                                </div>
+                                <ul className={styles.medList}>
+                                    {prescriptionMeds.map((med, index) => (
+                                        <li key={index} className={styles.medItem}>
+                                            <span className={styles.medName}>{med.name}</span>
+                                            <span className={styles.medMeta}>
+                                                {[med.dosage, med.frequency, med.duration].filter(Boolean).join(' · ')}
+                                            </span>
+                                            {med.instructions && (
+                                                <span className={styles.medInstructions}>{med.instructions}</span>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {/* ── Clinical Summary ──────────────────────────────── */}
+                        {(mergedNarrative || isSummarizing) && (
+                            <div className={styles.sectionCompact}>
+                                <div className={styles.sectionHeader}>
+                                    <h3 className={styles.sectionTitle}>Clinical Summary</h3>
+                                </div>
+                                {isSummarizing && !mergedNarrative ? (
+                                    <div className={styles.shimmerParagraph}>
+                                        {[100,85,95,70,88].map((w,i) => (
+                                            <div key={i} className={styles.shimmerLine} style={{ width: `${w}%` }} />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className={`${styles.paragraphText} ${isExpanding ? styles.paragraphUpdating : ''}`}>
+                                        {mergedNarrative || 'No summary generated yet.'}
+                                    </p>
+                                )}
+                            </div>
+                        )}
 
                         {/* Warning if draft and empty */}
                         {isDraft && isEmpty && (

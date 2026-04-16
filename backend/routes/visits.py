@@ -37,6 +37,20 @@ class UpdatePrescriptionDraftBody(BaseModel):
     prescriptionDraft: dict  # Contains diagnoses, medications, investigations, advice, warnings, reportSummary, followUp
 
 
+class ValidateSummaryBody(BaseModel):
+    summary: Optional[dict] = None
+
+
+SUMMARY_PLACEHOLDER_VALUES = {
+    "",
+    "symptom",
+    "issue",
+    "regular words",
+    "not clearly captured yet",
+    "no summary generated yet",
+}
+
+
 CONDITION_STOP_TERMS = {
     "have", "having", "pain", "fever", "cough", "cold", "nausea", "vomiting", "headache", "dizziness",
     "symptom", "issue", "problem", "feels", "feeling", "patient", "reports", "reported", "since", "days",
@@ -131,6 +145,83 @@ def _extract_medication_candidates(summary) -> list[dict]:
         seen.add(key)
         deduped.append(item)
     return deduped
+
+
+def _get_or_create_medical_history(db: DBSession, patient_id: str) -> models.MedicalHistory:
+    med_history = (
+        db.query(models.MedicalHistory)
+        .filter(models.MedicalHistory.patient_id == patient_id)
+        .first()
+    )
+    if med_history:
+        return med_history
+
+    med_history = models.MedicalHistory(patient_id=patient_id, conditions=[], allergies=[], medications=[])
+    db.add(med_history)
+    db.flush()
+    return med_history
+
+
+def _merge_summary_into_medical_history(
+    med_history: models.MedicalHistory,
+    summary_payload: VisitApprove,
+    actor_id: str,
+) -> None:
+    existing_conditions = {str(c).strip().lower() for c in (med_history.conditions or []) if str(c).strip()}
+    new_conditions = list(med_history.conditions or [])
+
+    for condition in _extract_condition_candidates(summary_payload.summary):
+        key = condition.lower()
+        if key in existing_conditions:
+            continue
+        existing_conditions.add(key)
+        new_conditions.append(condition)
+
+    med_history.conditions = new_conditions
+    med_history.updated_by = actor_id
+    flag_modified(med_history, "conditions")
+
+
+def _complete_linked_appointment(db: DBSession, visit: models.Visit, now: datetime) -> None:
+    if not visit.appointment_id:
+        return
+
+    appt = db.query(models.Appointment).filter(models.Appointment.id == visit.appointment_id).first()
+    if not appt:
+        return
+
+    appt.status = models.AppointmentStatusEnum.completed
+    appt.completed_at = now
+    appt.visit_id = visit.id
+
+
+def _close_queue_entry(db: DBSession, visit: models.Visit, now: datetime) -> None:
+    queue_entry = (
+        db.query(models.WaitingQueue)
+        .filter(
+            models.WaitingQueue.patient_id == visit.patient_id,
+            models.WaitingQueue.status.in_([models.WaitingQueueStatusEnum.in_room, models.WaitingQueueStatusEnum.called]),
+        )
+        .first()
+    )
+    if queue_entry:
+        queue_entry.status = models.WaitingQueueStatusEnum.done
+        queue_entry.done_at = now
+
+
+def _release_room(db: DBSession, visit: models.Visit) -> None:
+    if not visit.room_id:
+        return
+
+    room = db.query(models.Room).filter(models.Room.id == visit.room_id).first()
+    if not room:
+        return
+
+    room.status = models.RoomStatusEnum.idle
+    room.current_patient_id = None
+    room.assigned_doctor_id = None
+    if hasattr(room, "current_doctor_id"):
+        setattr(room, "current_doctor_id", None)
 
 
 def _normalize_quality_payload(summary: dict | None) -> dict | None:
@@ -261,6 +352,58 @@ def _normalize_prescription_payload(summary: dict | None) -> dict:
         "warnings": warnings,
         "report_summary": report_summary,
         "follow_up": follow_up if isinstance(follow_up, dict) else None,
+    }
+
+
+def _is_placeholder_value(value: str) -> bool:
+    normalized = re.sub(r"\s+", " ", (value or "").strip().lower())
+    return normalized in SUMMARY_PLACEHOLDER_VALUES
+
+
+def _validate_summary_for_approval(summary: dict) -> dict:
+    missing_fields: list[dict] = []
+    warnings: list[str] = []
+
+    chief_complaint = str(summary.get("chiefComplaint") or "").strip()
+    if not chief_complaint or _is_placeholder_value(chief_complaint):
+        missing_fields.append({
+            "field": "chiefComplaint",
+            "message": "Chief complaint is missing or generic. Please capture the primary patient issue.",
+            "severity": "error",
+        })
+
+    prescription = _normalize_prescription_payload(summary)
+    if len(prescription.get("medications") or []) == 0:
+        missing_fields.append({
+            "field": "medications",
+            "message": "No medications detected. Add prescribed medications before approval.",
+            "severity": "error",
+        })
+
+    doctor_actions = summary.get("doctorActions") or []
+    if not isinstance(doctor_actions, list) or len(doctor_actions) == 0:
+        missing_fields.append({
+            "field": "doctorActions",
+            "message": "Doctor actions are empty. Include plan/actions before approval.",
+            "severity": "error",
+        })
+
+    issues_paragraph = str(summary.get("issuesParagraph") or "").strip()
+    if not issues_paragraph:
+        warnings.append("Clinical summary paragraph is empty.")
+
+    actions_paragraph = str(summary.get("actionsParagraph") or "").strip()
+    if not actions_paragraph:
+        warnings.append("Actions paragraph is empty.")
+
+    clinical_snapshot = summary.get("clinicalSnapshot") or []
+    if not isinstance(clinical_snapshot, list) or len(clinical_snapshot) == 0:
+        warnings.append("Clinical snapshot is empty.")
+
+    return {
+        "ok": len(missing_fields) == 0,
+        "missingFields": missing_fields,
+        "warnings": warnings,
     }
 
 
@@ -880,7 +1023,7 @@ def save_visit_progress(
 def update_prescription_draft(
     visit_id: str,
     body: UpdatePrescriptionDraftBody,
-    ctx: RequestContext = Depends(require_admin),
+    ctx: RequestContext = Depends(require_any_auth),
     db: DBSession = Depends(get_db),
 ):
     """Update the prescription draft for a visit without approving it.
@@ -939,8 +1082,10 @@ def approve_visit(
     visit = db.query(models.Visit).filter(models.Visit.id == visit_id, models.Visit.is_deleted == False).first()
     if not visit:
         raise HTTPException(404, "Visit not found")
-    if ctx.is_room_device and visit.room_id != ctx.room_id:
-        raise HTTPException(403, "Access denied")
+    if visit.status == models.VisitStatusEnum.completed:
+        raise HTTPException(409, "Visit already completed")
+    if visit.status == models.VisitStatusEnum.cancelled:
+        raise HTTPException(409, "Visit was cancelled")
 
     if body.doctor_id:
         doctor = db.query(models.Doctor).filter(models.Doctor.id == body.doctor_id, models.Doctor.is_active == True).first()
@@ -948,118 +1093,100 @@ def approve_visit(
             raise HTTPException(404, "Doctor not found")
 
     now = datetime.utcnow()
+    try:
+        with db.begin_nested():
+            normalized_summary = _sanitize_summary_for_response(body.summary.model_dump())
+            validation = _validate_summary_for_approval(normalized_summary)
+            if not validation["ok"]:
+                raise HTTPException(
+                    422,
+                    {
+                        "message": "Summary validation failed",
+                        "missingFields": validation["missingFields"],
+                        "warnings": validation["warnings"],
+                    },
+                )
 
-    visit.summary = body.summary.model_dump()
+            visit.summary = normalized_summary
 
-    normalized_quality = _normalize_quality_payload(visit.summary)
-    if normalized_quality is not None:
-        visit.summary["quality"] = normalized_quality
+            normalized_quality = _normalize_quality_payload(visit.summary)
+            if normalized_quality is not None:
+                visit.summary["quality"] = normalized_quality
 
-    structured_findings = _normalize_structured_findings_payload(visit.summary)
-    if structured_findings:
-        visit.summary["structuredFindings"] = structured_findings
+            structured_findings = _normalize_structured_findings_payload(visit.summary)
+            if structured_findings:
+                visit.summary["structuredFindings"] = structured_findings
 
-    chief_complaint = str(visit.summary.get("chiefComplaint") or visit.summary.get("chief_complaint") or "").strip()
-    if not chief_complaint:
-        snapshot = visit.summary.get("clinicalSnapshot") or []
-        if isinstance(snapshot, list):
-            for item in snapshot:
-                if not isinstance(item, dict):
-                    continue
-                label = str(item.get("label") or "").strip()
-                category = str(item.get("category") or "").strip().lower()
-                status = str(item.get("status") or "confirmed").strip().lower()
-                if label and category == "symptom" and status != "denied":
-                    chief_complaint = label
-                    break
-    if chief_complaint:
-        chief_complaint = chief_complaint[:500]
-        visit.summary["chiefComplaint"] = chief_complaint
+            chief_complaint = str(visit.summary.get("chiefComplaint") or visit.summary.get("chief_complaint") or "").strip()
+            if not chief_complaint:
+                snapshot = visit.summary.get("clinicalSnapshot") or []
+                if isinstance(snapshot, list):
+                    for item in snapshot:
+                        if not isinstance(item, dict):
+                            continue
+                        label = str(item.get("label") or "").strip()
+                        category = str(item.get("category") or "").strip().lower()
+                        status = str(item.get("status") or "confirmed").strip().lower()
+                        if label and category == "symptom" and status != "denied":
+                            chief_complaint = label
+                            break
+            if chief_complaint:
+                visit.summary["chiefComplaint"] = chief_complaint[:500]
 
-    # ── Merge visit findings into patient's ongoing medical history ──────────
-    # Extract symptom-category facts → conditions
-    # Extract medication-category facts → medications
-    # Only merge facts that are not already present (case-insensitive dedup).
-    if body.summary.clinicalSnapshot or body.summary.prescriptions or body.summary.prescriptionDraft or body.summary.structuredFindings:
-        med_history = (
-            db.query(models.MedicalHistory)
-            .filter(models.MedicalHistory.patient_id == visit.patient_id)
-            .first()
-        )
-        if not med_history:
-            med_history = models.MedicalHistory(patient_id=visit.patient_id, conditions=[], allergies=[], medications=[])
-            db.add(med_history)
+            if body.summary.clinicalSnapshot or body.summary.prescriptions or body.summary.prescriptionDraft or body.summary.structuredFindings:
+                med_history = _get_or_create_medical_history(db, visit.patient_id)
+                _merge_summary_into_medical_history(med_history, body, body.doctor_id or ctx.sub)
 
-        existing_conditions = {str(c).strip().lower() for c in (med_history.conditions or []) if str(c).strip()}
-        new_conditions = list(med_history.conditions or [])
+            visit.status = models.VisitStatusEnum.completed
+            visit.ended_at = now
+            visit.approved_at = now
+            visit.approved_by = body.doctor_id or ctx.sub
+            if hasattr(visit, "completed_at"):
+                setattr(visit, "completed_at", now)
 
-        for condition in _extract_condition_candidates(body.summary):
-            key = condition.lower()
-            if key in existing_conditions:
-                continue
-            existing_conditions.add(key)
-            new_conditions.append(condition)
+            visit.transcript = ""
+            visit.dialogue = []
 
-        new_medications = _extract_medication_candidates(body.summary)
+            if body.doctor_id:
+                visit.doctor_id = body.doctor_id
 
-        med_history.conditions = new_conditions
-        if new_medications:
-            # Replace only when a structured medication list is present.
-            med_history.medications = new_medications
-        med_history.updated_by  = body.doctor_id or ctx.sub
-        flag_modified(med_history, "conditions")
-        if new_medications:
-            flag_modified(med_history, "medications")
-    # ── End medical history merge ─────────────────────────────────────────────
-    visit.status = models.VisitStatusEnum.completed
-    visit.ended_at = now
-    visit.approved_at = now
-    visit.approved_by = body.doctor_id or ctx.sub
-    if hasattr(visit, "completed_at"):
-        setattr(visit, "completed_at", now)
+            _complete_linked_appointment(db, visit, now)
+            _close_queue_entry(db, visit, now)
+            _release_room(db, visit)
 
-    # Clear PHI transcript + dialogue on approval
-    visit.transcript = ""
-    visit.dialogue = []
-
-    if body.doctor_id:
-        visit.doctor_id = body.doctor_id
-
-    # Complete linked appointment
-    if visit.appointment_id:
-        appt = db.query(models.Appointment).filter(models.Appointment.id == visit.appointment_id).first()
-        if appt:
-            appt.status = models.AppointmentStatusEnum.completed
-            appt.completed_at = now
-            appt.visit_id = visit.id
-
-    # Mark active queue entry done
-    queue_entry = (
-        db.query(models.WaitingQueue)
-        .filter(
-            models.WaitingQueue.patient_id == visit.patient_id,
-            models.WaitingQueue.status.in_([models.WaitingQueueStatusEnum.in_room, models.WaitingQueueStatusEnum.called]),
-        )
-        .first()
-    )
-    if queue_entry:
-        queue_entry.status = models.WaitingQueueStatusEnum.done
-        queue_entry.done_at = now
-
-    # Release linked room
-    if visit.room_id:
-        room = db.query(models.Room).filter(models.Room.id == visit.room_id).first()
-        if room:
-            room.status = models.RoomStatusEnum.idle
-            room.current_patient_id = None
-            room.assigned_doctor_id = None
-            if hasattr(room, "current_doctor_id"):
-                setattr(room, "current_doctor_id", None)
-
-    flag_modified(visit, "summary")
-    db.commit()
+            flag_modified(visit, "summary")
+            db.flush()
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
     audit(db, ctx, "APPROVE_VISIT", "visit", visit_id, {"patient_id": visit.patient_id, "status": visit.status.value})
     return {"id": visit.id, "status": visit.status.value}
+
+
+@router.post("/{visit_id}/validate-summary")
+def validate_visit_summary(
+    visit_id: str,
+    body: ValidateSummaryBody,
+    ctx: RequestContext = Depends(require_any_auth),
+    db: DBSession = Depends(get_db),
+):
+    visit = db.query(models.Visit).filter(models.Visit.id == visit_id, models.Visit.is_deleted == False).first()
+    if not visit:
+        raise HTTPException(404, "Visit not found")
+    if ctx.is_room_device and visit.room_id != ctx.room_id:
+        raise HTTPException(403, "Access denied")
+
+    source_summary = body.summary if isinstance(body.summary, dict) else (visit.summary if isinstance(visit.summary, dict) else {})
+    normalized_summary = _sanitize_summary_for_response(source_summary)
+    validation = _validate_summary_for_approval(normalized_summary)
+
+    return {
+        "ok": validation["ok"],
+        "missingFields": validation["missingFields"],
+        "warnings": validation["warnings"],
+        "normalizedSummary": normalized_summary,
+    }
 
 
 @router.delete("/{visit_id}", status_code=204)

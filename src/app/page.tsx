@@ -10,10 +10,11 @@ import {
   getDoctors,
   getPatient,
   getPatientVisits,
+  validateVisitSummary,
   updateMedicalHistory,
   updateQueueEntry,
 } from '@/services/api';
-import { Visit, DialogueTurn } from '@/types';
+import { Visit, DialogueTurn, VisitSummary } from '@/types';
 import { Doctor, EMRPatient, MedicalHistoryRecord, QueueEntry } from '@/types/emr';
 import styles from './page.module.css';
 import PatientHeader from '@/components/PatientHeader';
@@ -21,7 +22,6 @@ import HistoryPanel from '@/components/HistoryPanel/HistoryPanel';
 import MedicalSnapshot from '@/components/MedicalSnapshot';
 import TranscriptionPanel from '@/components/TranscriptionPanel';
 import SummaryPanel from '@/components/SummaryPanel';
-import PrescriptionPreview from '@/components/PrescriptionPreview/PrescriptionPreview';
 import RecordingButton from '@/components/RecordingButton';
 import { QueuePanel } from '@/components/QueuePanel/QueuePanel';
 import SpeakerConfirmation from '@/components/SpeakerConfirmation/SpeakerConfirmation';
@@ -39,6 +39,54 @@ function extractChiefComplaintFromQueueNotes(notes?: string | null): string | nu
   return first || text;
 }
 
+function normalizeSummaryForApproval(summary: VisitSummary, queueChiefComplaint?: string | null): VisitSummary {
+  const normalizedChiefComplaint =
+    (summary.chiefComplaint || '').trim()
+    || (queueChiefComplaint || '').trim()
+    || summary.clinicalSnapshot.find((item) => item.category === 'symptom' && (item.status ?? 'confirmed') !== 'denied')?.label?.trim()
+    || '';
+
+  const fallbackDraftFromPrescriptions =
+    summary.prescriptions.length > 0
+      ? summary.prescriptions
+          .filter((rx) => (rx.name || '').trim())
+          .map((rx) => ({
+            name: rx.name.trim(),
+            dosage: rx.dosage?.trim() || undefined,
+            frequency: rx.frequency?.trim() || undefined,
+            duration: undefined,
+            route: undefined,
+            instructions: undefined,
+          }))
+      : [];
+
+  const draft = summary.prescriptionDraft
+    ? {
+        ...summary.prescriptionDraft,
+        medications:
+          (summary.prescriptionDraft.medications?.length ?? 0) > 0
+            ? summary.prescriptionDraft.medications
+            : fallbackDraftFromPrescriptions,
+      }
+    : (fallbackDraftFromPrescriptions.length > 0
+      ? {
+          diagnoses: [],
+          medications: fallbackDraftFromPrescriptions,
+          investigations: [],
+          advice: [],
+          warnings: [],
+          reportSummary: '',
+          followUp: null,
+        }
+      : null);
+
+  return {
+    ...summary,
+    chiefComplaint: normalizedChiefComplaint,
+    prescriptionDraft: draft,
+  };
+}
+
 export default function ExamRoom() {
   const router = useRouter();
   const WHISPER_ENDPOINT = process.env.NEXT_PUBLIC_WHISPER_ENDPOINT || 'http://localhost:8000';
@@ -48,7 +96,6 @@ export default function ExamRoom() {
   // Data State
   const [patients, setPatients] = useState<EMRPatient[]>([]);
   const [doctorsById, setDoctorsById] = useState<Record<string, Doctor>>({});
-  const [assignedDoctorName, setAssignedDoctorName] = useState<string | null>(null);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [currentPatient, setCurrentPatient] = useState<EMRPatient | null>(null);
   const [medicalHistory, setMedicalHistory] = useState<MedicalHistoryRecord | null>(null);
@@ -63,6 +110,7 @@ export default function ExamRoom() {
   const [showRecoveryBanner, setShowRecoveryBanner] = useState(false);
   const [queueError, setQueueError] = useState<string | null>(null);
   const [visitError, setVisitError] = useState<string | null>(null);
+  const [validationWarnings, setValidationWarnings] = useState<string[]>([]);
   const [queueChiefComplaint, setQueueChiefComplaint] = useState<string | null>(null);
 
   const {
@@ -90,20 +138,11 @@ export default function ExamRoom() {
   }, []);
   // Determine initial selected patient based on room
   const currentRoom = roomId ? getRoom(roomId) : null;
+  // Derived from doctorsById (loaded with activeOnly=false) — no extra API call needed
+  const assignedDoctorName = currentRoom?.assignedDoctorId
+    ? (doctorsById[currentRoom.assignedDoctorId]?.name ?? null)
+    : null;
 
-  // Resolve the assigned doctor's actual name whenever the room's doctor changes
-  useEffect(() => {
-    if (!currentRoom?.assignedDoctorId) {
-      setAssignedDoctorName(null);
-      return;
-    }
-    getDoctors()
-      .then(docs => {
-        const doc = docs.find(d => d.id === currentRoom.assignedDoctorId);
-        setAssignedDoctorName(doc?.name ?? null);
-      })
-      .catch(() => setAssignedDoctorName(null));
-  }, [currentRoom?.assignedDoctorId]);
 
   useEffect(() => {
     if (currentRoom?.currentPatientId) {
@@ -333,6 +372,7 @@ export default function ExamRoom() {
     }
 
     setVisitError(null);
+    setValidationWarnings([]);
     try {
       clearTranscript();
 
@@ -349,7 +389,7 @@ export default function ExamRoom() {
       startNewVisit(selectedPatientId, newVisit.id);
 
       // Start audio streaming
-      await startRecording();
+      await startRecording(undefined, newVisit.id);
     } catch (error) {
       console.error("Failed to start recording", error);
       setActiveVisitId(null);
@@ -387,16 +427,18 @@ export default function ExamRoom() {
     }
   }, [currentVisit, dialogue, updateTranscript, updateDialogue]);
 
-  // Handle stop recording — wait for diarization, then allow manual summarize
+  // Handle stop recording — wait for diarization, then allow manual summarize.
+  // Always use generic role labels in the transcript — the actual names of the
+  // doctor and patient are available elsewhere (PatientHeader, room context).
   const handleStopRecording = useCallback(async () => {
-    // Use the resolved doctor name (from the doctors list), not the room name from auth
-    const doctorName = assignedDoctorName || "Doctor";
-    const patientName = currentPatient?.name || "Patient";
-
+    // Use the room's assigned doctor name — never fall back to the logged-in user's name
+    // because the device user is staff/patient, not the doctor.
+    const doctorName = assignedDoctorName || 'Doctor';
+    const patientName = currentPatient?.name || 'Patient';
     const { text, dialogue: finalDialogue } = await stopRecording(doctorName, patientName);
     updateTranscript(text, finalDialogue);
     setVisitStatus('ready_to_summarize');
-  }, [stopRecording, updateTranscript, setVisitStatus, assignedDoctorName, currentPatient]);
+  }, [stopRecording, updateTranscript, setVisitStatus, assignedDoctorName, currentPatient?.name]);
 
   const handleEditTurn = useCallback((index: number, newText: string) => {
     const currentDialogueArr = currentVisit?.dialogue || dialogue;
@@ -425,7 +467,11 @@ export default function ExamRoom() {
   const handleManualSummarize = useCallback(async () => {
     const currentDialogue = currentVisit?.dialogue || dialogue;
 
-    const quickSummary = generateQuickSummary(currentDialogue);
+    const quickSummaryBase = generateQuickSummary(currentDialogue);
+    const quickSummary = {
+      ...quickSummaryBase,
+      chiefComplaint: quickSummaryBase.chiefComplaint || queueChiefComplaint || '',
+    };
     updateSummary(quickSummary);
     setVisitStatus('draft');
 
@@ -444,17 +490,54 @@ export default function ExamRoom() {
       updateSummary(summary);
       setVisitStatus('draft');
     }
-  }, [generateQuickSummary, generateSummary, updateSummary, setVisitStatus, currentVisit, dialogue, medicalHistory]);
+  }, [generateQuickSummary, generateSummary, updateSummary, setVisitStatus, currentVisit, dialogue, medicalHistory, queueChiefComplaint]);
 
   // Handle approve — saves only structured summary to backend, transcript is discarded
   const handleApprove = useCallback(async () => {
-    if (!activeVisitId) {
-      console.error('No active visit ID to approve');
+    let effectiveVisitId = activeVisitId;
+
+    if (!effectiveVisitId && selectedPatientId && currentRoom?.assignedDoctorId && currentRoom?.id) {
+      try {
+        const createdVisit = await createVisit({
+          patientId: selectedPatientId,
+          doctorId: currentRoom.assignedDoctorId,
+          roomId: currentRoom.id,
+          chiefComplaint: queueChiefComplaint ?? undefined,
+        });
+        effectiveVisitId = createdVisit.id;
+        setActiveVisitId(createdVisit.id);
+      } catch (error) {
+        console.error('Failed to create fallback visit for approval', error);
+      }
+    }
+
+    if (!effectiveVisitId) {
+      setVisitError('Cannot save: no active visit found. Please start a new recording.');
       return;
     }
 
+    setVisitError(null);
     try {
-      await approveVisit(activeVisitId);
+      if (!currentVisit?.summary) {
+        setVisitError('Cannot save: summary is empty. Please generate summary first.');
+        return;
+      }
+
+      const normalizedSummary = normalizeSummaryForApproval(currentVisit.summary, queueChiefComplaint);
+      const validation = await validateVisitSummary(effectiveVisitId, normalizedSummary);
+      const validationMessages = [
+        ...validation.missingFields.map((item) => item.message),
+        ...validation.warnings,
+      ];
+      setValidationWarnings(validationMessages);
+
+      if (!validation.ok) {
+        setVisitError('Please fix the summary before approval.');
+        return;
+      }
+
+      updateSummary(validation.normalizedSummary);
+      await approveVisit(effectiveVisitId, validation.normalizedSummary);
 
       // Mark the queue entry as done
       if (activeQueueEntryId) {
@@ -469,6 +552,7 @@ export default function ExamRoom() {
       clearSession();
       setActiveVisitId(null);
       setQueueChiefComplaint(null);
+      setValidationWarnings([]);
       clearTranscript();
 
       // Refresh last visit for the PatientHeader and re-fetch patient medical history
@@ -484,8 +568,9 @@ export default function ExamRoom() {
       }
     } catch (error) {
       console.error('Error approving visit:', error);
+      setVisitError('Failed to save visit. Please try again.');
     }
-  }, [approveVisit, activeVisitId, activeQueueEntryId, clearSession, clearTranscript, currentPatient]);
+  }, [approveVisit, activeVisitId, activeQueueEntryId, clearSession, clearTranscript, currentPatient, currentRoom?.assignedDoctorId, currentRoom?.id, currentVisit?.summary, queueChiefComplaint, selectedPatientId, updateSummary]);
 
   // Handle discard — cancels backend visit (best-effort), clears local session
   const handleDiscard = useCallback(async () => {
@@ -504,6 +589,7 @@ export default function ExamRoom() {
     clearSession();
     setActiveVisitId(null);
     setQueueChiefComplaint(null);
+    setValidationWarnings([]);
     clearTranscript();
   }, [discardVisit, activeVisitId, activeQueueEntryId, clearSession, clearTranscript]);
   // Handle logout
@@ -626,6 +712,19 @@ export default function ExamRoom() {
           >×</button>
         </div>
       )}
+      {validationWarnings.length > 0 && (
+        <div className={styles.warningBanner} role="status" aria-live="polite">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{validationWarnings[0]}</span>
+          <button
+            className={styles.bannerDismiss}
+            onClick={() => setValidationWarnings([])}
+            aria-label="Dismiss warning"
+          >×</button>
+        </div>
+      )}
 
       {showQueue ? (
         <div className={styles.queueContainer}>
@@ -726,6 +825,8 @@ export default function ExamRoom() {
                   isEditable={!isRecording && !isTranscribing && (currentVisit?.dialogue || dialogue).length > 0}
                   onEditTurn={handleEditTurn}
                   onAddTurn={handleAddTurn}
+                  doctorName={assignedDoctorName || 'Doctor'}
+                  patientName={currentPatient?.name || 'Patient'}
                 />
               </ErrorBoundary>
 
@@ -754,15 +855,6 @@ export default function ExamRoom() {
                     updateParagraphs(issues, actions);
                   }}
                 />
-                {currentPatient && currentVisit?.summary?.prescriptionDraft && (
-                  <PrescriptionPreview
-                    patient={currentPatient}
-                    doctorName={assignedDoctorName}
-                    visitDate={currentVisit.createdAt}
-                    draft={currentVisit.summary.prescriptionDraft}
-                    allergies={liveMedicalSnapshot?.history.allergies ?? []}
-                  />
-                )}
               </ErrorBoundary>
             </div>
           </div>

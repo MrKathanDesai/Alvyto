@@ -17,6 +17,8 @@ interface TranscriptionPanelProps {
     isEditable?: boolean;
     onEditTurn?: (index: number, newText: string) => void;
     onAddTurn?: (speaker: string, text: string) => void;
+    doctorName?: string | null;
+    patientName?: string | null;
 }
 
 function SpeakerAvatar({ name }: { name: string }) {
@@ -80,6 +82,8 @@ export default function TranscriptionPanel({
     isEditable = false,
     onEditTurn,
     onAddTurn,
+    doctorName,
+    patientName,
 }: TranscriptionPanelProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const editTextareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -88,10 +92,16 @@ export default function TranscriptionPanel({
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [editText, setEditText] = useState('');
     const [isAddingTurn, setIsAddingTurn] = useState(false);
-    const [newTurnSpeaker, setNewTurnSpeaker] = useState('Doctor');
+    const resolvedDoctorName = (doctorName || 'Doctor').trim() || 'Doctor';
+    const resolvedPatientName = (patientName || 'Patient').trim() || 'Patient';
+    const [newTurnSpeaker, setNewTurnSpeaker] = useState(resolvedDoctorName);
     const [newTurnText, setNewTurnText] = useState('');
 
-    const SPEAKER_OPTIONS = ["Doctor", "Patient", "Companion"];
+    const SPEAKER_OPTIONS = [resolvedDoctorName, resolvedPatientName, "Companion"];
+
+    useEffect(() => {
+        setNewTurnSpeaker(resolvedDoctorName);
+    }, [resolvedDoctorName]);
 
     const autoResize = useCallback((textarea: HTMLTextAreaElement | null) => {
         if (!textarea) return;
@@ -140,13 +150,13 @@ export default function TranscriptionPanel({
 
         onAddTurn?.(newTurnSpeaker, trimmed);
         setNewTurnText('');
-        setNewTurnSpeaker('Doctor');
+        setNewTurnSpeaker(resolvedDoctorName);
         setIsAddingTurn(false);
     };
 
     const handleCancelNewTurn = () => {
         setNewTurnText('');
-        setNewTurnSpeaker('Doctor');
+        setNewTurnSpeaker(resolvedDoctorName);
         setIsAddingTurn(false);
     };
 

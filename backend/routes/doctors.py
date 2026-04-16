@@ -88,7 +88,7 @@ def update_doctor(
 def set_availability(
     doctor_id: str,
     body: DoctorAvailabilityUpdate,
-    ctx: RequestContext = Depends(require_any_auth),
+    ctx: RequestContext = Depends(require_admin),
     db: DBSession = Depends(get_db),
 ):
     doctor = db.query(models.Doctor).filter(models.Doctor.id == doctor_id).first()

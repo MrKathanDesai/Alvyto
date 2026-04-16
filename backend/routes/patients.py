@@ -134,7 +134,7 @@ def update_patient(
 @router.get("/{patient_id}/visits")
 def get_patient_visits(
     patient_id: str,
-    status: Optional[str] = Query("completed"),
+    status: Optional[str] = Query(None),
     ctx: RequestContext = Depends(require_any_auth),
     db: DBSession = Depends(get_db),
 ):
@@ -142,7 +142,7 @@ def get_patient_visits(
     if not patient:
         raise HTTPException(404, "Patient not found")
     audit(db, ctx, "VIEW_PATIENT_VISITS", "patient", patient_id)
-    visit_query = db.query(models.Visit).filter(models.Visit.patient_id == patient_id)
+    visit_query = db.query(models.Visit).filter(models.Visit.patient_id == patient_id, models.Visit.is_deleted == False)
 
     if status:
         try:
@@ -171,7 +171,7 @@ def get_patient_visits(
 def update_medical_history(
     patient_id: str,
     body: MedicalHistoryIn,
-    ctx: RequestContext = Depends(require_any_auth),
+    ctx: RequestContext = Depends(require_admin),
     db: DBSession = Depends(get_db),
 ):
     patient = db.query(models.Patient).filter(models.Patient.id == patient_id).first()

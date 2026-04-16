@@ -1,0 +1,148 @@
+[
+  {
+    "run": 1,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Acid peptic disease",
+      "Reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  },
+  {
+    "run": 2,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Acid peptic disease",
+      "Reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  },
+  {
+    "run": 3,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Recurrent gastritis",
+      "Acid peptic disease and reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  },
+  {
+    "run": 4,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Acid peptic disease",
+      "Reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  },
+  {
+    "run": 5,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 2,
+    "followUp": false,
+    "issuesParagraph": false,
+    "actionsParagraph": false,
+    "diagnoses": [
+      "Acid peptic disease and reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": [
+      "Pantoprazole",
+      "Domperidone"
+    ]
+  },
+  {
+    "run": 6,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Recurrent gastritis",
+      "Acid peptic disease and reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  },
+  {
+    "run": 7,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Acid peptic disease",
+      "Reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  },
+  {
+    "run": 8,
+    "doctorActions": 3,
+    "prescriptions": 2,
+    "draft_medications": 0,
+    "followUp": true,
+    "issuesParagraph": true,
+    "actionsParagraph": true,
+    "diagnoses": [
+      "Acid peptic disease",
+      "Reflux"
+    ],
+    "med_names_prescriptions": [
+      "Pantoprazole",
+      "Domperidone"
+    ],
+    "med_names_draft": []
+  }
+]

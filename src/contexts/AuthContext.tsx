@@ -20,17 +20,29 @@ interface AuthContextValue extends AuthState {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const STORAGE_KEY = 'alvyto_auth';
+// Separate storage keys for admin panel vs room panel so sessions don't
+// clobber each other when both panels are open in the same browser.
+const ADMIN_STORAGE_KEY = 'alvyto_admin_auth';
+const ROOM_STORAGE_KEY  = 'alvyto_room_auth';
+const LEGACY_KEY        = 'alvyto_auth'; // migrated automatically on load
+
+function getStorageKey(): string {
+  if (typeof window === 'undefined') return ADMIN_STORAGE_KEY;
+  return window.location.pathname.startsWith('/admin')
+    ? ADMIN_STORAGE_KEY
+    : ROOM_STORAGE_KEY;
+}
 
 function loadStoredAuth(): AuthState {
   if (typeof window === 'undefined') return empty();
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey();
+    const raw = localStorage.getItem(key) ?? localStorage.getItem(LEGACY_KEY);
     if (!raw) return empty();
     const parsed = JSON.parse(raw) as AuthState;
     // Check token expiry
     if (parsed.expiresAt && new Date(parsed.expiresAt) < new Date()) {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(key);
       clearToken();
       return empty();
     }
@@ -49,6 +61,13 @@ function empty(): AuthState {
   };
 }
 
+function clearStoredAuthState(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(getStorageKey());
+  localStorage.removeItem(LEGACY_KEY);
+  clearToken();
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useState<AuthState>(empty);
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -64,15 +83,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      storeToken(stored.token);
+      storeToken(stored.token, stored.role === 'room_device' ? 'room' : 'admin');
       if (active) setAuth(stored);
 
       try {
         await getMe();
       } catch (err) {
         console.warn('[AuthContext] Session validation failed, clearing auth state:', err);
-        localStorage.removeItem(STORAGE_KEY);
-        clearToken();
+        clearStoredAuthState();
         if (active) setAuth(empty());
 
         if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
@@ -105,15 +123,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       expiresAt: result.expiresAt,
       isAuthenticated: true,
     };
-    storeToken(result.token);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    storeToken(result.token, params.mode);
+    localStorage.setItem(params.mode === 'admin' ? ADMIN_STORAGE_KEY : ROOM_STORAGE_KEY, JSON.stringify(next));
     setAuth(next);
   }, []);
 
   const logout = useCallback(async () => {
     await apiLogout();
-    localStorage.removeItem(STORAGE_KEY);
-    clearToken();
+    clearStoredAuthState();
     setAuth(empty());
   }, []);
 

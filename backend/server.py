@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
-from backend.database import engine, Base, get_db
+from backend.database import engine, Base, get_db, get_database_path_for_logging
 from backend import models
 from backend.routes import auth, patients, visits, rooms, doctors, appointments, queue, audit_logs, admin_users
 
@@ -28,6 +28,7 @@ logger = logging.getLogger("EMR")
 async def lifespan(app: FastAPI):
     # Create all tables on startup (migration should have run first)
     Base.metadata.create_all(bind=engine)
+    logger.info("Database connected: %s", get_database_path_for_logging())
     logger.info("EMR API started — all tables verified.")
     yield
     logger.info("EMR API shutting down.")

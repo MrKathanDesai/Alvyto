@@ -354,6 +354,12 @@ def test_doctor_room_and_appointment_flows(client):
     assert created_room.status_code == 201
     room_id = created_room.json()["id"]
 
+    room_login = test_client.post(
+        "/api/auth/login",
+        json={"mode": "room", "room_id": room_id, "pin": "2468"},
+    )
+    assert room_login.status_code == 200, room_login.text
+
     room_assign = test_client.post(
         f"/api/rooms/{room_id}/assign",
         headers=admin_headers,
@@ -597,9 +603,10 @@ def test_visit_progress_approval_and_side_effects(client):
         assert room.current_patient_id is None
 
         history = db.query(models.MedicalHistory).filter(models.MedicalHistory.patient_id == patient_id).first()
-        assert "cough" in history.conditions
         assert history.conditions.count("asthma") == 1
-        assert history.medications == [{"name": "Amoxicillin", "dosage": "500mg", "frequency": "BID"}]
+        assert "Upper respiratory infection" in history.conditions
+        assert {"name": "LegacyMed", "dosage": "10mg", "frequency": "daily"} in history.medications
+        assert {"name": "Amoxicillin", "dosage": "500mg", "frequency": "BID"} not in history.medications
 
     completed_conflict = test_client.patch(
         f"/api/visits/{visit_id}/progress",
@@ -607,6 +614,106 @@ def test_visit_progress_approval_and_side_effects(client):
         json={"transcript": "should not save"},
     )
     assert completed_conflict.status_code == 409
+
+    second_approve = test_client.patch(
+        f"/api/visits/{visit_id}/approve",
+        headers=admin_headers,
+        json={
+            "doctor_id": doctor_id,
+            "summary": {
+                "clinicalSnapshot": [],
+                "doctorActions": [],
+            },
+        },
+    )
+    assert second_approve.status_code == 409
+
+
+def test_approve_rejects_invalid_summary_and_keeps_visit_open(client):
+    test_client, _ = client
+    admin_headers = _auth_headers(test_client, "super@clinic.com", "supersecure")
+    patient_id = test_client.get("/api/patients", headers=admin_headers).json()[0]["id"]
+    doctor_id = test_client.get("/api/doctors", headers=admin_headers).json()[0]["id"]
+    room_id = test_client.get("/api/rooms", headers=admin_headers).json()[0]["id"]
+
+    visit = test_client.post(
+        "/api/visits",
+        headers=admin_headers,
+        json={"patient_id": patient_id, "doctor_id": doctor_id, "room_id": room_id},
+    )
+    assert visit.status_code == 201, visit.text
+    visit_id = visit.json()["id"]
+
+    approve = test_client.patch(
+        f"/api/visits/{visit_id}/approve",
+        headers=admin_headers,
+        json={
+            "doctor_id": doctor_id,
+            "summary": {
+                "clinicalSnapshot": [{"label": "symptom", "category": "symptom"}],
+                "doctorActions": [],
+                "prescriptions": [],
+                "issuesParagraph": "",
+                "actionsParagraph": "",
+            },
+        },
+    )
+    assert approve.status_code == 422, approve.text
+    detail = approve.json()["detail"]
+    assert detail["message"] == "Summary validation failed"
+    assert any(item["field"] == "chiefComplaint" for item in detail["missingFields"])
+    assert any(item["field"] == "medications" for item in detail["missingFields"])
+    assert any(item["field"] == "doctorActions" for item in detail["missingFields"])
+
+    visit_after = test_client.get(f"/api/visits/{visit_id}", headers=admin_headers)
+    assert visit_after.status_code == 200
+    assert visit_after.json()["status"] == "pending"
+
+
+def test_room_device_cannot_access_admin_sensitive_endpoints(client):
+    test_client, _ = client
+    admin_headers = _auth_headers(test_client, "super@clinic.com", "supersecure")
+    rooms = test_client.get("/api/rooms", headers=admin_headers).json()
+    room_headers = _room_headers(test_client, rooms[0]["id"], "1234")
+    patient_id = test_client.get("/api/patients", headers=admin_headers).json()[0]["id"]
+    doctor_id = test_client.get("/api/doctors", headers=admin_headers).json()[0]["id"]
+
+    visit = test_client.post(
+        "/api/visits",
+        headers=admin_headers,
+        json={"patient_id": patient_id, "doctor_id": doctor_id, "room_id": rooms[0]["id"]},
+    )
+    assert visit.status_code == 201, visit.text
+
+    approve = test_client.patch(
+        f"/api/visits/{visit.json()['id']}/approve",
+        headers=room_headers,
+        json={
+            "doctor_id": doctor_id,
+            "summary": {
+                "clinicalSnapshot": [],
+                "doctorActions": [],
+            },
+        },
+    )
+    assert approve.status_code == 403
+
+    history = test_client.put(
+        f"/api/patients/{patient_id}/history",
+        headers=room_headers,
+        json={"conditions": ["migraine"], "allergies": [], "medications": []},
+    )
+    assert history.status_code == 403
+
+    availability = test_client.patch(
+        f"/api/doctors/{doctor_id}/availability",
+        headers=room_headers,
+        json={"status": "break"},
+    )
+    assert availability.status_code == 403
+
+    queue = test_client.get("/api/queue", headers=room_headers)
+    assert queue.status_code == 403
 
 
 def test_admin_users_and_audit_log_permissions(client):

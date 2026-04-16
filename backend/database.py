@@ -1,8 +1,13 @@
+import os
+from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./emr.db"
+BASE_DIR = Path(__file__).resolve().parent
+DEFAULT_SQLITE_PATH = BASE_DIR / "emr.db"
+SQLALCHEMY_DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{DEFAULT_SQLITE_PATH}")
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
@@ -17,3 +22,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def get_database_path_for_logging() -> str:
+    if SQLALCHEMY_DATABASE_URL.startswith("sqlite:///"):
+        return SQLALCHEMY_DATABASE_URL.replace("sqlite:///", "", 1)
+    return SQLALCHEMY_DATABASE_URL

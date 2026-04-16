@@ -8,20 +8,24 @@ import { triggerPrescriptionDownload } from '@/utils/prescriptionExport';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
-// Token storage: localStorage key
-const TOKEN_KEY = 'alvyto_token';
+// Separate localStorage keys for admin panel vs room panel so logging into
+// one panel never invalidates the other's session.
+const ADMIN_TOKEN_KEY = 'alvyto_admin_token';
+const ROOM_TOKEN_KEY  = 'alvyto_token';
 
 export function getStoredToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem(TOKEN_KEY);
+  const isAdminPanel = window.location.pathname.startsWith('/admin');
+  return localStorage.getItem(isAdminPanel ? ADMIN_TOKEN_KEY : ROOM_TOKEN_KEY);
 }
 
-export function storeToken(token: string): void {
-  localStorage.setItem(TOKEN_KEY, token);
+export function storeToken(token: string, mode?: 'admin' | 'room'): void {
+  localStorage.setItem(mode === 'admin' ? ADMIN_TOKEN_KEY : ROOM_TOKEN_KEY, token);
 }
 
 export function clearToken(): void {
-  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(ADMIN_TOKEN_KEY);
+  localStorage.removeItem(ROOM_TOKEN_KEY);
 }
 
 async function req<T>(
@@ -246,11 +250,6 @@ export async function getRooms(): Promise<Room[]> {
   return raw.map(mapRoom);
 }
 
-export async function getPublicRooms(): Promise<Room[]> {
-  const raw = await req<Record<string, unknown>[]>('GET', '/api/rooms/public', undefined, '');
-  return raw.map(mapRoom);
-}
-
 export async function getRoomsWithStatus(): Promise<RoomStatus[]> {
   const raw = await req<Record<string, unknown>[]>('GET', '/api/rooms/status');
   return raw.map((r) => ({
@@ -262,19 +261,6 @@ export async function getRoomsWithStatus(): Promise<RoomStatus[]> {
     queueLength: (r.queue_length as number) ?? 0,
     nextPatient: r.next_patient ? mapPatient(r.next_patient as Record<string, unknown>) : null,
   }));
-}
-
-export async function getRoomStatus(roomId: string): Promise<RoomStatus> {
-  const r = await req<Record<string, unknown>>('GET', '/api/rooms/' + roomId + '/status');
-  return {
-    room: mapRoom(r.room as Record<string, unknown>),
-    currentPatient: r.current_patient ? mapPatient(r.current_patient as Record<string, unknown>) : null,
-    assignedDoctor: r.assigned_doctor ? mapDoctor(r.assigned_doctor as Record<string, unknown>) : null,
-    activeVisitId: (r.active_visit_id as string) ?? null,
-    chiefComplaint: (r.chief_complaint as string) ?? null,
-    queueLength: (r.queue_length as number) ?? 0,
-    nextPatient: r.next_patient ? mapPatient(r.next_patient as Record<string, unknown>) : null,
-  };
 }
 
 export async function createRoom(data: {
@@ -303,16 +289,6 @@ export async function updateRoom(id: string, data: Partial<{
   return mapRoom(raw);
 }
 
-export async function assignRoom(roomId: string, data: {
-  patientId?: string | null; doctorId?: string | null;
-}): Promise<Room> {
-  const raw = await req<Record<string, unknown>>('POST', '/api/rooms/' + roomId + '/assign', {
-    patient_id: data.patientId ?? null,
-    doctor_id: data.doctorId ?? null,
-  });
-  return mapRoom(raw);
-}
-
 export async function deleteRoom(id: string): Promise<void> {
   await req('DELETE', '/api/rooms/' + id);
 }
@@ -336,11 +312,6 @@ function mapDoctor(r: Record<string, unknown>): Doctor {
 export async function getDoctors(activeOnly = true): Promise<Doctor[]> {
   const raw = await req<Record<string, unknown>[]>('GET', '/api/doctors?active_only=' + activeOnly);
   return raw.map(mapDoctor);
-}
-
-export async function getDoctor(id: string): Promise<Doctor> {
-  const raw = await req<Record<string, unknown>>('GET', '/api/doctors/' + id);
-  return mapDoctor(raw);
 }
 
 export async function createDoctor(data: {
@@ -535,6 +506,30 @@ export async function approveVisit(visitId: string, summary: VisitSummary, docto
   });
 }
 
+export async function validateVisitSummary(
+  visitId: string,
+  summary: VisitSummary,
+): Promise<{
+  ok: boolean;
+  missingFields: Array<{ field: string; message: string; severity: string }>;
+  warnings: string[];
+  normalizedSummary: VisitSummary;
+}> {
+  return req('POST', '/api/visits/' + visitId + '/validate-summary', {
+    summary: {
+      clinicalSnapshot: summary.clinicalSnapshot,
+      doctorActions: summary.doctorActions,
+      prescriptions: summary.prescriptions ?? [],
+      prescriptionDraft: summary.prescriptionDraft ?? null,
+      issuesParagraph: summary.issuesParagraph,
+      actionsParagraph: summary.actionsParagraph,
+      chiefComplaint: summary.chiefComplaint ?? '',
+      structuredFindings: summary.structuredFindings ?? [],
+      quality: summary.quality ?? null,
+    },
+  });
+}
+
 export async function saveVisitProgress(
   visitId: string,
   data: { transcript?: string; dialogue?: Array<{speaker: string; text: string; start?: number; end?: number}>; status?: string }
@@ -591,11 +586,6 @@ export async function getAppointments(params?: {
   if (params?.status) qs.set('status', params.status);
   const raw = await req<Record<string, unknown>[]>('GET', '/api/appointments?' + qs.toString());
   return raw.map(mapAppointment);
-}
-
-export async function getAppointment(id: string): Promise<Appointment> {
-  const raw = await req<Record<string, unknown>>('GET', '/api/appointments/' + id);
-  return mapAppointment(raw);
 }
 
 export async function createAppointment(data: {

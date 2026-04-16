@@ -51,7 +51,7 @@ def _set_doctor_available_if_in_session(db: DBSession, doctor_id: str | None) ->
 @router.get("", response_model=QueueSummaryOut)
 @router.get("/", response_model=QueueSummaryOut)
 def get_queue(
-    ctx: RequestContext = Depends(require_any_auth),
+    ctx: RequestContext = Depends(require_admin),
     db: DBSession = Depends(get_db),
 ):
     waiting = (
@@ -321,6 +321,13 @@ def auto_assign(
         if not doctor:
             raise HTTPException(400, "No available doctors")
 
+        db.refresh(entry)
+        db.refresh(room)
+        if entry.status not in (models.WaitingQueueStatusEnum.waiting, models.WaitingQueueStatusEnum.called):
+            raise HTTPException(409, "Queue entry changed during assignment. Refresh and retry.")
+        if room.status != models.RoomStatusEnum.idle or room.current_patient_id is not None:
+            raise HTTPException(409, "Selected room is no longer available. Refresh and retry.")
+
         room.status = models.RoomStatusEnum.in_use
         room.current_patient_id = entry.patient_id
         room.assigned_doctor_id = doctor.id
@@ -341,6 +348,9 @@ def auto_assign(
             .first()
         )
         if availability:
+            db.refresh(availability)
+            if availability.status != models.DoctorAvailabilityStatusEnum.available:
+                raise HTTPException(409, "Selected doctor is no longer available. Refresh and retry.")
             availability.status = models.DoctorAvailabilityStatusEnum.in_session
 
         db.commit()

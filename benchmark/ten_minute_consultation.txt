@@ -1,0 +1,82 @@
+Doctor: Good afternoon, Mr. Rakesh Shah. I am Dr. Nidhi Trivedi. Please have a seat. How are you feeling today?
+Patient: Good afternoon, doctor. Umm, honestly not very good. Since about two weeks I have this burning in my stomach after meals, and in the last four days it has become much worse.
+Doctor: Alright, I hear you. Burning after meals for two weeks, worse in the last four days. Can you point to exactly where you feel it?
+Patient: Mostly here, in the upper middle part, just below the chest. Sometimes it comes up into my throat, like sour water.
+Doctor: So upper abdominal burning with sour reflux. Does it happen after specific foods, like spicy, oily, tea, coffee?
+Patient: Yes, yes, especially after spicy dinner and tea. I take three, sometimes four cups of tea in office.
+Doctor: Okay. Any nausea, vomiting, black stool, blood in stool, or weight loss recently?
+Patient: No vomiting, no blood, no black stool. Weight maybe one kilo down, but appetite is there.
+Doctor: Any fever, chest pain while walking, or breathlessness?
+Patient: No fever. No breathlessness. Chest pain only this burning type, mostly after food or when lying down.
+Doctor: Got it. Does the pain wake you at night?
+Patient: Yes, around midnight I wake up with burning, then I sit up and drink water.
+Doctor: How often in a week does that happen?
+Patient: At least four nights this week.
+Doctor: Understood. What have you taken so far for relief?
+Patient: I took over-the-counter antacid gel, and one tablet from chemist, I think pantoprazole forty, but not regularly.
+Doctor: Okay, irregular pantoprazole use. Any painkiller use, like ibuprofen, diclofenac, aspirin?
+Patient: I take ibuprofen maybe two or three times a week for knee pain.
+Doctor: That can irritate the stomach. Do you smoke or drink alcohol?
+Patient: I do not smoke. I drink socially, maybe two pegs on weekends.
+Doctor: Thanks. Tell me about your meal timings.
+Patient: Breakfast is late, around ten-thirty. Lunch around three. Dinner very late, like ten-thirty or eleven because of work.
+Doctor: And right after dinner, do you lie down quickly?
+Patient: Yes doctor, usually within twenty minutes because I am tired.
+Doctor: Alright. Any previous history of ulcer, gastritis, or H. pylori treatment?
+Patient: About five years back I had gastritis episode, but no endoscopy done. It settled with medicines.
+Doctor: Any diabetes, blood pressure, thyroid, heart disease?
+Patient: I have borderline blood pressure, taking telmisartan forty daily. No diabetes as far as I know.
+Doctor: Any known medicine allergy?
+Patient: No known drug allergy.
+Doctor: Okay, let me quickly examine you. Please lie down on the couch.
+Patient: Sure.
+Doctor: Your blood pressure is one thirty six over eighty six, pulse eighty, oxygen ninety nine, temperature normal. Mild tenderness in epigastric region, no guarding, no rigidity.
+Patient: So is it serious, doctor? I am worried maybe heart problem or something.
+Doctor: At present this pattern is more consistent with acid peptic disease and reflux, not typical cardiac pain. But if you get crushing chest pain with sweating or breathlessness, that is different and urgent.
+Patient: Okay, that is reassuring.
+Doctor: Let me ask one more thing. Any difficulty swallowing or food getting stuck?
+Patient: No, swallowing is normal.
+Doctor: Any persistent vomiting or severe abdominal pain radiating to back?
+Patient: No, none of that.
+Doctor: Good. We can start treatment and lifestyle correction first.
+Patient: Yes please, I really need relief. Office concentration is getting affected.
+Doctor: I will prescribe Pantoprazole forty milligram once daily, empty stomach, thirty minutes before breakfast, for six weeks.
+Patient: Okay, before breakfast, daily.
+Doctor: Along with that, take Domperidone ten milligram twice daily, fifteen minutes before lunch and dinner, for ten days.
+Patient: Twice daily before lunch and dinner, understood.
+Doctor: For breakthrough burning, keep Liquid Antacid fifteen milliliter after meals and at bedtime as needed, maximum four doses in a day.
+Patient: Alright. Can I continue ibuprofen for knee pain?
+Doctor: Try to avoid ibuprofen for now. Use Paracetamol six hundred fifty milligram only if needed, after food, not more than three tablets in twenty four hours.
+Patient: Okay, I will stop ibuprofen for now.
+Doctor: Now important guidelines. First, fixed meal timings. No long gaps beyond four hours.
+Patient: Hmm, that will be hard with meetings, but I can try.
+Doctor: Keep small snacks, like banana or roasted chana, to avoid prolonged fasting. Second, reduce tea to one cup a day, avoid late-night spicy food.
+Patient: One cup tea only... that is tough, but yes, I get your point.
+Doctor: Third, do not lie down for at least two to three hours after dinner. Keep head-end elevated by about six inches while sleeping.
+Patient: Should I use two pillows?
+Doctor: Better to elevate the bed head, not just extra pillows, because pillows can bend your neck and not reduce reflux properly.
+Patient: Got it.
+Doctor: Fourth, avoid trigger foods: fried snacks, red chili, citrus juices on empty stomach, soda, and very late heavy dinners.
+Patient: Can I have curd and buttermilk?
+Doctor: Yes, plain curd and buttermilk are usually okay if they do not trigger symptoms. Prefer early dinner by eight-thirty if possible.
+Patient: Okay, I will shift dinner earlier.
+Doctor: Do you feel stress has increased recently? Stress can worsen acidity.
+Patient: Yes doctor, major project deadline this month, sleep is less, maybe five to six hours.
+Doctor: Please add ten to fifteen minutes of evening walk and simple breathing exercise. It helps symptoms and sleep.
+Patient: Alright, I can start walking after work.
+Doctor: Now regarding tests. Since this is recurrent and night symptoms are present, I will order baseline CBC, liver function test, amylase, and stool occult blood. Also H. pylori stool antigen.
+Patient: Do I need endoscopy immediately?
+Doctor: Not immediately today because no alarm signs like bleeding, persistent vomiting, progressive weight loss, or swallowing difficulty. But if symptoms persist after two to three weeks of proper treatment, we will schedule upper GI endoscopy.
+Patient: Okay, fair enough.
+Doctor: Please bring previous prescriptions if available during follow-up.
+Patient: Yes, I have old file at home, I will bring it.
+Doctor: Warning signs I want you to remember: black stools, vomiting blood, severe continuous abdominal pain, chest pain with sweating, repeated vomiting, or fainting. If any of these occur, go to emergency immediately.
+Patient: Yes, I will not ignore those.
+Doctor: Good. Follow-up after ten days with test reports, earlier if worsening.
+Patient: Ten days, with reports. Okay. Can I message the clinic if medicine causes side effects?
+Doctor: Yes, absolutely. If you get severe loose motions, palpitations, rash, or dizziness, stop that medicine and contact us.
+Patient: Thank you, doctor. You explained very clearly.
+Doctor: You are welcome, Mr. Shah. Start from tonight with diet changes, and from tomorrow morning begin the tablets on schedule.
+Patient: Sure doctor, I will follow this properly.
+Doctor: Great. We should see significant improvement in one week if routine is maintained.
+Patient: Perfect. Thank you again.

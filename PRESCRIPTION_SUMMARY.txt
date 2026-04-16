@@ -1,0 +1,236 @@
+================================================================================
+                    ALVYTO EMR - PRESCRIPTION SYSTEM SUMMARY
+================================================================================
+
+1. VISIT MODEL/SCHEMA - Related Fields
+================================================================================
+
+Frontend (src/types/index.ts):
+  ├─ Visit.id: string
+  ├─ Visit.patientId: string
+  ├─ Visit.doctorId?: string
+  ├─ Visit.summary: VisitSummary | null
+  │   ├─ prescriptions: Prescription[]  (Simple: name, dosage, frequency)
+  │   └─ prescriptionDraft?: PrescriptionDraft | null  (Rich: detailed med info)
+  │       ├─ diagnoses: string[]
+  │       ├─ medications: PrescriptionMedicationDetail[]
+  │       │   └─ name, dosage, frequency, duration, route, instructions
+  │       ├─ investigations: PrescriptionInvestigation[]
+  │       ├─ advice: string[]
+  │       ├─ warnings: string[]
+  │       ├─ reportSummary: string
+  │       └─ followUp?: { timeline, notes }
+  ├─ Visit.status: VisitStatus (pending|in_progress|completed|cancelled)
+  ├─ Visit.createdAt: string
+  └─ Visit.endedAt?: string
+
+Backend (backend/models.py):
+  └─ Visit.summary = Column(JSON)  <-- Entire VisitSummary stored as JSON
+
+2. VISIT SUMMARY ENDPOINTS
+================================================================================
+
+GET /api/visits/{visitId}
+  Returns: Visit with full summary including prescription data
+  
+GET /api/visits?status=completed&patientId=...&limit=50
+  Returns: List of visits (array)
+
+POST /api/visits
+  Request: { patient_id, doctor_id, room_id, appointment_id, chief_complaint }
+  Returns: New Visit (status=pending, summary=null)
+
+PATCH /api/visits/{visitId}/progress
+  Saves transcript & dialogue during session (no prescription data yet)
+
+PATCH /api/visits/{visitId}/approve
+  Input: VisitSummary with prescriptionDraft
+  Action: Stores summary as JSON, sets status=completed, merges into medical history
+  Side effects:
+    - Visit.summary = full VisitSummary (including prescriptionDraft)
+    - Visit.status = "completed"
+    - Visit.approved_at = now()
+    - Patient.medicalHistory.medications updated
+    - Patient.medicalHistory.conditions updated
+    - Visit.transcript cleared (PHI protection)
+
+3. PRESCRIPTION PDF EXPORT
+================================================================================
+
+Backend HTML Export:
+  Endpoint: GET /api/visits/{visitId}/prescription
+  Returns: HTML (text/html) with Content-Disposition: attachment
+  Requires: Visit.status = "completed" with valid prescriptionDraft
+  
+  Data extracted from:
+    - Patient.name, mrn, dateOfBirth, sex
+    - Visit.doctor.name, specialty, licenseNumber, phone
+    - Patient.medicalHistory.allergies
+    - Visit.summary.prescriptionDraft (all fields)
+  
+  HTML Template (_build_prescription_html):
+    Header (patient demographics, allergies alert)
+    └─ Assessment (diagnoses)
+    └─ Medications (formatted with dosage/frequency/instructions)
+    └─ Investigations (with timing)
+    └─ Advice (bullet list)
+    └─ Warnings (bullet list)
+    └─ Follow-up (timeline + notes)
+    └─ Footer (doctor signature line)
+
+Frontend PDF Generation:
+  File: src/utils/prescriptionExport.ts
+  Function: triggerPrescriptionDownload(filename, { visit, patient, doctor, allergies })
+  Library: pdf-lib (client-side PDF generation)
+  
+  Features:
+    - Multi-page PDF (auto page breaks)
+    - Professional layout with colors
+    - Normalizs fallback data if prescriptionDraft missing
+
+4. EXISTING PRESCRIPTION COMPONENTS
+================================================================================
+
+PrescriptionPreview (src/components/PrescriptionPreview/):
+  Props: patient, doctorName?, visitDate?, draft, allergies?
+  Display: Patient meta → Diagnoses → Medications → Investigations → 
+           Advice → Warnings → Follow-up
+
+SummaryPanel (src/components/SummaryPanel/):
+  Purpose: Edit clinical snapshot & doctor actions (indirectly affects prescriptions)
+  Features: 
+    - Edit symptoms/conditions
+    - Edit doctor actions
+    - Auto-expand narratives
+    - Triggers re-generation of prescription draft via AI
+
+5. API ENDPOINTS FOR CREATING/UPDATING PRESCRIPTIONS
+================================================================================
+
+CREATE:
+  POST /api/visits                              (New visit, no prescription yet)
+  PATCH /api/visits/{visitId}/approve           (Add prescriptionDraft to visit)
+
+RETRIEVE:
+  GET /api/visits/{visitId}                     (Get prescription data)
+  GET /api/visits?patientId=...&status=completed
+  GET /api/visits/{visitId}/prescription        (Export as HTML)
+
+UPDATE:
+  PATCH /api/visits/{visitId}/approve           (Update/create prescription)
+  
+DELETE:
+  DELETE /api/visits/{visitId}                  (Soft delete visit + prescription)
+
+NOTE: No direct prescription CRUD - prescriptions are immutable after approval.
+      To modify: create new visit or approve with updated summary.
+
+6. DATA FLOW SUMMARY
+================================================================================
+
+RECORDING SESSION:
+  1. POST /api/visits              → Create visit (status=pending)
+  2. PATCH /api/visits/{id}/progress (multiple times)
+     → Save transcript/dialogue
+
+AI PROCESSING (External):
+  3. Pipeline processes transcript
+     → Generates VisitSummary with prescriptionDraft
+
+APPROVAL:
+  4. PATCH /api/visits/{id}/approve
+     Request: { summary: { prescriptionDraft, ... }, doctor_id }
+     ├─ Store Visit.summary = JSON
+     ├─ Update Patient.medicalHistory.medications
+     ├─ Set status = "completed"
+     └─ Clear PHI (transcript)
+
+EXPORT:
+  5. GET /api/visits/{id}/prescription
+     → Backend returns HTML
+  
+  OR
+  
+  5b. Frontend triggerPrescriptionDownload()
+      → Generates PDF from Visit data
+
+ARCHIVE:
+  6. Prescription stored in Patient.medicalHistory
+     ├─ Patient.medicalHistory.medications (latest from last visit)
+     └─ Patient.medicalHistory.conditions (all conditions merged)
+
+7. KEY DATA STRUCTURES
+================================================================================
+
+Prescription (Simple):
+{
+  "name": "Paracetamol",
+  "dosage": "500mg",
+  "frequency": "twice daily",
+  "isSupported": true
+}
+
+PrescriptionMedicationDetail (Full):
+{
+  "name": "Paracetamol",
+  "dosage": "500mg",
+  "frequency": "twice daily",
+  "duration": "5 days",
+  "route": "oral",
+  "instructions": "Take with food"
+}
+
+PrescriptionDraft (Complete):
+{
+  "diagnoses": ["Acute pharyngitis"],
+  "medications": [{ ...as above... }],
+  "investigations": [{ "name": "Throat culture", "details": "...", "timing": "..." }],
+  "advice": ["Rest your voice", "Stay hydrated"],
+  "warnings": ["Seek emergency care if breathing difficulty"],
+  "reportSummary": "Patient presents with acute pharyngitis...",
+  "followUp": { "timeline": "3 days", "notes": "If symptoms persist..." }
+}
+
+VisitSummary (Full Context):
+{
+  "clinicalSnapshot": [{ "label": "fever", "category": "symptom" }],
+  "doctorActions": [{ "id": "...", "text": "Rest 3 days", ... }],
+  "prescriptions": [{ "name": "Paracetamol", ... }],
+  "prescriptionDraft": { ...above... },
+  "issuesParagraph": "...",
+  "actionsParagraph": "..."
+}
+
+8. CURRENT LIMITATIONS
+================================================================================
+
+NO prescription editing after approval (immutable)
+NO medication database (free-text strings)
+NO drug-allergy interaction checking
+NO prescription status tracking (dispensed/fulfilled/refilled)
+NO direct prescription queryability (must fetch visits)
+NO severity levels for allergies
+NO prescription refill support
+NO pharmacy integration
+
+9. QUICK REFERENCE - KEY FILES
+================================================================================
+
+Data Models:
+  backend/models.py              → Visit model (lines 255-286)
+  backend/schemas.py             → Pydantic schemas (lines 19-105)
+  src/types/index.ts             → TypeScript interfaces (lines 60-95)
+
+API Implementation:
+  backend/routes/visits.py       → All visit endpoints (526 lines)
+    - approve_visit (lines 399-506)
+    - download_visit_prescription (lines 297-319)
+    - _build_prescription_html (lines 112-217)
+
+Frontend:
+  src/services/api.ts            → API functions (lines 481-741)
+  src/utils/prescriptionExport.ts → PDF generation (499 lines)
+  src/components/PrescriptionPreview/ → UI component
+  src/components/SummaryPanel/   → Edit component
+
+================================================================================

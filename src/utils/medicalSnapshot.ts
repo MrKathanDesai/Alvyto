@@ -1,5 +1,5 @@
 import type { MedicalHistoryRecord } from '@/types/emr';
-import type { Prescription, VisitSummary } from '@/types';
+import type { VisitSummary } from '@/types';
 
 type MedicationRecord = Record<string, unknown>;
 
@@ -24,6 +24,15 @@ function dedupeStrings(values: string[]): string[] {
   return result;
 }
 
+function looksLikeClinicalCondition(value: string): boolean {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return false;
+  if (/^(symptom|issue|location of pain|associated symptom with food\/drink|lifestyle factor related to symptoms|symptom relief attempts)$/i.test(normalized)) {
+    return false;
+  }
+  return true;
+}
+
 function normalizeMedicationList(items: MedicationRecord[]): MedicationRecord[] {
   const seen = new Set<string>();
   const result: MedicationRecord[] = [];
@@ -41,16 +50,6 @@ function normalizeMedicationList(items: MedicationRecord[]): MedicationRecord[] 
   }
 
   return result;
-}
-
-function mapPrescriptionsToMedications(prescriptions: Prescription[]): MedicationRecord[] {
-  return normalizeMedicationList(
-    prescriptions.map((item) => ({
-      name: item.name,
-      dosage: item.dosage ?? '',
-      frequency: item.frequency ?? '',
-    }))
-  );
 }
 
 function extractAllergiesFromTranscript(transcript: string): string[] {
@@ -71,26 +70,6 @@ function extractAllergiesFromTranscript(transcript: string): string[] {
   return dedupeStrings(matches);
 }
 
-function extractPrescriptionsFromTranscript(transcript: string): MedicationRecord[] {
-  const pattern =
-    /\b(?:prescribed|start|starting|begin|take|taking|continue|continuing)\s+([a-z][a-z0-9-]*(?:\s+[a-z0-9-]+){0,2})(?:\s+(\d+(?:\.\d+)?\s*(?:mg|mcg|g|ml)))?(?:\s+(once daily|twice daily|three times daily|daily|bid|tid|qid|as needed|prn))?/gi;
-
-  const matches: MedicationRecord[] = [];
-  let match: RegExpExecArray | null;
-  while ((match = pattern.exec(transcript)) !== null) {
-    const name = normalizeText(match[1]);
-    if (!name || name.length < 3) continue;
-
-    matches.push({
-      name,
-      dosage: normalizeText(match[2]),
-      frequency: normalizeText(match[3]),
-    });
-  }
-
-  return normalizeMedicationList(matches);
-}
-
 export function createEmptyMedicalHistory(patientId: string): MedicalHistoryRecord {
   return {
     id: `draft-${patientId}`,
@@ -109,20 +88,17 @@ export function deriveMedicalSnapshot(
   transcript?: string | null,
 ): { history: MedicalHistoryRecord; hasLiveUpdates: boolean } {
   const safeTranscript = normalizeText(transcript);
-  const liveConditions = dedupeStrings(
-    (summary?.clinicalSnapshot ?? [])
-      .filter((item) => item.category === 'symptom')
-      .map((item) => item.label)
-  );
+  // Clinical snapshot chip labels are AI observation tags ("location of pain",
+  // "symptom relief attempts"), NOT medical diagnoses. Never inject them into
+  // Medical Conditions — only the backend approve flow merges confirmed diagnoses.
   const liveAllergies = extractAllergiesFromTranscript(safeTranscript);
 
-  const summaryMeds = mapPrescriptionsToMedications(summary?.prescriptions ?? []);
-  const transcriptMeds = extractPrescriptionsFromTranscript(safeTranscript);
-  const replacementMeds = summaryMeds.length > 0 ? summaryMeds : transcriptMeds;
-
-  const nextConditions = dedupeStrings([...baseHistory.conditions, ...liveConditions]);
+  // Conditions come only from the stored patient record — never from live AI chips.
+  const nextConditions = dedupeStrings([...baseHistory.conditions]).filter(looksLikeClinicalCondition);
   const nextAllergies = dedupeStrings([...baseHistory.allergies, ...liveAllergies]);
-  const nextMedications = replacementMeds.length > 0 ? replacementMeds : normalizeMedicationList(baseHistory.medications);
+  // Longitudinal medications should only come from the persisted chart, never
+  // directly from live transcript/summary heuristics for the current visit.
+  const nextMedications = normalizeMedicationList(baseHistory.medications);
 
   const nextNotes = dedupeStrings([
     normalizeText(baseHistory.notes),

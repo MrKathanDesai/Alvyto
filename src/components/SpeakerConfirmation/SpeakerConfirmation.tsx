@@ -12,16 +12,7 @@ export default function SpeakerConfirmation({ speakers, onConfirm }: SpeakerConf
     const roles = ["Doctor", "Patient", "Companion"];
 
     const assignRole = (speakerId: string, role: string) => {
-        setAssignments((prev) => {
-            const updated = { ...prev };
-            for (const id in updated) {
-                if (updated[id] === role && id !== speakerId) {
-                    delete updated[id];
-                }
-            }
-            updated[speakerId] = role;
-            return updated;
-        });
+        setAssignments((prev) => ({ ...prev, [speakerId]: role }));
     };
 
     const allAssigned = speakers.length > 0 && speakers.every((s) => assignments[s.speaker_id]);
@@ -36,7 +27,7 @@ export default function SpeakerConfirmation({ speakers, onConfirm }: SpeakerConf
                 <div className={styles.header}>
                     <h3>Confirm Speakers</h3>
                     <p className={styles.subtitle}>
-                        Please map the detected voices to their corresponding roles in the room before finalizing the transcript.
+                        Map each detected voice to a role. If the same person was split into multiple voices, assign them the same role.
                     </p>
                 </div>
 
@@ -44,23 +35,19 @@ export default function SpeakerConfirmation({ speakers, onConfirm }: SpeakerConf
                     {speakers.map((spk) => (
                         <div key={spk.speaker_id} className={styles.speakerRow}>
                             <div className={styles.speakerSample}>
-                                <span className={styles.speakerLabel}>{spk.speaker_id} said:</span>
+                                <span className={styles.speakerLabel}>{spk.backend_role ?? spk.speaker_id} said:</span>
                                 <p className={styles.sampleText}>&quot;{spk.sample_text}&quot;</p>
                             </div>
                             <div className={styles.rolePills}>
-                                {roles.map((role) => {
-                                    const takenByOther = Object.entries(assignments).some(([id, r]) => r === role && id !== spk.speaker_id);
-                                    return (
-                                        <button
-                                            key={role}
-                                            className={`${styles.pill} ${assignments[spk.speaker_id] === role ? styles.pillActive : ''} ${takenByOther ? styles.pillDisabled : ''}`}
-                                            disabled={takenByOther}
-                                            onClick={() => assignRole(spk.speaker_id, role)}
-                                        >
-                                            {role}
-                                        </button>
-                                    );
-                                })}
+                                {roles.map((role) => (
+                                    <button
+                                        key={role}
+                                        className={`${styles.pill} ${assignments[spk.speaker_id] === role ? styles.pillActive : ''}`}
+                                        onClick={() => assignRole(spk.speaker_id, role)}
+                                    >
+                                        {role}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     ))}
@@ -68,17 +55,11 @@ export default function SpeakerConfirmation({ speakers, onConfirm }: SpeakerConf
 
                 <div className={styles.actions}>
                     <button
-                        className={styles.btnSkip}
-                        onClick={() => onConfirm(null)}
-                    >
-                        Use Auto-Detection
-                    </button>
-                    <button
                         className={styles.btnConfirm}
                         disabled={!allAssigned}
                         onClick={() => onConfirm(assignments)}
                     >
-                        Confirm & View Transcript
+                        Confirm Speakers
                     </button>
                 </div>
             </div>

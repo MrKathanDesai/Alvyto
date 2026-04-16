@@ -1,6 +1,5 @@
 import os
 import logging
-import io
 import time
 import numpy as np
 import torch
@@ -108,7 +107,6 @@ class HybridDiarizer:
         audio_array: np.ndarray,
         whisperx_result: dict,
         sample_rate: int = 16000,
-        num_speakers: int = 2
     ) -> list:
         segments = self._resegment(whisperx_result)
         waveform = torch.from_numpy(audio_array).unsqueeze(0).float()
@@ -269,7 +267,6 @@ class ASREngine:
                 audio_array=audio,
                 whisperx_result=aligned,
                 sample_rate=16000,
-                num_speakers=2
             )
 
             if not raw_segments:
@@ -296,22 +293,7 @@ class ASREngine:
                 for spk_id, role in label_map.items()
             }
 
-            dialogue = []
-            for seg in final["segments"]:
-                name = name_map.get(seg.get("speaker", ""), "Unknown")
-                text = seg.get("text", "").strip()
-                if not text:
-                    continue
-                if dialogue and dialogue[-1]["speaker"] == name:
-                    dialogue[-1]["text"] += " " + text
-                    dialogue[-1]["end"] = seg["end"]
-                else:
-                    dialogue.append({
-                        "speaker": name,
-                        "text": text,
-                        "start": seg["start"],
-                        "end": seg["end"]
-                    })
+            dialogue = self._build_dialogue_from_words(final, name_map)
 
             logger.info(f"Step 4+5 done: {time.time()-t0:.1f}s  ({len(dialogue)} turns)")
 
@@ -322,12 +304,19 @@ class ASREngine:
                 summary = self.summarizer.summarize_dialogue(dialogue)
                 logger.info(f"Step 6 done: {time.time()-t0:.1f}s")
 
+            transcript = " ".join(
+                turn.get("text", "").strip()
+                for turn in dialogue
+                if turn.get("text")
+            ).strip()
+
             return {
                 "status": "complete",
+                "transcript": transcript,
                 "dialogue": dialogue,
                 "summary": summary,
                 "raw_segments": final["segments"],
-                "speaker_samples": self.extract_speaker_samples(final["segments"])
+                "speaker_samples": self.extract_speaker_samples(final["segments"], label_map)
             }
 
         except Exception as e:
@@ -336,6 +325,85 @@ class ASREngine:
                 "status": "error",
                 "error": str(e)
             }
+
+    def _build_dialogue_from_words(self, final: dict, name_map: dict) -> list:
+        """Build speaker-turn dialogue using word-level speaker assignments.
+
+        whisperx.assign_word_speakers tags each individual word with a speaker
+        label in final["word_segments"].  Using this instead of the coarser
+        final["segments"] means a single Whisper segment that spans multiple
+        speakers (e.g. "Do you have a fever? No, just headache.") is correctly
+        split into separate turns.
+
+        Falls back to segment-level if word_segments is unavailable.
+        """
+        words = final.get("word_segments") or []
+
+        if words:
+            dialogue: list = []
+            cur_name: str | None = None
+            cur_words: list[str] = []
+            cur_start: float = 0.0
+            cur_end: float = 0.0
+
+            for w in words:
+                spk_id = w.get("speaker") or ""
+                name = name_map.get(spk_id) if spk_id else None
+
+                # Carry forward previous speaker for untagged words
+                # (can happen at segment edges when diarization has gaps)
+                if not name:
+                    name = cur_name or "Unknown"
+
+                word_text = (w.get("word") or "").strip()
+                if not word_text:
+                    continue
+
+                if name != cur_name:
+                    if cur_words and cur_name is not None:
+                        dialogue.append({
+                            "speaker": cur_name,
+                            "text": " ".join(cur_words).strip(),
+                            "start": cur_start,
+                            "end": cur_end,
+                        })
+                    cur_name = name
+                    cur_words = [word_text]
+                    cur_start = w.get("start") or 0.0
+                    cur_end = w.get("end") or cur_start
+                else:
+                    cur_words.append(word_text)
+                    if w.get("end"):
+                        cur_end = w["end"]
+
+            if cur_words and cur_name is not None:
+                dialogue.append({
+                    "speaker": cur_name,
+                    "text": " ".join(cur_words).strip(),
+                    "start": cur_start,
+                    "end": cur_end,
+                })
+
+            return dialogue
+
+        # ── Fallback: segment-level (less precise) ──────────────────────
+        dialogue = []
+        for seg in final.get("segments", []):
+            name = name_map.get(seg.get("speaker", ""), "Unknown")
+            text = seg.get("text", "").strip()
+            if not text:
+                continue
+            if dialogue and dialogue[-1]["speaker"] == name:
+                dialogue[-1]["text"] += " " + text
+                dialogue[-1]["end"] = seg["end"]
+            else:
+                dialogue.append({
+                    "speaker": name,
+                    "text": text,
+                    "start": seg["start"],
+                    "end": seg["end"],
+                })
+        return dialogue
 
     def build_label_map(self, segments):
         speaker_order = []
@@ -346,13 +414,18 @@ class ASREngine:
             if len(speaker_order) >= 3:
                 break
 
-        roles = ["Doctor", "Patient", "Companion"]
         return {
-            spk: roles[i] if i < len(roles) else f"Speaker {i+1}"
+            spk: f"Speaker {i+1}"
             for i, spk in enumerate(speaker_order)
         }
 
-    def extract_speaker_samples(self, segments):
+    def extract_speaker_samples(self, segments, label_map: dict | None = None):
+        """Return one sample per speaker (first segment with ≥4 words).
+
+        Each sample now includes ``backend_role`` so the client can match
+        speakerSamples back to the correct dialogue label without relying on
+        positional ordering (which can differ from build_label_map's order).
+        """
         samples = {}
         for seg in segments:
             speaker = seg.get("speaker")
@@ -362,7 +435,8 @@ class ASREngine:
                     samples[speaker] = {
                         "speaker_id": speaker,
                         "sample_text": text[:100],
-                        "start": seg.get("start", 0)
+                        "start": seg.get("start", 0),
+                        "backend_role": (label_map or {}).get(speaker, "Unknown"),
                     }
             if len(samples) >= 3:
                 break
