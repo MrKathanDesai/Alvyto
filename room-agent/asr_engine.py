@@ -9,6 +9,10 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
 import pandas as pd
 from summarizer import Summarizer
+from transcription_normalizer import (
+    build_medical_asr_prompt,
+    correct_medical_terms_in_dialogue,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -183,6 +187,7 @@ class ASREngine:
             asr_options={
                 "suppress_blank": True,
                 "suppress_tokens": [-1],
+                "initial_prompt": build_medical_asr_prompt(),
             }
         )
 
@@ -220,7 +225,15 @@ class ASREngine:
             logger.warning(f"Preview transcription error: {e}")
             return ""
 
-    def run_pipeline(self, audio: np.ndarray, doctor_name: str = "Doctor", patient_name: str = "Patient", should_summarize: bool = True, status_callback=None) -> dict:
+    def run_pipeline(
+        self,
+        audio: np.ndarray,
+        doctor_name: str = "Doctor",
+        patient_name: str = "Patient",
+        should_summarize: bool = True,
+        status_callback=None,
+        medical_history: dict | None = None,
+    ) -> dict:
         """
         Full processing pipeline.
         """
@@ -294,6 +307,7 @@ class ASREngine:
             }
 
             dialogue = self._build_dialogue_from_words(final, name_map)
+            dialogue, transcription_corrections = correct_medical_terms_in_dialogue(dialogue, medical_history=medical_history)
 
             logger.info(f"Step 4+5 done: {time.time()-t0:.1f}s  ({len(dialogue)} turns)")
 
@@ -316,7 +330,8 @@ class ASREngine:
                 "dialogue": dialogue,
                 "summary": summary,
                 "raw_segments": final["segments"],
-                "speaker_samples": self.extract_speaker_samples(final["segments"], label_map)
+                "speaker_samples": self.extract_speaker_samples(final["segments"], label_map),
+                "transcription_corrections": transcription_corrections,
             }
 
         except Exception as e:

@@ -168,9 +168,6 @@ export default function TranscriptionPanel({
                         <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                     </svg>
                     Live Transcription
-                    {isRecording && (
-                        <span className={styles.draftLabel}>(draft)</span>
-                    )}
                 </h2>
 
                 <div className={styles.statusGroup}>
@@ -236,9 +233,9 @@ export default function TranscriptionPanel({
                 ) : isEmpty && isRecording && !livePreviewText ? (
                     <div className={styles.placeholder}>
                         <div className={styles.recordingPulse}></div>
-                        <h3 className={styles.placeholderTitle}>Recording...</h3>
+                        <h3 className={styles.placeholderTitle}>Listening</h3>
                         <p className={styles.placeholderText}>
-                            Audio is being captured and buffered securely on the device.
+                            Audio is being captured.
                         </p>
                     </div>
                 ) : isEmpty && isProcessing ? (
@@ -246,7 +243,7 @@ export default function TranscriptionPanel({
                         <div className={styles.loadingSpinner}></div>
                         <h3 className={styles.placeholderTitle}>Processing Audio</h3>
                         <p className={styles.placeholderText}>
-                            Running advanced WhisperX transcription and exact word-level diarization...
+                            Transcribing and identifying speakers…
                         </p>
                     </div>
                 ) : !isRecording && dialogue.length > 0 ? (
@@ -401,9 +398,9 @@ export default function TranscriptionPanel({
                         )}
                         {livePreviewText && isRecording && (
                             <div className={styles.livePreviewBanner}>
-                                <span className={styles.previewLabel}>● Recording — live preview</span>
+                                <span className={styles.previewLabel}>Live preview</span>
                                 <p className={styles.previewText}>{livePreviewText}</p>
-                                <span className={styles.previewNote}>Final diarized transcript will appear after Stop</span>
+                                <span className={styles.previewNote}>Final transcript appears after recording stops</span>
                             </div>
                         )}
                         {isRecording && !livePreviewText && <span className={styles.cursor} />}
@@ -414,7 +411,7 @@ export default function TranscriptionPanel({
             {isRecording && (
                 <div className={styles.footer}>
                     <span className={styles.footerHint}>
-                        <span aria-hidden="true">💡</span> Text may update as transcription refines
+                        Text may update as transcription refines
                     </span>
                 </div>
             )}

@@ -51,13 +51,22 @@ const GENERIC_CHIP_TERMS = new Set([
     'complaint', 'duration', 'timing', 'symptom', 'symptoms', 'issue', 'issues',
     'finding', 'findings', 'history', 'inquiry', 'question', 'condition',
     'examination', 'assessment', 'diagnosis', 'treatment', 'prescription',
+    'location', 'trigger food drink', 'trigger food/drink', 'weight loss',
+    'night symptoms', 'frequency', 'frequency of symptom', 'medication use',
 ]);
 
 function isJunkChip(label: string): boolean {
     const text = label.trim();
     if (!text) return true;
     if (text.split(/\s+/).length > 8) return true;
-    if (GENERIC_CHIP_TERMS.has(text.toLowerCase())) return true;
+    const normalized = normalizeText(text);
+    if (GENERIC_CHIP_TERMS.has(text.toLowerCase()) || GENERIC_CHIP_TERMS.has(normalized)) return true;
+    if (text.includes(' - ')) {
+        const [left = '', right = ''] = text.split(' - ', 2).map((part) => normalizeText(part));
+        if (!left || !right) return true;
+        if (left === right) return true;
+        if (GENERIC_CHIP_TERMS.has(left) && GENERIC_CHIP_TERMS.has(right)) return true;
+    }
     return JUNK_CHIP_RE.some(re => re.test(text));
 }
 

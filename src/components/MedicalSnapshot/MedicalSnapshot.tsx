@@ -180,7 +180,7 @@ export default function MedicalSnapshot({
 
                             <div className={styles.section}>
                                 <h3 className={`${styles.sectionTitle} ${styles.danger}`}>
-                                    ⚠️ Allergies
+                                    Allergies
                                 </h3>
                                 <textarea
                                     className={styles.textarea}
@@ -234,7 +234,7 @@ export default function MedicalSnapshot({
                             {/* Allergies */}
                             <div className={styles.section}>
                                 <h3 className={`${styles.sectionTitle} ${styles.danger}`}>
-                                    ⚠️ Allergies
+                                    Allergies
                                 </h3>
                                 <div className={styles.chips}>
                                     {history.allergies.length > 0 ? (

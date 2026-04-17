@@ -26,6 +26,9 @@ err() {
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PIDS=()
+PYTHON_BIN=""
+BACKEND_VENV="${SCRIPT_DIR}/backend/venv"
+ROOM_AGENT_VENV="${SCRIPT_DIR}/room-agent/venv"
 
 BACKEND_LOG="/tmp/alvyto-backend.log"
 ROOM_AGENT_LOG="/tmp/alvyto-room-agent.log"
@@ -95,6 +98,27 @@ wait_for_service() {
   return 1
 }
 
+command_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+resolve_python() {
+  local candidate
+  for candidate in python3.12 python3.11 python3.10 python3; do
+    if command_exists "$candidate"; then
+      local major
+      local minor
+      major="$($candidate -c 'import sys; print(sys.version_info[0])' 2>/dev/null || echo 0)"
+      minor="$($candidate -c 'import sys; print(sys.version_info[1])' 2>/dev/null || echo 0)"
+      if [[ "$major" -eq 3 && "$minor" -ge 10 ]]; then
+        PYTHON_BIN="$candidate"
+        return 0
+      fi
+    fi
+  done
+  return 1
+}
+
 start_service() {
   local name="$1"
   local logfile="$2"
@@ -133,38 +157,39 @@ start_service() {
 
 log "Starting Alvyto EMR stack from ${SCRIPT_DIR}"
 
-if ! command -v ffmpeg >/dev/null 2>&1; then
-  err "ffmpeg is required but not installed. Install with: brew install ffmpeg"
+if ! command_exists ffmpeg; then
+  err "ffmpeg is required but not installed."
+  err "Install ffmpeg, then re-run this script."
   exit 1
 fi
 
-if ! command -v node >/dev/null 2>&1; then
-  err "node is required but not installed. Install with: brew install node"
+if ! command_exists node; then
+  err "node is required but not installed."
+  err "Install Node.js 18+ and re-run this script."
   exit 1
 fi
 
-if ! command -v python3.11 >/dev/null 2>&1; then
-  err "python3.11 is required but not installed. Install with: brew install python@3.11"
+if ! resolve_python; then
+  err "Python 3.10+ is required but not installed."
+  err "Install Python 3.10+ and re-run this script."
   exit 1
 fi
+ok "Using Python interpreter: ${PYTHON_BIN}"
 
-if ! command -v ollama >/dev/null 2>&1; then
-  err "Ollama is required but not installed."
-  err "Install with: curl -fsSL https://ollama.com/install.sh | sh"
-  err "  or on macOS: brew install ollama"
-  exit 1
+if command_exists ollama; then
+  log "Ensuring Ollama is running..."
+  if ! ollama list >/dev/null 2>&1; then
+    log "Starting Ollama server in background..."
+    ollama serve >/tmp/alvyto-ollama.log 2>&1 &
+    PIDS+=("$!")
+    sleep 3
+  fi
+
+  log "Pulling ${OLLAMA_MODEL:-phi4-mini} (skipped if already present)..."
+  ollama pull "${OLLAMA_MODEL:-phi4-mini}" || true
+else
+  warn "Ollama not found. Room-agent summarization may fail until Ollama is installed/running."
 fi
-
-log "Ensuring Ollama is running..."
-if ! ollama list >/dev/null 2>&1; then
-  log "Starting Ollama server in background..."
-  ollama serve >/tmp/alvyto-ollama.log 2>&1 &
-  PIDS+=($!)
-  sleep 3
-fi
-
-log "Pulling phi4-mini (skipped if already present)..."
-ollama pull phi4-mini || true
 
 log "Killing existing processes on ports 3000, 8000, 8080"
 for port in 3000 8000 8080; do
@@ -177,23 +202,20 @@ rm -rf "${SCRIPT_DIR}/.next/cache"
 
 sleep 1
 
-if [[ ! -d "${SCRIPT_DIR}/venv" ]]; then
-  log "Creating Python virtual environment"
-  python3.11 -m venv "${SCRIPT_DIR}/venv"
+if [[ ! -d "${BACKEND_VENV}" ]]; then
+  log "Creating Backend virtual environment"
+  "$PYTHON_BIN" -m venv "${BACKEND_VENV}"
 fi
-
-# shellcheck disable=SC1091
-source "${SCRIPT_DIR}/venv/bin/activate"
 
 log "Installing Backend Python dependencies"
-pip install -q -r "${SCRIPT_DIR}/backend/requirements.txt"
+"${BACKEND_VENV}/bin/pip" install -q -r "${SCRIPT_DIR}/backend/requirements.txt"
 
-if [[ ! -d "${SCRIPT_DIR}/room-agent/venv" ]]; then
+if [[ ! -d "${ROOM_AGENT_VENV}" ]]; then
   log "Creating Room Agent virtual environment"
-  python3.11 -m venv "${SCRIPT_DIR}/room-agent/venv"
+  "$PYTHON_BIN" -m venv "${ROOM_AGENT_VENV}"
 fi
 log "Installing Room Agent Python dependencies"
-"${SCRIPT_DIR}/room-agent/venv/bin/pip" install -q -r "${SCRIPT_DIR}/room-agent/requirements.txt"
+"${ROOM_AGENT_VENV}/bin/pip" install -q -r "${SCRIPT_DIR}/room-agent/requirements.txt"
 
 
 log "Installing Node dependencies"
@@ -211,24 +233,20 @@ if ! grep -q '^NEXT_PUBLIC_API_URL=http://localhost:8080$' "${SCRIPT_DIR}/.env.l
   echo 'NEXT_PUBLIC_API_URL=http://localhost:8080' >> "${SCRIPT_DIR}/.env.local"
 fi
 
-if [[ ! -f "${SCRIPT_DIR}/emr.db" ]]; then
-  log "emr.db not found. Seeding database..."
+if [[ -f "${SCRIPT_DIR}/emr.db" && ! -f "${SCRIPT_DIR}/backend/emr.db" ]]; then
+  warn "Found legacy DB at repo root. Moving it to backend/emr.db"
+  mv "${SCRIPT_DIR}/emr.db" "${SCRIPT_DIR}/backend/emr.db"
+fi
+
+if [[ ! -f "${SCRIPT_DIR}/backend/emr.db" ]]; then
+  log "backend/emr.db not found. Seeding database..."
   (
     cd "${SCRIPT_DIR}"
-    python3 -m backend.seed
-    python3 -m backend.seed_visits
+    "${BACKEND_VENV}/bin/python" -m backend.seed
+    "${BACKEND_VENV}/bin/python" -m backend.seed_visits
   )
 fi
 
-# Resolve backend Python venv — prefer backend/venv, fall back to root venv
-if [[ -f "${SCRIPT_DIR}/backend/venv/bin/activate" ]]; then
-  BACKEND_VENV="${SCRIPT_DIR}/backend/venv"
-elif [[ -f "${SCRIPT_DIR}/venv/bin/activate" ]]; then
-  BACKEND_VENV="${SCRIPT_DIR}/venv"
-else
-  err "No Python venv found for backend. Run: python3 -m venv backend/venv && source backend/venv/bin/activate && pip install -r backend/requirements.txt"
-  exit 1
-fi
 log "Using backend venv: ${BACKEND_VENV}"
 
 BACKEND_POST_BODY='{"email":"admin@clinic.com","password":"admin123"}'
@@ -253,7 +271,7 @@ if ! start_service \
   "http://127.0.0.1:8000/health" \
   180 \
   "" \
-  bash -c "cd '$SCRIPT_DIR/room-agent' && source '$SCRIPT_DIR/room-agent/venv/bin/activate' && uvicorn server:app --host 127.0.0.1 --port 8000"
+  bash -c "cd '$SCRIPT_DIR/room-agent' && source '$ROOM_AGENT_VENV/bin/activate' && uvicorn server:app --host 127.0.0.1 --port 8000"
 then
   warn "Room Agent failed to start. Check $ROOM_AGENT_LOG. Continuing without Room Agent."
 fi

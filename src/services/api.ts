@@ -3,7 +3,15 @@ import type {
   Appointment, QueueEntry, QueueSummary, AutoAssignRequest,
   RoomStatus
 } from '@/types/emr';
-import type { Visit, VisitSummary, KeyFactCategory, PrescriptionDraft } from '@/types/index';
+import type {
+  Visit,
+  VisitSummary,
+  KeyFactCategory,
+  PrescriptionDraft,
+  SourceFact,
+  SummarySections,
+  MedicationTimingDetails,
+} from '@/types/index';
 import { triggerPrescriptionDownload } from '@/utils/prescriptionExport';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
@@ -352,6 +360,29 @@ function normalizePrescriptionDraft(raw: unknown): PrescriptionDraft | null {
 
   const value = raw as Record<string, unknown>;
   const diagnoses = Array.isArray(value.diagnoses) ? value.diagnoses.map(String).map((item) => item.trim()).filter(Boolean) : [];
+  const normalizeTimingDetails = (value: unknown): MedicationTimingDetails | undefined => {
+    if (!value || typeof value !== 'object') return undefined;
+    const item = value as Record<string, unknown>;
+    const relationToMeals = Array.isArray(item.relationToMeals) ? item.relationToMeals.map(String).map((v) => v.trim()).filter(Boolean) : [];
+    const timeOfDay = Array.isArray(item.timeOfDay) ? item.timeOfDay.map(String).map((v) => v.trim()).filter(Boolean) : [];
+    const specificDays = Array.isArray(item.specificDays) ? item.specificDays.map(String).map((v) => v.trim()).filter(Boolean) : [];
+    const eventTiming = Array.isArray(item.eventTiming) ? item.eventTiming.map(String).map((v) => v.trim()).filter(Boolean) : [];
+    const normalized: MedicationTimingDetails = {
+      relationToMeals: relationToMeals.length ? relationToMeals : undefined,
+      timeOfDay: timeOfDay.length ? timeOfDay : undefined,
+      interval: String(item.interval ?? '').trim() || undefined,
+      specificDays: specificDays.length ? specificDays : undefined,
+      alternateDays: typeof item.alternateDays === 'boolean' ? item.alternateDays : undefined,
+      prn: typeof item.prn === 'boolean' ? item.prn : undefined,
+      prnIndication: String(item.prnIndication ?? '').trim() || undefined,
+      maxDose: String(item.maxDose ?? '').trim() || undefined,
+      taperInstructions: String(item.taperInstructions ?? '').trim() || undefined,
+      splitDose: String(item.splitDose ?? '').trim() || undefined,
+      eventTiming: eventTiming.length ? eventTiming : undefined,
+    };
+    return Object.values(normalized).some((entry) => Array.isArray(entry) ? entry.length > 0 : entry !== undefined) ? normalized : undefined;
+  };
+
   const medications = Array.isArray(value.medications)
     ? value.medications
         .filter((item): item is Record<string, unknown> => !!item && typeof item === 'object')
@@ -362,6 +393,7 @@ function normalizePrescriptionDraft(raw: unknown): PrescriptionDraft | null {
           duration: String(item.duration ?? '').trim() || undefined,
           route: String(item.route ?? '').trim() || undefined,
           instructions: String(item.instructions ?? '').trim() || undefined,
+          timingDetails: normalizeTimingDetails(item.timingDetails ?? item.timing_details),
         }))
         .filter((item) => item.name.length > 0)
     : [];
@@ -401,9 +433,64 @@ function normalizePrescriptionDraft(raw: unknown): PrescriptionDraft | null {
   };
 }
 
+function createEmptySummarySections(): SummarySections {
+  return {
+    historyOfPresentIllness: [],
+    negativeFindings: [],
+    riskFactors: [],
+    pastHistory: [],
+    medicationHistory: [],
+    allergies: [],
+    vitals: [],
+    examination: [],
+    assessment: [],
+    medications: [],
+    investigations: [],
+    carePlan: [],
+    warnings: [],
+    followUp: [],
+    unmapped: [],
+  };
+}
+
+function normalizeSourceFacts(raw: unknown): SourceFact[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter((item): item is Record<string, unknown> => !!item && typeof item === 'object')
+    .map((item, index) => ({
+      id: String(item.id ?? `sf-${index}`),
+      speaker: String(item.speaker ?? 'Unknown').trim() || 'Unknown',
+      turnIndex: Number(item.turnIndex ?? item.turn_index ?? 0),
+      sentenceIndex: Number(item.sentenceIndex ?? item.sentence_index ?? 0),
+      category: String(item.category ?? 'other').trim() as SourceFact['category'],
+      section: String(item.section ?? 'unmapped').trim() as SourceFact['section'],
+      text: String(item.text ?? '').trim(),
+      evidence: String(item.evidence ?? '').trim() || undefined,
+      status: String(item.status ?? 'confirmed').trim() as SourceFact['status'],
+      confidence: Number(item.confidence ?? 0),
+      mapped: Boolean(item.mapped ?? true),
+      isSupported: typeof item.isSupported === 'boolean' ? item.isSupported : undefined,
+    }))
+    .filter((item) => item.text.length > 0);
+}
+
+function normalizeSummarySections(raw: unknown): SummarySections | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const value = raw as Record<string, unknown>;
+  const base = createEmptySummarySections();
+  (Object.keys(base) as Array<keyof SummarySections>).forEach((key) => {
+    const sectionValue = value[key];
+    if (!Array.isArray(sectionValue)) return;
+    base[key] = sectionValue.map(String).map((item) => item.trim()).filter(Boolean);
+  });
+  return base;
+}
+
 function mapVisit(r: Record<string, unknown>): Visit {
   const s = r.summary as Record<string, unknown> | null;
   const rawStructured = (s?.structuredFindings ?? s?.structured_findings) as unknown;
+  const rawSourceFacts = (s?.sourceFacts ?? s?.source_facts) as unknown;
+  const rawSections = (s?.sections ?? s?.summarySections ?? s?.summary_sections) as unknown;
 
   const normalizedStructuredFindings = Array.isArray(rawStructured)
     ? (rawStructured as Record<string, unknown>[]).map((item, index) => {
@@ -431,6 +518,32 @@ function mapVisit(r: Record<string, unknown>): Visit {
             : [],
         mode: (rawQuality.mode as 'hybrid' | 'llm_only' | 'rule_only' | undefined) ?? undefined,
         generatedAt: (rawQuality.generatedAt as string | undefined) ?? (rawQuality.generated_at as string | undefined),
+        coverage: rawQuality.coverage !== undefined ? Number(rawQuality.coverage ?? 0) : undefined,
+        sourceFactCount: rawQuality.sourceFactCount !== undefined || rawQuality.source_fact_count !== undefined
+          ? Number(rawQuality.sourceFactCount ?? rawQuality.source_fact_count ?? 0)
+          : undefined,
+        mappedFactCount: rawQuality.mappedFactCount !== undefined || rawQuality.mapped_fact_count !== undefined
+          ? Number(rawQuality.mappedFactCount ?? rawQuality.mapped_fact_count ?? 0)
+          : undefined,
+        unmappedFactIds: Array.isArray(rawQuality.unmappedFactIds)
+          ? rawQuality.unmappedFactIds.map(String)
+          : Array.isArray(rawQuality.unmapped_fact_ids)
+            ? (rawQuality.unmapped_fact_ids as unknown[]).map(String)
+            : [],
+        criticalMisses: Array.isArray(rawQuality.criticalMisses)
+          ? rawQuality.criticalMisses.map(String)
+          : Array.isArray(rawQuality.critical_misses)
+            ? (rawQuality.critical_misses as unknown[]).map(String)
+            : [],
+        sectionCounts: rawQuality.sectionCounts && typeof rawQuality.sectionCounts === 'object'
+          ? Object.fromEntries(
+              Object.entries(rawQuality.sectionCounts as Record<string, unknown>).map(([key, value]) => [key, Number(value ?? 0)])
+            )
+          : rawQuality.section_counts && typeof rawQuality.section_counts === 'object'
+            ? Object.fromEntries(
+                Object.entries(rawQuality.section_counts as Record<string, unknown>).map(([key, value]) => [key, Number(value ?? 0)])
+              )
+            : undefined,
       }
     : undefined;
 
@@ -451,6 +564,8 @@ function mapVisit(r: Record<string, unknown>): Visit {
         actionsParagraph: ((s.actionsParagraph ?? s.actions_paragraph ?? s.actionPlan ?? s.action_plan) as string) ?? '',
         chiefComplaint: String((s.chiefComplaint ?? s.chief_complaint) as string ?? '').trim(),
         structuredFindings: normalizedStructuredFindings,
+        sourceFacts: normalizeSourceFacts(rawSourceFacts),
+        sections: normalizeSummarySections(rawSections),
         quality: normalizedQuality,
       }
     : null;
@@ -500,6 +615,8 @@ export async function approveVisit(visitId: string, summary: VisitSummary, docto
       actionsParagraph: summary.actionsParagraph,
       chiefComplaint: summary.chiefComplaint ?? '',
       structuredFindings: summary.structuredFindings ?? [],
+      sourceFacts: summary.sourceFacts ?? [],
+      sections: summary.sections ?? null,
       quality: summary.quality ?? null,
     },
     doctor_id: doctorId ?? null,
@@ -525,6 +642,8 @@ export async function validateVisitSummary(
       actionsParagraph: summary.actionsParagraph,
       chiefComplaint: summary.chiefComplaint ?? '',
       structuredFindings: summary.structuredFindings ?? [],
+      sourceFacts: summary.sourceFacts ?? [],
+      sections: summary.sections ?? null,
       quality: summary.quality ?? null,
     },
   });

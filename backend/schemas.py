@@ -24,12 +24,52 @@ class StructuredFinding(BaseModel):
     evidence: Optional[str] = None
 
 
+class SourceFact(BaseModel):
+    id: str
+    speaker: str = Field(..., max_length=30)
+    turnIndex: int = 0
+    sentenceIndex: int = 0
+    category: str = Field(..., max_length=40)
+    section: str = Field(..., max_length=40)
+    text: str = Field(..., max_length=500)
+    evidence: Optional[str] = None
+    status: str = Field(default="confirmed", pattern="^(confirmed|probable|denied|unclear)$")
+    confidence: float = Field(default=0.0, ge=0, le=1)
+    mapped: bool = True
+    isSupported: Optional[bool] = None
+
+
+class SummarySections(BaseModel):
+    historyOfPresentIllness: List[str] = []
+    negativeFindings: List[str] = []
+    riskFactors: List[str] = []
+    pastHistory: List[str] = []
+    medicationHistory: List[str] = []
+    allergies: List[str] = []
+    vitals: List[str] = []
+    examination: List[str] = []
+    assessment: List[str] = []
+    medications: List[str] = []
+    investigations: List[str] = []
+    carePlan: List[str] = []
+    warnings: List[str] = []
+    followUp: List[str] = []
+    unmapped: List[str] = []
+
+
 class SummaryQuality(BaseModel):
     score: float = Field(default=0, ge=0, le=100)
     confidence: float = Field(default=0, ge=0, le=1)
     missingFields: List[str] = []
     mode: Optional[str] = Field(default=None, pattern="^(hybrid|llm_only|rule_only)$")
     generatedAt: Optional[str] = None
+    coverage: Optional[float] = Field(default=None, ge=0, le=1)
+    sourceFactCount: Optional[int] = Field(default=None, ge=0)
+    mappedFactCount: Optional[int] = Field(default=None, ge=0)
+    unmappedFactIds: List[str] = []
+    criticalMisses: List[str] = []
+    sectionCounts: Dict[str, int] = {}
+
 class SummaryItem(BaseModel):
     id: str
     text: str = Field(..., max_length=1000)
@@ -49,6 +89,7 @@ class PrescriptionMedicationDetail(BaseModel):
     duration: Optional[str] = None
     route: Optional[str] = None
     instructions: Optional[str] = None
+    timingDetails: Optional[Dict[str, Any]] = None
 
 class PrescriptionInvestigation(BaseModel):
     name: str
@@ -77,6 +118,8 @@ class VisitSummary(BaseModel):
     actionsParagraph: str = ""
     chiefComplaint: str = ""
     structuredFindings: List[StructuredFinding] = []
+    sourceFacts: List[SourceFact] = []
+    sections: Optional[SummarySections] = None
     quality: Optional[SummaryQuality] = None
 
 class Medication(BaseModel):

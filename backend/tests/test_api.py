@@ -567,6 +567,38 @@ def test_visit_progress_approval_and_side_effects(client):
                 },
                 "issuesParagraph": "Cough noted.",
                 "actionsParagraph": "Medication prescribed.",
+                "sourceFacts": [
+                    {
+                        "id": "sf-1",
+                        "speaker": "Patient",
+                        "turnIndex": 0,
+                        "sentenceIndex": 0,
+                        "category": "symptom",
+                        "section": "historyOfPresentIllness",
+                        "text": "cough for three days",
+                        "evidence": "Patient reports cough for three days.",
+                        "status": "confirmed",
+                        "confidence": 0.9,
+                        "mapped": True,
+                        "isSupported": True,
+                    }
+                ],
+                "sections": {
+                    "historyOfPresentIllness": ["cough for three days"],
+                    "carePlan": ["Rest and fluids"],
+                },
+                "quality": {
+                    "score": 92,
+                    "confidence": 0.9,
+                    "missingFields": [],
+                    "mode": "hybrid",
+                    "coverage": 1,
+                    "sourceFactCount": 1,
+                    "mappedFactCount": 1,
+                    "unmappedFactIds": [],
+                    "criticalMisses": [],
+                    "sectionCounts": {"historyOfPresentIllness": 1, "carePlan": 1},
+                },
             },
         },
     )
@@ -590,6 +622,9 @@ def test_visit_progress_approval_and_side_effects(client):
         assert visit.dialogue == []
         assert visit.summary["prescriptionDraft"]["medications"][0]["instructions"] == "after food"
         assert visit.summary["prescriptionDraft"]["followUp"]["timeline"] == "1 week"
+        assert visit.summary["sourceFacts"][0]["text"] == "cough for three days"
+        assert visit.summary["sections"]["historyOfPresentIllness"] == ["cough for three days"]
+        assert visit.summary["quality"]["coverage"] == 1
 
         appt_row = db.query(models.Appointment).filter(models.Appointment.id == appt_id).first()
         assert appt_row.status == models.AppointmentStatusEnum.completed
@@ -670,7 +705,7 @@ def test_approve_rejects_invalid_summary_and_keeps_visit_open(client):
     assert visit_after.json()["status"] == "pending"
 
 
-def test_room_device_cannot_access_admin_sensitive_endpoints(client):
+def test_room_device_can_approve_own_room_visit_but_not_admin_sensitive_endpoints(client):
     test_client, _ = client
     admin_headers = _auth_headers(test_client, "super@clinic.com", "supersecure")
     rooms = test_client.get("/api/rooms", headers=admin_headers).json()
@@ -691,12 +726,29 @@ def test_room_device_cannot_access_admin_sensitive_endpoints(client):
         json={
             "doctor_id": doctor_id,
             "summary": {
-                "clinicalSnapshot": [],
-                "doctorActions": [],
+                "clinicalSnapshot": [{"label": "cough", "category": "symptom"}],
+                "doctorActions": [{"id": "1", "text": "Rest and fluids", "sourceFactIds": [], "isEdited": False}],
+                "prescriptions": [{"name": "Amoxicillin", "dosage": "500mg", "frequency": "BID"}],
+                "prescriptionDraft": {
+                    "diagnoses": ["Upper respiratory infection"],
+                    "medications": [
+                        {
+                            "name": "Amoxicillin",
+                            "dosage": "500mg",
+                            "frequency": "BID",
+                            "duration": "5 days",
+                            "route": "oral",
+                            "instructions": "after food",
+                        }
+                    ],
+                },
+                "issuesParagraph": "Cough noted.",
+                "actionsParagraph": "Medication prescribed.",
+                "chiefComplaint": "cough",
             },
         },
     )
-    assert approve.status_code == 403
+    assert approve.status_code == 200, approve.text
 
     history = test_client.put(
         f"/api/patients/{patient_id}/history",

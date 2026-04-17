@@ -89,7 +89,7 @@ export default function LoginPage() {
                             'Live AI-assisted visit documentation',
                             'Smart queue and scheduling management',
                             'Physician-reviewed SOAP summaries',
-                            'HIPAA-compliant audit trail',
+                            'Secure, structured clinical records',
                         ].map(f => (
                             <div key={f} className={styles.feature}>
                                 <span className={styles.featureDot} />
@@ -225,7 +225,7 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    <p className={styles.footer}>Secure access · HIPAA compliant</p>
+                    <p className={styles.footer}>Secure access</p>
                 </div>
             </main>
         </div>

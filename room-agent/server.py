@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 
 from asr_engine import ASREngine, DEVICE
+from transcription_normalizer import correct_medical_terms_in_dialogue
 
 # Configure Logging
 logging.basicConfig(
@@ -169,7 +170,13 @@ async def summarize_dialogue(req: SummarizeRequest, authorization: Optional[str]
         return JSONResponse({"error": "Summarizer not ready"}, status_code=503)
     try:
         dialogue_dicts = [{"speaker": t.speaker, "text": t.text} for t in req.dialogue]
-        result = engine.summarizer.summarize_dialogue(dialogue_dicts, medical_history=req.medical_history)
+        corrected_dialogue, corrections = correct_medical_terms_in_dialogue(
+            dialogue_dicts,
+            medical_history=req.medical_history,
+        )
+        result = engine.summarizer.summarize_dialogue(corrected_dialogue, medical_history=req.medical_history)
+        if isinstance(result, dict):
+            result["transcriptionCorrections"] = corrections
         return result
     except Exception as e:
         logger.error(f"Summarization failed: {e}", exc_info=True)

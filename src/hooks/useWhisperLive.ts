@@ -116,6 +116,14 @@ const GENERIC_SNAPSHOT_LABELS = new Set([
     'pain inquiry',
     'duration of symptoms',
     'location of pain',
+    'location',
+    'trigger food drink',
+    'trigger food/drink',
+    'weight loss',
+    'night symptoms',
+    'frequency',
+    'frequency of symptom',
+    'medication use',
     'associated symptom with food/drink',
     'lifestyle factor related to symptoms',
     'symptom relief attempts',
@@ -130,6 +138,19 @@ function isNoiseChunk(chunk: string): boolean {
     const text = compactText(chunk);
     if (!text || text.length < 6) return true;
     return NOISE_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function isGenericSnapshotLabel(label: string): boolean {
+    const normalized = normalizeText(label);
+    if (!normalized) return true;
+    if (GENERIC_SNAPSHOT_LABELS.has(normalized)) return true;
+    if (label.includes(' - ')) {
+        const [left = '', right = ''] = label.split(' - ', 2).map(normalizeText);
+        if (!left || !right) return true;
+        if (left === right) return true;
+        if (GENERIC_SNAPSHOT_LABELS.has(left) && GENERIC_SNAPSHOT_LABELS.has(right)) return true;
+    }
+    return false;
 }
 
 function inferChiefComplaintFromDialogue(dialogue: DialogueTurn[]): string {
@@ -231,8 +252,7 @@ function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[], doct
     }));
 
     const filteredSnapshot = enrichedSnapshot.filter((item) => {
-        const normalized = normalizeText(item.label);
-        return !GENERIC_SNAPSHOT_LABELS.has(normalized) && !isNoiseChunk(item.label);
+        return !isGenericSnapshotLabel(item.label) && !isNoiseChunk(item.label);
     });
 
     const snapshotWithFallback = filteredSnapshot.length > 0 ? filteredSnapshot : fallbackSnapshot;
@@ -266,13 +286,14 @@ function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[], doct
     if ((result.doctorActions?.length ?? 0) === 0) missingFields.push('doctorActions');
 
     const quality = {
+        ...(result.quality ?? {}),
         score: Math.max(15, 100 - missingFields.length * 18),
         confidence: clamp01(
             (clinicalSnapshot.reduce((acc, item) => acc + (item.confidence ?? 0.7), 0) / Math.max(1, clinicalSnapshot.length))
         ),
         missingFields,
-        mode: 'hybrid' as const,
-        generatedAt: new Date().toISOString(),
+        mode: result.quality?.mode ?? ('hybrid' as const),
+        generatedAt: result.quality?.generatedAt ?? new Date().toISOString(),
     };
 
     const mergedDoctorActions = [...(result.doctorActions ?? [])].reduce<VisitSummary['doctorActions']>((acc, action) => {
@@ -342,12 +363,36 @@ function buildQuickSummary(dialogue: DialogueTurn[], doctorName?: string, patien
             : 'No clear action plan captured yet.',
         chiefComplaint,
         structuredFindings: extracted,
+        sourceFacts: [],
+        sections: {
+            historyOfPresentIllness: chiefComplaint ? [chiefComplaint] : [],
+            negativeFindings: [],
+            riskFactors: [],
+            pastHistory: [],
+            medicationHistory: [],
+            allergies: [],
+            vitals: [],
+            examination: [],
+            assessment: [],
+            medications: [],
+            investigations: [],
+            carePlan: doctorActions.map((item) => item.text),
+            warnings: [],
+            followUp: [],
+            unmapped: [],
+        },
         quality: {
             score: Math.max(25, 100 - missingFields.length * 25),
             confidence: clamp01(clinicalSnapshot.reduce((acc, item) => acc + (item.confidence ?? 0.7), 0) / Math.max(1, clinicalSnapshot.length)),
             missingFields,
             mode: 'rule_only',
             generatedAt: new Date().toISOString(),
+            coverage: 0,
+            sourceFactCount: 0,
+            mappedFactCount: 0,
+            unmappedFactIds: [],
+            criticalMisses: [],
+            sectionCounts: {},
         },
     };
 }
@@ -386,6 +431,10 @@ export function useWhisperLive(
     const isRecordingRef = useRef(false);
     const isPausedRef = useRef(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    /** Wall-clock timestamp (ms) when the current recording segment started. */
+    const recordingStartRef = useRef<number | null>(null);
+    /** Seconds accumulated before the most recent pause. */
+    const accumulatedDurationRef = useRef<number>(0);
     const confirmationResolverRef = useRef<((value: { text: string; dialogue: DialogueTurn[] }) => void) | null>(null);
     const namesRef = useRef<{ doctor?: string, patient?: string }>({});
     const autoSaveIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -432,19 +481,25 @@ export function useWhisperLive(
     }, []);
 
     const startDurationTimer = useCallback(() => {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-        }
-
+        if (timerRef.current) clearInterval(timerRef.current);
+        recordingStartRef.current = Date.now();
         timerRef.current = setInterval(() => {
-            setRecordingDuration(d => d + 1);
-        }, 1000);
+            if (recordingStartRef.current !== null) {
+                const elapsed = Math.floor((Date.now() - recordingStartRef.current) / 1000);
+                setRecordingDuration(accumulatedDurationRef.current + elapsed);
+            }
+        }, 500);
     }, []);
 
     const stopDurationTimer = useCallback(() => {
         if (timerRef.current) {
             clearInterval(timerRef.current);
             timerRef.current = null;
+        }
+        // Freeze accumulated time at the moment of stopping/pausing
+        if (recordingStartRef.current !== null) {
+            accumulatedDurationRef.current += Math.floor((Date.now() - recordingStartRef.current) / 1000);
+            recordingStartRef.current = null;
         }
     }, []);
 
@@ -553,6 +608,8 @@ export function useWhisperLive(
             setLivePreviewText('');
             setConfidence(0);
             setRecordingDuration(0);
+            accumulatedDurationRef.current = 0;
+            recordingStartRef.current = null;
             setIsConfirming(false);
             setProcessingStage(null);
             setBackendDialogue([]);
@@ -826,6 +883,8 @@ export function useWhisperLive(
     const clearTranscript = useCallback(() => {
         stopAutoSaveInterval();
         stopDurationTimer();
+        accumulatedDurationRef.current = 0;
+        recordingStartRef.current = null;
 
         setConfirmedText('');
         setPartialText('');
@@ -915,6 +974,8 @@ export function useWhisperLive(
                 actionsParagraph: data.actionsParagraph ?? '',
                 chiefComplaint: data.chiefComplaint ?? '',
                 structuredFindings: data.structuredFindings ?? [],
+                sourceFacts: data.sourceFacts ?? [],
+                sections: data.sections ?? null,
                 quality: data.quality ?? undefined,
             };
 

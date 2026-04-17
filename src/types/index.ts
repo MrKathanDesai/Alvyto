@@ -69,12 +69,81 @@ export interface StructuredFinding {
   evidence?: string;
 }
 
+export interface SourceFact {
+  id: string;
+  speaker: string;
+  turnIndex: number;
+  sentenceIndex: number;
+  category:
+    | 'symptom'
+    | 'negative'
+    | 'risk_factor'
+    | 'past_history'
+    | 'medication_history'
+    | 'allergy'
+    | 'vital'
+    | 'exam'
+    | 'assessment'
+    | 'prescription'
+    | 'investigation'
+    | 'advice'
+    | 'warning'
+    | 'follow_up'
+    | 'other';
+  section:
+    | 'historyOfPresentIllness'
+    | 'negativeFindings'
+    | 'riskFactors'
+    | 'pastHistory'
+    | 'medicationHistory'
+    | 'allergies'
+    | 'vitals'
+    | 'examination'
+    | 'assessment'
+    | 'medications'
+    | 'investigations'
+    | 'carePlan'
+    | 'warnings'
+    | 'followUp'
+    | 'unmapped';
+  text: string;
+  evidence?: string;
+  status: 'confirmed' | 'probable' | 'denied' | 'unclear';
+  confidence: number;
+  mapped: boolean;
+  isSupported?: boolean;
+}
+
+export interface SummarySections {
+  historyOfPresentIllness: string[];
+  negativeFindings: string[];
+  riskFactors: string[];
+  pastHistory: string[];
+  medicationHistory: string[];
+  allergies: string[];
+  vitals: string[];
+  examination: string[];
+  assessment: string[];
+  medications: string[];
+  investigations: string[];
+  carePlan: string[];
+  warnings: string[];
+  followUp: string[];
+  unmapped: string[];
+}
+
 export interface SummaryQuality {
   score: number;
   confidence: number;
   missingFields: string[];
   mode?: 'hybrid' | 'llm_only' | 'rule_only';
   generatedAt?: string;
+  coverage?: number;
+  sourceFactCount?: number;
+  mappedFactCount?: number;
+  unmappedFactIds?: string[];
+  criticalMisses?: string[];
+  sectionCounts?: Record<string, number>;
 }
 
 export interface Prescription {
@@ -91,6 +160,21 @@ export interface PrescriptionMedicationDetail {
   duration?: string;
   route?: string;
   instructions?: string;
+  timingDetails?: MedicationTimingDetails;
+}
+
+export interface MedicationTimingDetails {
+  relationToMeals?: string[];
+  timeOfDay?: string[];
+  interval?: string;
+  specificDays?: string[];
+  alternateDays?: boolean;
+  prn?: boolean;
+  prnIndication?: string;
+  maxDose?: string;
+  taperInstructions?: string;
+  splitDose?: string;
+  eventTiming?: string[];
 }
 
 export interface PrescriptionInvestigation {
@@ -123,6 +207,8 @@ export interface VisitSummary {
   actionsParagraph: string;
   chiefComplaint?: string;
   structuredFindings?: StructuredFinding[];
+  sourceFacts?: SourceFact[];
+  sections?: SummarySections | null;
   quality?: SummaryQuality;
 }
 export interface Visit {

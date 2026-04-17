@@ -233,6 +233,12 @@ def _normalize_quality_payload(summary: dict | None) -> dict | None:
     score = float(quality.get("score") or 0)
     confidence = float(quality.get("confidence") or 0)
     missing_fields = quality.get("missingFields") or quality.get("missing_fields") or []
+    coverage = quality.get("coverage")
+    source_fact_count = quality.get("sourceFactCount") or quality.get("source_fact_count")
+    mapped_fact_count = quality.get("mappedFactCount") or quality.get("mapped_fact_count")
+    unmapped_fact_ids = quality.get("unmappedFactIds") or quality.get("unmapped_fact_ids") or []
+    critical_misses = quality.get("criticalMisses") or quality.get("critical_misses") or []
+    section_counts = quality.get("sectionCounts") or quality.get("section_counts") or {}
 
     return {
         "score": max(0.0, min(100.0, score)),
@@ -240,6 +246,16 @@ def _normalize_quality_payload(summary: dict | None) -> dict | None:
         "missingFields": [str(item).strip() for item in missing_fields if str(item).strip()],
         "mode": str(quality.get("mode") or "hybrid").strip() or "hybrid",
         "generatedAt": str(quality.get("generatedAt") or quality.get("generated_at") or "").strip() or None,
+        "coverage": max(0.0, min(1.0, float(coverage))) if coverage is not None else None,
+        "sourceFactCount": max(0, int(source_fact_count)) if source_fact_count is not None else None,
+        "mappedFactCount": max(0, int(mapped_fact_count)) if mapped_fact_count is not None else None,
+        "unmappedFactIds": [str(item).strip() for item in unmapped_fact_ids if str(item).strip()],
+        "criticalMisses": [str(item).strip() for item in critical_misses if str(item).strip()],
+        "sectionCounts": {
+            str(key).strip(): max(0, int(value))
+            for key, value in section_counts.items()
+            if str(key).strip()
+        } if isinstance(section_counts, dict) else {},
     }
 
 
@@ -270,6 +286,71 @@ def _normalize_structured_findings_payload(summary: dict | None) -> list[dict]:
             "evidence": evidence,
         })
 
+    return normalized
+
+
+def _empty_sections_payload() -> dict:
+    return {
+        "historyOfPresentIllness": [],
+        "negativeFindings": [],
+        "riskFactors": [],
+        "pastHistory": [],
+        "medicationHistory": [],
+        "allergies": [],
+        "vitals": [],
+        "examination": [],
+        "assessment": [],
+        "medications": [],
+        "investigations": [],
+        "carePlan": [],
+        "warnings": [],
+        "followUp": [],
+        "unmapped": [],
+    }
+
+
+def _normalize_source_facts_payload(summary: dict | None) -> list[dict]:
+    data = summary or {}
+    facts = data.get("sourceFacts") or data.get("source_facts") or []
+    if not isinstance(facts, list):
+        return []
+
+    normalized = []
+    for index, item in enumerate(facts):
+        if not isinstance(item, dict):
+            continue
+        text = str(item.get("text") or "").strip()
+        if not text:
+            continue
+        normalized.append({
+            "id": str(item.get("id") or f"sf-{index}"),
+            "speaker": str(item.get("speaker") or "Unknown").strip() or "Unknown",
+            "turnIndex": int(item.get("turnIndex") or item.get("turn_index") or 0),
+            "sentenceIndex": int(item.get("sentenceIndex") or item.get("sentence_index") or 0),
+            "category": str(item.get("category") or "other").strip() or "other",
+            "section": str(item.get("section") or "unmapped").strip() or "unmapped",
+            "text": text,
+            "evidence": str(item.get("evidence") or "").strip() or None,
+            "status": str(item.get("status") or "confirmed").strip() or "confirmed",
+            "confidence": max(0.0, min(1.0, float(item.get("confidence") or 0))),
+            "mapped": bool(item.get("mapped", True)),
+            "isSupported": item.get("isSupported"),
+        })
+    return normalized
+
+
+def _normalize_summary_sections_payload(summary: dict | None) -> dict:
+    data = summary or {}
+    raw = data.get("sections") or data.get("summarySections") or data.get("summary_sections") or {}
+    normalized = _empty_sections_payload()
+    if not isinstance(raw, dict):
+        return normalized
+
+    for key in normalized.keys():
+        values = raw.get(key) or raw.get(re.sub(r"([A-Z])", lambda m: "_" + m.group(1).lower(), key))
+        if not isinstance(values, list):
+            continue
+        normalized[key] = [str(item).strip() for item in values if str(item).strip()]
     return normalized
 
 
@@ -400,6 +481,19 @@ def _validate_summary_for_approval(summary: dict) -> dict:
     if not isinstance(clinical_snapshot, list) or len(clinical_snapshot) == 0:
         warnings.append("Clinical snapshot is empty.")
 
+    quality = _normalize_quality_payload(summary)
+    if quality:
+        coverage = quality.get("coverage")
+        if coverage is not None and coverage < 0.75:
+            warnings.append(f"Structured fact coverage is low ({round(coverage * 100)}%). Review summary completeness before approval.")
+        critical_misses = quality.get("criticalMisses") or []
+        if critical_misses:
+            warnings.append(f"Critical sections may be incomplete: {', '.join(critical_misses)}.")
+
+    sections = _normalize_summary_sections_payload(summary)
+    if sections.get("unmapped"):
+        warnings.append(f"{len(sections['unmapped'])} clinically relevant fact(s) remain unmapped to a summary section.")
+
     return {
         "ok": len(missing_fields) == 0,
         "missingFields": missing_fields,
@@ -410,6 +504,9 @@ def _validate_summary_for_approval(summary: dict) -> dict:
 def _sanitize_summary_for_response(summary: dict | None) -> dict:
     data = summary if isinstance(summary, dict) else {}
     normalized = _normalize_prescription_payload(data)
+    normalized_source_facts = _normalize_source_facts_payload(data)
+    normalized_sections = _normalize_summary_sections_payload(data)
+    normalized_quality = _normalize_quality_payload(data)
 
     return {
         "clinicalSnapshot": data.get("clinicalSnapshot") or data.get("clinical_snapshot") or [],
@@ -436,7 +533,9 @@ def _sanitize_summary_for_response(summary: dict | None) -> dict:
         "actionsParagraph": str(data.get("actionsParagraph") or data.get("actions_paragraph") or ""),
         "chiefComplaint": str(data.get("chiefComplaint") or data.get("chief_complaint") or ""),
         "structuredFindings": data.get("structuredFindings") or data.get("structured_findings") or [],
-        "quality": data.get("quality") or data.get("summary_quality") or None,
+        "sourceFacts": normalized_source_facts,
+        "sections": normalized_sections,
+        "quality": normalized_quality,
     }
 
 
@@ -1076,12 +1175,14 @@ def update_prescription_draft(
 def approve_visit(
     visit_id: str,
     body: VisitApprove,
-    ctx: RequestContext = Depends(require_admin),
+    ctx: RequestContext = Depends(require_any_auth),
     db: DBSession = Depends(get_db),
 ):
     visit = db.query(models.Visit).filter(models.Visit.id == visit_id, models.Visit.is_deleted == False).first()
     if not visit:
         raise HTTPException(404, "Visit not found")
+    if ctx.is_room_device and visit.room_id != ctx.room_id:
+        raise HTTPException(403, "Access denied")
     if visit.status == models.VisitStatusEnum.completed:
         raise HTTPException(409, "Visit already completed")
     if visit.status == models.VisitStatusEnum.cancelled:

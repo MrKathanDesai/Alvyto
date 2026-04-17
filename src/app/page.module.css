@@ -13,7 +13,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 50px;
+  height: 48px;
   padding: 0 var(--spacing-6);
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -21,7 +21,6 @@
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  box-shadow: 0 1px 0 var(--border);
 }
 
 .roomInfo {
@@ -43,8 +42,8 @@
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background-color: var(--surface-3);
+  letter-spacing: 0.06em;
+  background-color: var(--surface-2);
   color: var(--text-3);
   border: 1px solid var(--border);
 }
@@ -197,12 +196,15 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
-  padding: 10px var(--spacing-5);
+  margin: var(--spacing-3) var(--spacing-6) 0;
+  padding: 10px var(--spacing-4);
   background-color: #FFFBEB;
   color: var(--amber);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  border-bottom: 1px solid #FDE68A;
+  border: 1px solid #FDE68A;
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-lg);
 }
 
 .warningBanner svg {
@@ -222,12 +224,15 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
-  padding: 10px var(--spacing-5);
+  margin: var(--spacing-3) var(--spacing-6) 0;
+  padding: 10px var(--spacing-4);
   background-color: #FEF2F2;
   color: var(--red);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  border-bottom: 1px solid #FECACA;
+  border: 1px solid #FECACA;
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius-lg);
 }
 
 .bannerDismiss {
@@ -255,19 +260,21 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1);
-  margin: 0 var(--spacing-6) var(--spacing-4);
+  margin: var(--spacing-3) var(--spacing-6) 0;
   padding: var(--spacing-3) var(--spacing-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background-color: var(--surface);
+  background-color: var(--blue-subtle);
+  border: 1px solid rgba(37,99,235,0.12);
+  border-left: 3px solid var(--blue-primary);
+  border-radius: var(--radius-lg);
 }
 
 .queueChiefComplaintLabel {
   font-size: var(--font-size-xs);
-  color: var(--text-3);
+  color: var(--blue-primary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: var(--font-weight-semibold);
+  opacity: 0.8;
 }
 
 .queueChiefComplaintValue {
@@ -281,6 +288,7 @@
   margin-bottom: var(--spacing-8);
 }
 
+.welcomeMessage h1,
 .welcomeMessage h2 {
   font-size: var(--font-size-2xl);
   color: var(--text-1);

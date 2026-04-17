@@ -568,7 +568,7 @@ export default function ExamRoom() {
       }
     } catch (error) {
       console.error('Error approving visit:', error);
-      setVisitError('Failed to save visit. Please try again.');
+      setVisitError(error instanceof Error ? error.message : 'Failed to save visit. Please try again.');
     }
   }, [approveVisit, activeVisitId, activeQueueEntryId, clearSession, clearTranscript, currentPatient, currentRoom?.assignedDoctorId, currentRoom?.id, currentVisit?.summary, queueChiefComplaint, selectedPatientId, updateSummary]);
 

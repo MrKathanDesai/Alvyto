@@ -108,6 +108,39 @@ def call_summarize_api(payload: dict) -> dict:
 
 def run_quality_checks(summary: dict) -> dict[str, bool]:
     prescription_draft = summary.get("prescriptionDraft") or {}
+    sections = summary.get("sections") or {}
+    source_facts = summary.get("sourceFacts") or []
+
+    def values_for_section(name: str) -> list[str]:
+        raw = sections.get(name) or []
+        return [str(item).strip().lower() for item in raw if str(item).strip()]
+
+    def section_contains(name: str, snippet: str) -> bool:
+        snippet_lower = snippet.lower()
+        return any(snippet_lower in item for item in values_for_section(name))
+
+    def meds_contain(snippet: str) -> bool:
+        snippet_lower = snippet.lower()
+        meds = prescription_draft.get("medications") or []
+        return any(
+            snippet_lower in " ".join(str(item.get(key) or "") for key in ("name", "dosage", "frequency", "duration", "route", "instructions")).lower()
+            for item in meds
+            if isinstance(item, dict)
+        )
+
+    def investigations_contain(snippet: str) -> bool:
+        snippet_lower = snippet.lower()
+        investigations = prescription_draft.get("investigations") or []
+        return any(
+            snippet_lower in " ".join(str(item.get(key) or "") for key in ("name", "details", "timing")).lower()
+            for item in investigations
+            if isinstance(item, dict)
+        )
+
+    def warnings_contain(snippet: str) -> bool:
+        snippet_lower = snippet.lower()
+        return any(snippet_lower in str(item).lower() for item in (prescription_draft.get("warnings") or []))
+
     checks = {
         "clinical_snapshot_present": len(summary.get("clinicalSnapshot", [])) >= 4,
         "doctor_actions_present": len(summary.get("doctorActions", [])) >= 3,
@@ -119,6 +152,26 @@ def run_quality_checks(summary: dict) -> dict[str, bool]:
         "follow_up_present": bool((prescription_draft.get("followUp") or {}).get("timeline")),
         "issues_paragraph_present": bool((summary.get("issuesParagraph") or "").strip()),
         "actions_paragraph_present": bool((summary.get("actionsParagraph") or "").strip()),
+        "source_facts_present": len(source_facts) >= 18,
+        "sections_present": isinstance(sections, dict) and len(sections) > 0,
+        "captures_night_symptoms": section_contains("historyOfPresentIllness", "four nights") or section_contains("historyOfPresentIllness", "midnight"),
+        "captures_reflux_pattern": section_contains("historyOfPresentIllness", "sour water") or section_contains("historyOfPresentIllness", "throat"),
+        "captures_negatives": all(section_contains("negativeFindings", snippet) for snippet in ["no vomiting", "no blood", "no black stool"]),
+        "captures_risk_factors": (
+            section_contains("riskFactors", "tea")
+            and section_contains("riskFactors", "late")
+            and (
+                section_contains("riskFactors", "lying down")
+                or section_contains("riskFactors", "within twenty minutes")
+            )
+            and section_contains("medicationHistory", "ibuprofen")
+        ),
+        "captures_vitals": all(section_contains("vitals", snippet) for snippet in ["blood pressure", "pulse", "oxygen", "temperature"]),
+        "captures_exam": section_contains("examination", "epigastric") or section_contains("examination", "tenderness"),
+        "captures_liquid_antacid": meds_contain("liquid antacid"),
+        "captures_paracetamol_limit": meds_contain("paracetamol") and meds_contain("three tablets"),
+        "captures_investigations": all(investigations_contain(snippet) for snippet in ["cbc", "stool occult blood", "pylori"]),
+        "captures_warning_signs": warnings_contain("black stools") and warnings_contain("vomiting blood"),
     }
     return checks
 

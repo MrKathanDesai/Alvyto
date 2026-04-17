@@ -30,15 +30,6 @@
   letter-spacing: 0.06em;
 }
 
-.draftLabel {
-  font-size: 10px;
-  font-weight: var(--font-weight-normal);
-  color: var(--amber);
-  text-transform: lowercase;
-  letter-spacing: normal;
-  margin-left: 4px;
-}
-
 .statusGroup {
   display: flex;
   align-items: center;
@@ -95,7 +86,7 @@
 }
 
 .spinIcon {
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes pulse {

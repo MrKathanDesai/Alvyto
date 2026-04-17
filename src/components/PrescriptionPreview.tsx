@@ -50,7 +50,7 @@ export function PrescriptionPreview({
       {/* Allergies Warning */}
       {allergies && allergies.length > 0 && (
         <div className={styles.alertBox}>
-          <div className={styles.alertTitle}>⚠️ Known Allergies</div>
+          <div className={styles.alertTitle}>Known Allergies</div>
           <ul className={styles.alertList}>
             {allergies.map((allergy, idx) => (
               <li key={idx}>{allergy}</li>
@@ -74,7 +74,7 @@ export function PrescriptionPreview({
       {/* Medications */}
       {draft.medications && draft.medications.length > 0 && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>💊 Medications</h3>
+          <h3 className={styles.sectionTitle}>Medications</h3>
           <table className={styles.medicationsTable}>
             <thead>
               <tr>
@@ -105,7 +105,7 @@ export function PrescriptionPreview({
       {/* Investigations */}
       {draft.investigations && draft.investigations.length > 0 && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>🧪 Investigations / Tests</h3>
+          <h3 className={styles.sectionTitle}>Investigations</h3>
           <div className={styles.investigationsList}>
             {draft.investigations.map((investigation, idx) => (
               <div key={idx} className={styles.investigationItem}>
@@ -129,7 +129,7 @@ export function PrescriptionPreview({
       {/* Advice */}
       {draft.advice && draft.advice.length > 0 && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>📋 Doctor Advice</h3>
+          <h3 className={styles.sectionTitle}>Doctor Advice</h3>
           <ul className={styles.adviceList}>
             {draft.advice.map((adviceItem, idx) => (
               <li key={idx} className={styles.adviceItem}>{adviceItem}</li>
@@ -141,7 +141,7 @@ export function PrescriptionPreview({
       {/* Warnings */}
       {draft.warnings && draft.warnings.length > 0 && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>⚠️ Warnings & Precautions</h3>
+          <h3 className={styles.sectionTitle}>Warnings & Precautions</h3>
           <ul className={styles.warningsList}>
             {draft.warnings.map((warning, idx) => (
               <li key={idx} className={styles.warningItem}>{warning}</li>
@@ -163,7 +163,7 @@ export function PrescriptionPreview({
       {/* Follow-up */}
       {draft.followUp && (draft.followUp.timeline || draft.followUp.notes) && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>📅 Follow-up</h3>
+          <h3 className={styles.sectionTitle}>Follow-up</h3>
           {draft.followUp.timeline && (
             <div className={styles.followUpItem}>
               <strong>Timeline:</strong> {draft.followUp.timeline}

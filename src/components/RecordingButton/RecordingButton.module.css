@@ -139,7 +139,7 @@
 .processingIcon {
     width: 22px;
     height: 22px;
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {

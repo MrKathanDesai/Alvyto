@@ -167,12 +167,12 @@ export function PrescriptionEditor({
             onClick={() => setActiveTab(tab)}
             disabled={disabled}
           >
-            {tab === 'medications' && `💊 Medications (${editing.medications.length})`}
-            {tab === 'diagnoses' && `🔍 Diagnoses (${editing.diagnoses.length})`}
-            {tab === 'investigations' && `🧪 Investigations (${editing.investigations.length})`}
-            {tab === 'advice' && `📋 Advice (${editing.advice.length})`}
-            {tab === 'warnings' && `⚠️ Warnings (${editing.warnings.length})`}
-            {tab === 'followup' && '📅 Follow-up'}
+            {tab === 'medications' && `Medications (${editing.medications.length})`}
+            {tab === 'diagnoses' && `Diagnoses (${editing.diagnoses.length})`}
+            {tab === 'investigations' && `Investigations (${editing.investigations.length})`}
+            {tab === 'advice' && `Advice (${editing.advice.length})`}
+            {tab === 'warnings' && `Warnings (${editing.warnings.length})`}
+            {tab === 'followup' && 'Follow-up'}
           </button>
         ))}
       </div>
