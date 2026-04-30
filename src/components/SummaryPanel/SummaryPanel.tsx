@@ -53,7 +53,19 @@ const GENERIC_CHIP_TERMS = new Set([
     'examination', 'assessment', 'diagnosis', 'treatment', 'prescription',
     'location', 'trigger food drink', 'trigger food/drink', 'weight loss',
     'night symptoms', 'frequency', 'frequency of symptom', 'medication use',
+    'timing', 'pain intensity', 'aggravating factors', 'spontaneous pain', 'swelling',
+    'bad taste', 'medication taken by patient', 'pregnancy status', 'diabetes history',
+    'medication contraindications', 'history of acidity',
 ]);
+
+const PLACEHOLDER_STYLE_CHIP_RE = [
+    /\bstatus$/i,
+    /\bhistory$/i,
+    /\bfactors?$/i,
+    /\bintensity$/i,
+    /\btiming$/i,
+    /\bpain\s+management$/i,
+];
 
 function isJunkChip(label: string): boolean {
     const text = label.trim();
@@ -61,6 +73,7 @@ function isJunkChip(label: string): boolean {
     if (text.split(/\s+/).length > 8) return true;
     const normalized = normalizeText(text);
     if (GENERIC_CHIP_TERMS.has(text.toLowerCase()) || GENERIC_CHIP_TERMS.has(normalized)) return true;
+    if (PLACEHOLDER_STYLE_CHIP_RE.some((re) => re.test(text))) return true;
     if (text.includes(' - ')) {
         const [left = '', right = ''] = text.split(' - ', 2).map((part) => normalizeText(part));
         if (!left || !right) return true;

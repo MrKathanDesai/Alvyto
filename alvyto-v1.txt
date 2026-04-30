@@ -1,0 +1,5281 @@
+A
+PROJECT REPORT
+ON
+
+Alvyto - Smart EMR System
+AT
+
+In the partial fulfillment of the requirement
+for the degree of ​
+Bachelor of Technology ​
+in
+Computer Science and Engineering
+PREPARED BY
+Khush Patel(IU2241230528)​
+Kathan Desai(IU2241230483)​
+Jeet Patel(IU2241230480)
+
+UNDER GUIDANCE OF
+Internal Guide
+Prof. Zalak Vyas,
+Head of Department,​
+​
+​
+​
+Department of Computer Science and Engineering,
+I.T.E, Indus University, Ahmedabad.​ ​
+
+SUBMITTED TO
+INSTITUTE OF TECHNOLOGY AND ENGINEERING
+INDUS UNIVERSITY CAMPUS, RANCHARDA, VIA-THALTEJ
+AHMEDABAD-382115, GUJARAT, INDIA,
+WEB: www.indusuni.ac.in
+APRIL 2026
+
+CANDIDATE’S DECLARATION
+I declare that the final semester report entitled “Alvyto-Smart EMR System” is our own
+work conducted under the supervision of the guide Prof Zalak Vyas.
+I further declare that to the best of our knowledge, the report for B.Tech final semester does
+not contain part of the work which has been submitted for the award of B.Tech Degree either
+in this university or any other university without proper citation.
+
+___________________________________
+Candidate’s Signature
+Khush Patel(IU2241230528)
+
+___________________________________
+Guide:
+Prof. Zalak Vyas
+Department of Computer Science And Engineering,
+Indus Institute of Technology and Engineering
+INDUS UNIVERSITY– Ahmedabad,
+State: Gujarat
+
+CANDIDATE’S DECLARATION
+I declare that the final semester report entitled “Alvyto-Smart EMR System” is our own
+work conducted under the supervision of the guide Prof Zalak Vyas.
+I further declare that to the best of our knowledge, the report for B.Tech final semester does
+not contain part of the work which has been submitted for the award of B.Tech Degree either
+in this university or any other university without proper citation.
+
+___________________________________
+Candidate’s Signature
+Kathan Desai (IU2241230483)
+
+___________________________________
+Guide:
+Prof. Zalak Vyas
+Department of Computer Science And Engineering,
+Indus Institute of Technology and Engineering
+INDUS UNIVERSITY– Ahmedabad,
+State: Gujarat
+
+CANDIDATE’S DECLARATION
+I declare that the final semester report entitled “Alvyto-Smart EMR System” is our own
+work conducted under the supervision of the guide Prof Zalak Vyas.
+I further declare that to the best of our knowledge, the report for B.Tech final semester does
+not contain part of the work which has been submitted for the award of B.Tech Degree either
+in this university or any other university without proper citation.
+
+___________________________________
+Candidate’s Signature
+Jeet Patel (IU2241230480)
+
+___________________________________
+Guide:
+Prof. Zalak Vyas
+Department of Computer Science And Engineering,
+Indus Institute of Technology and Engineering
+INDUS UNIVERSITY– Ahmedabad,
+State: Gujarat
+
+INDUS INSTITUTE OF TECHNOLOGY AND ENGINEERING
+COMPUTER SCIENCE AND ENGINEERING
+2025 -2026
+
+CERTIFICATE
+Date: 14-04-2026
+
+This is to certify that the project work entitled “Alvyto - Smart EMR System” has been
+carried out by Khush Patel, Kathan Desai and Jeet Patel under my guidance in partial
+fulfillment of degree of Bachelor of Technology in COMPUTER SCIENCE AND
+ENGINEERING (Final Year) of Indus University, Ahmedabad during the academic year
+2025- 2026.
+
+______________________
+Prof. Zalak Vyas
+Head of Department,
+Department of Computer
+Science And Engineering,
+IITE, Indus University,
+Ahmedabad
+
+______________________
+Dr. Kaushal Jani
+Head of Department,
+Department of Computer
+Science And Engineering,
+IITE, Indus University,
+Ahmedabad
+
+TABLE OF CONTENT
+Title​ ​
+
+​
+
+​ ​
+
+Page No
+
+ABSTRACT…………………………………………………………
+
+i
+
+LIST OF FIGURES………………………………………………...
+
+ii
+
+LIST OF TABLES………………………………………………….
+
+iii
+
+ABBREVIATIONS…………………………………………………​
+
+iv
+
+CHAPTER 1 INTRODUCTION…………………………………..​
+
+1​
+
+​
+
+1.1​
+
+Project Summary……………………………………..​
+
+​
+
+2​
+
+​
+
+1.2​
+
+Project Purpose……………………………………….​
+
+​
+
+3​
+
+​
+
+1.3​
+
+Project Scope…………………………………………​
+
+​
+
+4​
+
+​
+
+1.4​
+
+Objectives…………………………………………….​
+
+​
+
+5
+
+​
+
+​
+
+1.4.1​ Main Objectives……………………………...​
+
+​
+
+5
+
+​
+
+​
+
+1.4.2​ Secondary Objectives………………………..​
+
+​
+
+1.5​
+
+Technology and Literature Overview…………….....​
+
+​
+
+6
+
+​
+
+1.6​
+
+Synopsis……………………………………………...​
+
+​
+
+8
+
+CHAPTER 2 LITERATURE SURVEY…………………………..​
+
+​
+
+9
+
+5
+
+2.1​
+
+Introduction of Survey………………………………​
+
+2.2​
+
+Why Survey?……………..………………………….​
+
+​
+
+11
+
+CHAPTER 3 PROJECT MANAGEMENT……………………..​​
+
+​
+
+12
+
+3.1​
+
+3.2​
+3.3​
+
+10
+
+Project Planning Objectives………………………..​​
+
+13
+
+3.1.1​ Software Scope……………………………..​​
+
+​
+
+13
+
+3.1.2​ Resource……………………………………​​
+
+​
+
+13
+
+3.1.2.1​Human Resource…………………...​​
+
+​
+
+13
+
+3.1.2.2​Reusable Software Resources……...​ ​
+
+​
+
+13
+
+3.1.2.3​Environment Resource……………..​ ​
+
+​
+
+14
+
+3.1.3​ Project Development Approach…………..​ ​
+
+​
+
+15
+
+Project Scheduling………………………………....​ ​
+
+​
+
+15
+
+3.2.1​ Basic Principle……………………………..​ ​
+
+​
+
+15
+
+Risk Management……………………………….…..​
+
+​
+
+16
+
+3.3.1​ Risk Identification……………………….​
+
+​
+
+​
+
+16
+
+3.3.1.1​Risk Identification artifacts…...…​
+
+​
+
+​
+
+17
+
+3.3.2​ Risk Projection…………………………..​
+
+​
+
+​
+
+18
+
+CHAPTER 4 SYSTEM REQUIREMENTS……………….....​
+
+​
+
+​
+
+24
+
+4.1​​
+
+User Characteristics…………………………...…​ ​
+
+​
+
+25
+
+4.2​
+
+Functional Requirement………………………....​
+
+​
+
+​
+
+25​
+
+4.3​
+
+Non-Functional Requirement……………………​
+
+​
+
+​
+
+27
+
+4.4​
+
+Hardware and Software Requirement…………..​
+
+​
+
+​
+
+28
+
+4.4.1​ Hardware Requirement………………….​
+
+​
+
+​
+
+28
+
+4.4.2​ Software Requirement ………………….​
+
+​
+
+​
+
+28
+
+4.4.3​ Deployment Architecture……………….
+
+29
+
+CHAPTER 5 SYSTEM ANALYSIS………………………….​
+
+​
+
+​
+
+30
+
+5.1​ ​ Study of Current System………………………..​
+
+​
+
+​
+
+31
+
+5.2​
+
+Problems in Current System…………………….​
+
+​
+
+​
+
+31
+
+5.3​
+
+Requirement of new System……………….……​
+
+​
+
+​
+
+32
+
+5.4​
+
+Process Model………………….…………..……​
+
+​
+
+​
+
+32
+
+5.5
+
+Feasibility Study………………….………..…… ​ ​
+
+​
+
+33
+
+5.5.1
+
+Technical Feasibility……….……………​
+
+​
+
+33
+
+5.5.2
+
+Operational Feasibility……………….…​
+
+​
+
+34
+
+5.5.3​ Economic Feasibility……………………​
+
+​
+
+34
+
+5.5.4
+
+Schedule Feasibility……………………​
+
+​
+
+34
+
+Features of New System………………..………​
+
+​
+
+​
+
+34
+
+CHAPTER 6 DETAILED DESCRIPTION…………………​
+
+​
+
+​
+
+37
+
+5.6
+6.1​
+
+User/Employee Module…………………………
+
+​​
+
+​
+
+38
+
+6.2​
+
+Company Module………………………………. ​ ​
+
+​
+
+39
+
+6.3​
+
+Administrator Module…………………………..​
+
+​
+
+​
+
+40
+
+CHAPTER 7 TESTING…………………..…………………….​ ​
+
+​
+
+41
+
+7.1​
+
+Black-Box Testing…………………………….…
+
+​
+
+​
+
+42
+
+7.2​
+
+White-Box Testing ………………………………. ​​
+
+​
+
+43
+
+7.3​
+
+Test Cases ……………………………………….​
+
+​
+
+​
+
+45
+
+7.4​
+
+Model Benchmark………………………………​
+
+​
+
+​
+
+48
+
+​
+
+7.4.1
+
+Raw Benchmark Scores……………….​
+
+​
+
+​
+
+48​
+
+​
+
+7.4.2
+
+Aggregate Benchmark Summary………​
+
+​
+
+​
+
+49​
+
+​
+
+7.4.3
+
+Key Findings.………………………….​
+
+​
+
+​
+
+50
+
+CHAPTER 8 SYSTEM DESIGN…………………..………..…​ ​
+
+​
+
+51
+
+8.1​
+
+Class Diagram………………………..…………...​ ​
+
+​
+
+8.2​
+
+Use Case Diagram………………….…………..…​ ​
+
+​
+
+53
+
+8.3​
+
+Sequence Diagram…………………………….….​ ​
+
+​
+
+54
+
+8.4​
+
+Activity Diagram……………………………….…​ ​
+
+​
+
+55
+
+8.5​
+
+Data Flow Diagram……………………………….​ ​
+
+​
+
+56
+​
+
+59
+
+CHAPTER 9 LIMITATION AND FUTURE ENHANCEMENT…​
+
+52
+
+9.1​
+
+Limitation…………………………………………. ​​
+
+9.2​
+
+Future Enhancement…………………………….…​ ​
+
+​
+
+61
+
+CHAPTER 10 CONCLUSION……………………………….…​ ​
+
+​
+
+63
+
+​
+
+Conclusion…………………………………………​ ​
+
+​
+
+64
+
+CHAPTER 11 APPENDICES …..……………………………....​ ​
+
+​
+
+66​
+
+​
+
+10.1
+
+60
+
+11.1​
+
+Business Model ………………………………..….​ ​
+
+​
+
+67
+
+11.2
+
+Product Deployment Detail……………………..…​ ​
+
+​
+
+69
+
+11.3
+
+API and Web Services..……..……………………..​ ​
+
+​
+
+78
+
+BIBLIOGRAPHY……………………………………………..….​ ​
+
+​
+
+80
+
+ABSTRACT
+Alvyto is a local clinical documentation system that converts doctor patient conversations
+into structured medical records. During a consultation, the system captures room audio,
+turns speech into text, separates doctor and patient speech, and prepares a draft summary for
+review. The doctor checks the draft, edits it if needed, and approves it before it is saved in the
+patient record.
+The platform has three connected parts: a web interface for doctors and staff, a backend
+service for records and access control, and a room service for audio processing. It also
+includes appointment scheduling, queue handling, and room management so that daily clinic
+work stays in one place.
+The system is designed for local use inside the clinic network. Sensitive consultation data is
+not kept longer than needed, and all critical actions are recorded in an audit log. Internal
+testing shows that the full consultation to summary flow works reliably on standard clinic
+hardware, with faster performance when graphics acceleration is available.
+This project shows that practical, local-first clinical documentation is possible with clear
+doctor control over final records.
+
+Department of Computer Science and Engineering​
+
+i
+
+LIST OF FIGURE
+
+Figure No.
+
+Title
+
+Page No.
+
+8.1
+
+Class Diagram
+
+48
+
+8.2
+
+Use Case Diagram
+
+49
+
+8.3
+
+Sequence Diagram
+
+50
+
+8.4
+
+Activity Diagram
+
+51
+
+Data Flow Diagram
+
+8.5
+
+●​ Level – 0
+
+52-54
+
+●​ Level – 1
+●​ Level – 2
+
+11.2
+
+Working Screenshots
+
+Department of Computer Science & Engineering​
+
+68-73
+
+ii
+
+IU/IITE/CSE/2026/UDP-028
+
+LIST OF TABLES
+
+Table No.
+
+Title
+
+Page No.
+
+3.1.2.2
+
+Software Resources
+
+12
+
+3.1.2.3
+
+Environment Resources
+
+12
+
+3.2.1.1
+
+Project Timeline
+
+14
+
+3.3.2
+
+Risk Projection for each
+working KPI
+
+18
+
+4.4.1
+
+Hardware Requirement
+
+24
+
+4.4.2
+
+Software Requirement
+
+25
+
+7.1
+
+Black Box Test Case
+
+39
+
+7.2
+
+White Box Testing
+
+41
+
+7.3
+
+Test Case
+
+44
+
+7.4.1
+
+Raw Benchmark Scores
+
+45
+
+7.4.2
+
+Aggregate
+
+Benchmark
+
+Scores
+
+45
+
+11.2
+
+Deployment Architecture
+
+67
+
+11.3.1
+
+API Modules
+
+75
+
+11.3.2
+
+API Endpoints
+
+75
+
+Department of Computer Science & Engineering​
+
+iii
+
+IU/IITE/CSE/2026/UDP-028
+
+ABBREVIATIONS
+This section provides a list of abbreviations used throughout the report for quick reference.
+●​ AI – Artificial Intelligence
+●​ API – Application Programming Interface
+●​ ASR – Automatic Speech Recognition
+●​ CPU – Central Processing Unit
+●​ DB – Database
+●​ DFD – Data Flow Diagram
+●​ EMR – Electronic Medical Record
+●​ FR – Functional Requirement
+●​ GPU – Graphics Processing Unit
+●​ GGUF – GPT-Generated Unified Format (quantized model format)
+●​ HTTP – Hypertext Transfer Protocol
+●​ JWT – JSON Web Token
+●​ LLM – Large Language Model
+●​ NFR – Non-Functional Requirement
+●​ NLP – Natural Language Processing
+●​ PHI – Protected Health Information
+●​ RAM v Random Access Memory
+●​ REST – Representational State Transfer
+●​ SQL – Structured Query Language
+●​ UI – User Interface
+●​ UDP – Under-Development Project
+●​ VAD – Voice Activity Detection
+●​ WS – WebSocket
+
+Department of Computer Science & Engineering​
+
+iii
+
+CHAPTER 1
+
+INTRODUCTION
+▪​ 1.1 Project Summary
+▪​ 1.2 Project Purpose
+▪​ 1.3 Project Scope
+▪​ 1.4 Objectives
+▪​ 1.5 Technology and Literature
+Overview
+
+▪​ 1.6 Synopsis
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+INTRODUCTION
+
+1.1 PROJECT SUMMARY
+Alvyto is a local clinical documentation platform built for day to day consultation work
+inside a clinic. During a doctor patient consultation, the system captures room audio,
+converts speech to text, separates doctor and patient speech, and prepares a structured visit
+draft. The doctor reviews and edits the draft, then approves it before it is saved to the patient
+record.
+The project is built as three connected services:
+1. Frontend in Next.js for room and admin interfaces
+2. Backend in FastAPI for records, authentication, and workflow APIs
+3. Room agent for audio processing and summary generation
+The admin side includes patient records, doctors, rooms, scheduling, queue operations, visits,
+audit logs, and admin user management.
+
+1.2 PROJECT PURPOSE
+The project solves a practical clinic problem: doctors spend too much time typing notes and
+handling repeated record entry steps after every consultation.
+Alvyto reduces this effort by creating a draft from spoken consultation data and keeping the
+doctor in control of final approval. This improves speed, supports better structure in records,
+and keeps consultation and administration in one workflow instead of spreading work across
+disconnected tools.
+
+Department of Computer Science & Engineering ​
+
+2
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+INTRODUCTION
+
+1.3 PROJECT SCOPE
+The scope of Alvyto covers the full lifecycle of a clinical consultation, from audio capture
+through to approved medical record entry, and extends to clinic administrative management.
+The following core functionalities are within scope:
+
+IN SCOPE
+
+OUT OF SCOPE
+
+Real-time consultation audio capture Automated
+over WebSocket
+
+diagnosis,
+
+treatment
+
+recommendation, or clinical decision support
+
+Speaker diarization and word-aligned National-scale hospital interoperability rollout
+transcription
+
+(full enterprise HL7/FHIR integration)
+
+Structured summary generation with Multi-language production optimization in v1
+transcript-grounded validation
+Doctor
+
+review,
+
+inline
+
+edit,
+
+mandatory approval workflow
+
+and Cloud SaaS multi-tenant deployment across
+multiple clinics
+
+Patient visit records and structured Regulatory certification process execution (e.g.,
+history management
+
+formal HIPAA audit)
+
+Department of Computer Science & Engineering ​
+
+3
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+Appointment, queue, room, and staff Billing,
+administration modules
+Role-based
+
+access
+
+INTRODUCTION
+insurance
+
+claims
+
+automation,
+
+and
+
+pharmacy network integration
+(super_admin, Biometric identity systems
+
+admin, room_device)
+Append-only audit logging without Population analytics and research reporting
+PHI payload in logs
+
+engine
+
+1.4 OBJECTIVES
+1.4.1 Main Objectives :
+1. Build a fully local exam-room EMR system that captures and processes
+doctor–patient consultation audio in real time.
+2.
+
+Implement
+
+accurate
+
+speaker-aware
+
+transcription
+
+using
+
+WhisperX
+
+and
+
+pyannote.audio for clinically usable dialogue separation.
+3. Generate schema-compliant structured clinical summaries using phi4-mini served
+locally via Ollama.
+4. Enforce a zero-inference hallucination guard that validates all generated facts
+against transcript evidence before doctor review.
+5. Deliver an operational clinic platform combining consultation documentation,
+record management, appointment flow, and auditable access control.
+1.4.2 Secondary Objectives :
+1.Reduce doctor documentation burden while preserving mandatory human oversight.
+2. Minimize PHI retention by erasing raw transcripts after summary approval.
+3. Enable thin-client room deployment using browser-only endpoints on clinic LAN.
+4. Keep the architecture modular for independent updates to room agent, backend,
+and frontend.
+Department of Computer Science & Engineering ​
+
+4
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+INTRODUCTION
+
+1.5 TECHNOLOGY AND LITERATURE OVERVIEW
+●​ WhisperX:WhisperX
+
+extends
+
+Whisper
+
+with
+
+forced
+
+alignment
+
+and
+
+diarization-friendly output, enabling word-level timestamps required for precise
+medical note attribution. Alvyto uses `small.en` with INT8 compute for clinic
+hardware
+
+feasibility.
+
+Segment-level-only
+
+ASR
+
+was
+
+rejected
+
+because
+
+speaker-boundary errors propagate into summary extraction. WhisperX provides
+robust clinical conversation capture without requiring cloud inference.
+●​ Pyannote.audio:pyannote.audio performs speaker diarization using deep speaker
+embeddings and clustering. Alvyto uses ResNet34 embeddings with silhouette-based
+adaptive speaker count so the pipeline does not hardcode two speakers. This avoids
+mislabeling when a third voice (assistant or family member) enters a consultation.
+Diarized segments are merged with aligned ASR words for downstream structured
+extraction.
+●​ phi4-mini:phi4-mini (3.8B, Q4_K_M) was selected after comparative benchmarking
+against qwen2.5:3b, qwen3:4b, and llama3.1:8b. It produced 1.00 support rate and
+100% schema compliance across benchmark scenarios. qwen3:4b was disqualified
+due to token-budget consumption by hybrid reasoning traces before valid JSON
+output. phi4-mini offers quality-speed balance suitable for clinic latency constraints.
+●​ FastAPI:FastAPI
+
+powers
+
+backend
+
+APIs,
+
+authentication,
+
+and
+
+room-agent
+
+orchestration interfaces. The backend implements JWT HS256, bcrypt-12 password
+hashing, RBAC roles, and append-only audit logging. SQLAlchemy models maintain
+structured patient, visit, queue, and administration data. FastAPI was chosen for
+high-performance async endpoints and clean schema-driven development.
+●​ Next.js with TypeScript:The frontend provides the doctor workflow (recording,
+transcript review, summary editing, approval) and administrative dashboard.
+Role-aware routing restricts room devices to room-scoped operations. UI behavior
+includes amber highlighting for unsupported summary items and mandatory approval
+gating before commit. Browser-only clients keep room hardware lightweight and easy
+to maintain.
+
+Department of Computer Science & Engineering ​
+
+5
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+INTRODUCTION
+
+1.6 SYNOPSIS
+In each consultation, room audio is streamed from browser to room agent over WebSocket,
+transcribed and aligned by WhisperX, diarized by pyannote.audio, summarized by phi4-mini,
+and validated against transcript evidence under strict support thresholds; the doctor then edits
+or approves the output, after which the backend commits structured records, updates patient
+history, logs the event in immutable audit trails, and erases raw transcript content to enforce
+PHI minimization.
+
+Department of Computer Science & Engineering ​
+
+6
+
+CHAPTER 2
+
+LITERATURE SURVEY
+▪​ 2.1 Survey Design and Selection
+Criteria
+
+▪​ 2.2 Technical Foundations
+Reviewed
+
+▪​ 2.3 Comparative Survey Model
+▪​ 2.4 Gap Identified from Survey
+▪​ 2.5 Justification of Technology
+Choice
+
+Department of Computer Science & Engineering ​
+
+7FDSSDFSFsdf
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+LITERATURE SURVEY
+
+2.1 SURVEY DESIGN AND SELECTION CRITERIA
+The survey was structured to evaluate technologies and systems relevant to consultation
+documentation under clinic constraints. Selection criteria included:
+- local deployability and operational control
+- support for speaker-aware transcription workflows
+- structured output suitability for record systems
+- integration complexity with backend clinical workflows
+- reliability of output format under repeated runs
+- suitability for hardware commonly available in clinics
+
+2.2 TECHNICAL FOUNDATIONS REVIEWED
+2.2.1 Speech Transcription
+Whisper established strong baseline robustness in noisy, multi-accent speech settings [1].
+WhisperX extends this by adding alignment and practical integration patterns needed for
+timestamp-sensitive transcript processing [2].
+2.2.2 Speaker Separation
+pyannote.audio provides a production-usable toolkit for speaker diarization and is commonly
+used to separate speaker turns in conversational audio [3]. This directly supports consultation
+formatting where attribution between doctor and patient is necessary.
+2.2.3 Structured Draft Generation
+For project-specific model selection, the report benchmarked four candidates:
+- qwen2.5:3b
+- qwen3:4b
+- phi4-mini
+- llama3.1:8b
+The selected model in your implementation is phi4-mini, based on internal benchmark
+outcomes documented in Chapter 7.
+
+Department of Computer Science & Engineering ​
+
+10
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+LITERATURE SURVEY
+
+2.3 COMPARATIVE SURVEY MODEL
+Candidate
+
+/ Local
+
+System
+
+Execution
+
+Structured
+
+Transcript-g Operational
+
+Integration
+
+JSON
+
+rounded
+
+Fit for Clinic Effort
+
+Stability
+
+Draft
+
+Hardware
+
+Suitability
+WhisperX
+
++ Yes
+
+High
+
+pyannote
+
++
+
+internal
+
+review
+
+tests
+
+validation
+
+phi4-mini
+
+in High
+
+(implemented
+
+with Practical
+
+Moderate
+
+and
+
+flow
+
+stack)
+qwen2.5:3b
+
+Yes
+
+(benchmarked)
+
+qwen3:4b
+
+Yes
+
+(benchmarked)
+
+llama3.1:8b
+
+Yes
+
+(benchmarked)
+
+Project
+
+Project
+
+Practical
+
+Moderate
+
+benchmark
+
+benchmark
+
+result
+
+result
+
+Project
+
+Project
+
+Practical
+
+Moderate
+
+benchmark
+
+benchmark
+
+result
+
+result
+
+Project
+
+Project
+
+Higher
+
+Moderate
+
+benchmark
+
+benchmark
+
+compute cost
+
+result
+
+result
+
+Generic cloud Depends on Requires
+
+Depends on Varies
+
+Higher
+
+transcription
+
+additional
+
+pipeline
+
+integration
+
+structuring
+
+controls
+
+dependency
+
+API workflows
+
+provider
+
+layer
+
+Department of Computer Science & Engineering ​
+
+11
+
+2.4 GAP IDENTIFIED FROM SURVEY
+The survey indicates that many available tools solve only part of the workflow:
+- transcription-only systems do not complete record-approval flow
+- record systems do not generally generate consultation drafts from live room audio
+- administrative tools (scheduling, queue, room operations) are often separated from
+documentation processing
+Alvyto addresses this gap through one integrated local platform that connects consultation
+processing and clinic operations while preserving doctor approval control.
+
+2.5 JUSTIFICATION OF TECHNOLOGY CHOICE
+The selected architecture and toolchain are justified by project constraints:
+- local execution requirement
+- need for timestamp-aware transcript handling
+- requirement for speaker-separated consultation text
+- requirement for structured draft output integrated with backend schemas
+- requirement for practical deployment and maintainability in clinic infrastructure
+
+CHAPTER 3
+
+PROJECT MANAGEMENT
+▪​ 3.1 Planning Strategy
+▪​ 3.2 Development Process Model
+▪​ 3.3 Resource Planning
+▪​ 3.4 Scheduling Plan
+▪​ 3.5 Risk Management
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+3.1 PLANNING STRATEGY
+3.1.1​ Software Scope
+The development approach for Alvyto followed an iterative, module-first plan. The project
+was divided into independent services so that each critical part could be developed and
+validated before full integration.
+The three service units were:
+1. frontend service for room and admin interfaces
+2. backend service for records, access control, and operational APIs
+3. room processing service for consultation audio pipeline
+This plan reduced integration risk, especially because consultation processing had higher
+uncertainty than standard admin modules.
+
+3.2 DEVELOPMENT PROCESS MODEL
+The appropriate process model for this project is Iterative Incremental Development with
+Validation Gates.
+This model fits Alvyto better than a strict linear model because:
+- transcription quality, speaker separation quality, and draft quality need repeated
+tuning
+- frontend workflow and backend schema must evolve together
+- clinic usability issues appear during practical trial runs, not only in initial design
+3.2.1 Validation Gates used in practice
+- Gate 1: room audio capture and stable transcript stream
+- Gate 2: speaker-separated transcript consistency
+- Gate 3: structured draft generation with schema-valid output
+- Gate 4: doctor review and approval workflow completion
+- Gate 5: admin operations (scheduling, queue, rooms, visits) integrated with backend
+This gate-based progression reflects how the project was actually built and tested.
+
+Department of Computer Science & Engineering ​
+
+13
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+3.3 RESOURCE PLANNING
+3.3.1 Human Resource
+●​ backend development and data modeling
+●​ frontend and user workflow implementation
+●​ room service pipeline implementation
+●​ testing, debugging, and documentation
+3.3.2 Software Resources
+Resource
+
+Purpose
+
+Python 3.11+
+
+Backend and room agent development
+
+Node.js 20+
+
+Frontend development (Next.js)
+
+WhisperX
+
+Speech recognition and alignment
+
+pyannote.audio 3.x
+
+Speaker diarization
+
+Ollama
+
+LLM model management and inference
+
+phi4-mini (GGUF Q4_K_M)
+
+Clinical summarization
+
+FastAPI + Uvicorn
+
+Backend and room agent API servers
+
+SQLAlchemy + SQLite
+
+Data persistence
+
+Next.js 14 / React 19
+
+Frontend UI
+
+JWT / bcrypt
+
+Authentication and security
+Table 3.1.2.2: Software Resources
+
+Department of Computer Science & Engineering ​
+
+14
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+3.3.3 Hardware and Environment Resource
+Resource
+
+Details
+
+Development OS
+
+macOS (Apple Silicon) / Ubuntu 22.04
+
+Minimum server (CPU)
+
+Intel Core i5, 16 GB RAM, 20 GB SSD
+
+Recommended server
+
+Above +
+
+NVIDIA RTX 3060 or
+
+equivalent
+Room PCs (thin clients)
+
+Any modern browser, no local AI
+dependencies
+
+Network
+
+Local clinic LAN no internet required
+Table 3.1.2.3: Environment Resources
+
+3.4 PROJECT SCHEDULING
+
+Phase
+
+Work Package
+
+Duration
+
+1
+
+Literature survey, architecture definition, risk mapping
+
+Week 1-2
+
+2
+
+Environment setup, dependencies, model runtime validation
+
+Week 3
+
+3
+
+Room agent core pipeline (ASR + diarization + summary)
+
+Week 4–5
+
+4
+
+Hallucination
+
+validation
+
+and
+
+benchmark-driven
+
+model Week 6
+
+selection
+5
+
+Backend API, data models, auth, audit logging
+
+Department of Computer Science & Engineering ​
+
+Week 7–8
+
+15
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+6
+
+Frontend doctor and admin modules
+
+Week 9–10
+
+7
+
+Integration, system testing, defect closure
+
+Week 11
+
+8
+
+Documentation, final validation, report preparation
+
+Week 12–13
+
+Table 3.4.1.1:Project Scheduling
+
+3.5 RISK MANAGEMENT
+3.5.1 Method Used for Risk Identification
+Risk assessment was performed against the implemented system, not against a generic
+template.
+The review considered:
+●​ the three-service architecture (frontend, backend, room service)
+●​ consultation flow (capture, transcript, structured draft, doctor approval)
+●​ admin flow (schedule, check-in, queue, room, visit lifecycle)
+●​ local deployment behavior and known limitations from testing
+Each risk was evaluated using:
+1. trigger condition in this project
+2. impact on correctness, usability, or safety
+3. mitigation currently present in code and workflow
+4. remaining exposure and next control
+
+Department of Computer Science & Engineering ​
+
+16
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+3.5.2 Risk Projection Table
+
+ID
+
+Risk
+
+How It Appears Likelihood
+
+Impact
+
+in This Project
+R1
+
+Transcript-speak Speaker turns and Medium
+er-summary
+
+transcript
+
+alignment drift
+
+can
+
+High
+
+Controls Already Residual
+Present
+
+Status
+
+Structured
+
+Medium
+
+chunks
+
+pipeline
+
+mismatch
+
+normalized
+
+before
+
+draft
+
+stages,
+
+dialogue handling,
+
+generation
+
+doctor
+
+approval
+
+before final save
+R2
+
+Streaming
+
+Interruption during Medium
+
+segment loss in room
+room capture
+
+High
+
+Session
+
+recovery Medium
+
+audio
+
+handling,
+
+transfer can drop
+
+transcript
+
+consultation
+
+normalization,
+
+fragments
+
+doctor edit layer
+before approval
+
+R3
+
+Long
+
+Chunked transcript High
+
+Mediu
+
+Post-processing
+
+consultation
+
+can split related
+
+m
+
+and
+
+context break
+
+symptom-plan
+
+summary
+
+statements
+
+workflow; manual
+
+Medium
+
+merged
+
+correction possible
+at review
+R4
+
+First-response
+latency
+
+Initial request after Medium
+
+from idle period can be
+
+model startup
+
+slower
+
+Mediu
+
+Persistent service Medium
+
+m
+
+process, practical
+deployment
+guidance,
+
+warm
+
+behavior after first
+run
+
+Department of Computer Science & Engineering ​
+
+17
+
+IU/IITE/CSE/2026/UDP-028​
+R5
+
+​
+
+Backend
+
+write Queue,
+
+visits, Medium
+
+pressure
+
+under appointments, and
+
+mixed
+
+logs
+
+workflows
+
+frequent writes
+
+PROJECT MANAGEMENT
+Mediu
+
+Clean route-level Medium
+
+m
+
+validation,
+
+generate
+
+enum-safe
+transitions,
+controlled
+persistence points
+
+R6
+
+Cross-service
+
+Room service issue Low
+
+failure
+
+affects
+
+draft
+
+services,
+
+propagation
+
+generation
+
+while
+
+independent
+
+admin
+
+High
+
+remains
+
+Decoupled
+
+Medium
+
+modules, fallback
+
+active
+
+operational
+continuity
+
+on
+
+admin side
+R7
+
+Session
+
+state Interrupted
+
+inconsistency
+
+encounter
+desync
+
+Medium
+
+High
+
+can
+
+Session
+
+Medium
+
+persistence hooks,
+
+transcript,
+
+stricter
+
+state
+
+draft, and approval
+
+normalization,
+
+state
+
+explicit
+
+status
+
+transitions
+R8
+
+UI sync lag for Async updates can Medium
+
+Mediu
+
+Hook-level
+
+live updates
+
+m
+
+cleanup,
+
+appear out of order
+in
+
+room/admin
+
+Clinical wording Draft
+
+polling Medium
+
+corrections, safer
+
+views
+R9
+
+Low
+
+data normalization
+may
+
+be Medium
+
+Very
+
+Mandatory doctor Medium
+
+High
+
+review
+
+and
+gate,
+
+misinterpretatio
+
+textually valid but
+
+n in draft
+
+clinically
+
+approval
+
+imprecise
+
+editable
+prescription
+
+and
+
+summary fields
+Department of Computer Science & Engineering ​
+
+18
+
+to
+
+IU/IITE/CSE/2026/UDP-028​
+R10 Blind
+
+Under
+
+acceptance
+
+​
+
+workload Low
+
+of pressure, clinician
+
+generated draft
+
+PROJECT MANAGEMENT
+Very
+
+Approval-only
+
+High
+
+persistence model,
+
+may over-trust the
+
+manual
+
+draft
+
+controls,
+
+Medium
+edit
+
+review-first
+workflow
+R11 Missing
+non-verbal cues
+
+Tone, pause, and High
+
+Mediu
+
+Explicitly treated Medium
+
+gesture context are
+
+m
+
+as
+
+limitation;
+
+not represented in
+
+doctor
+
+can
+
+text output
+
+add/adjust
+interpretation
+before save
+
+R12 Workflow delay If draft preparation Medium
+from processing takes
+
+too
+
+time
+
+flow
+
+room
+
+long,
+
+Mediu
+
+Hybrid
+
+summary Medium
+
+m
+
+flow
+
+and
+
+UI
+
+streamlining
+
+to
+
+is
+
+affected
+
+reduce
+
+perceived
+
+waiting
+R13 Adoption
+
+New digital review Medium
+
+friction
+
+among step may initially
+
+clinicians
+
+feel intrusive
+
+Mediu
+
+Cleaner
+
+Low
+
+m
+
+room/admin
+reduced
+
+UX, Medium
+
+clutter,
+
+structured review
+sequence
+R14 Sensitive
+session
+
+In-memory
+data transient
+
+exposure risk
+
+handling
+
+or Low
+data
+can be
+
+Very
+
+JWT auth, RBAC, Medium
+
+High
+
+audit trail, local
+deployment
+
+exposed by weak
+
+model,
+
+controls
+
+endpoint access
+
+Department of Computer Science & Engineering ​
+
+restricted
+
+19
+
+to
+
+IU/IITE/CSE/2026/UDP-028​
+R15 Data
+
+​
+
+lifecycle Consultation
+
+retention risk
+
+artifacts
+
+Medium
+
+PROJECT MANAGEMENT
+High
+
+may
+
+Approved
+clear
+
+visits Low
+transient Medium
+
+remain longer than
+
+transcript/dialogue
+
+intended
+
+data in backend
+flow
+
+R16 Multi-room
+
+CPU-first
+
+High
+
+High
+
+Modular
+
+concurrency
+
+deployment
+
+can
+
+architecture
+
+degradation
+
+slow
+
+with
+
+supports
+
+simultaneous
+
+service High
+(open)
+future
+
+horizontal scaling
+
+active rooms
+R17 Deployment-lev
+el
+
+Different machines Medium
+
+model may run different
+
+inconsistency
+
+Mediu
+
+Deployment
+
+m
+
+scripts
+
+model builds
+
+controlled
+
+Medium
+and (open)
+stack,
+
+but strict model
+governance
+
+3.5.3 In-Depth Analysis by Risk Group
+A. Technical Pipeline Risks (R1 to R5)
+●​ R1 Alignment drift
+In Alvyto, correctness depends on consistent transfer between transcript
+segments, speaker labels, and structured draft fields. Any mismatch can
+distort clinical meaning. Current control is a strict review gate and
+normalized intermediate handling, which reduces unsafe persistence risk
+but does not eliminate draft quality issues.
+●​ R2 Streaming segment loss
+Room capture is sensitive to network instability and session interruptions.
+If early or mid-consultation segments are lost, draft completeness
+decreases. Because final save is doctor-controlled, harmful persistence is
+reduced, but review workload increases.
+●​ R3 Context fragmentation
+Department of Computer Science & Engineering ​
+
+20
+
+to
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+Long encounters can spread one clinical thought across multiple transcript
+windows. This can reduce continuity in generated draft sections. Current
+implementation allows manual correction and summary refinement, but
+this remains a quality risk in long, complex consultations.
+●​ R4 Startup latency
+Initial request latency is practical in observed workflow but still noticeable
+in cold scenarios. This is a usability risk rather than a correctness risk.
+Warm behavior after first run is better.
+●​ R5 Write pressure
+Unlike generic designs that write every raw stream event, Alvyto limits
+final persistence points. This reduces write load. Still, high operational
+activity in queue and scheduling can create pressure under heavy usage.
+B. Integration and State Risks (R6 to R8)
+●​ R6 Service coupling impact
+The architecture is decoupled enough that admin functions can continue
+even if room draft flow is degraded. This is a strong design choice for
+operational resilience.
+●​ R7 Session state consistency
+Encounter state must remain coherent from capture through approval.
+Previous hardening work on state handling and normalization reduced this
+risk, but interruption recovery remains important.
+●​ R8 Sync lag and ordering
+Real-time interfaces naturally face asynchronous update timing. Current
+hook-level corrections reduce visible errors. Residual impact is moderate
+and mainly affects user trust in live view timing.
+C. Clinical Use Risks (R9 to R13)
+●​ R9 Clinical misinterpretation
+This is one of the highest-impact risks. Even when wording appears correct,
+clinical framing can be wrong. Alvyto’s key safeguard is that no draft enters
+permanent records without doctor approval.
+●​ R10 Over-trust of generated content
+Department of Computer Science & Engineering ​
+
+21
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+This risk is not removed by technology alone. It is controlled through process
+design. Review and approval are mandatory and integrated directly in the
+workflow.
+●​ R11 Non-verbal context gap
+Text-only interpretation always loses part of clinical nuance. The report
+should state this clearly as a limitation and emphasize clinician judgment
+before finalization.
+●​ R12 Workflow delay
+If processing extends beyond acceptable room turnaround, staff efficiency
+drops. Current UI and summary flow tuning improved this, but it remains
+workload-dependent.
+●​ R13 Adoption resistance
+Adoption risk is real in clinical settings. Simplified interface and reduced
+visual noise are valid controls already aligned with your recent admin and
+room UI cleanup work.
+D. Security, Lifecycle, and Scale Risks (R14 to R17)
+●​ R14 Sensitive data exposure
+Current controls include authentication, role checks, and auditability.
+However, production-grade hardening still requires stricter environment
+controls and transport/security policy enforcement.
+●​ R15 Retention lifecycle
+A major strength in your implementation is transient consultation data cleanup
+after approval. This should be highlighted as an implemented safeguard in the
+report.
+●​ R16 Concurrency degradation
+This is currently the largest operational risk for scale. CPU-first deployments
+can degrade with multiple active rooms. Architecture supports scaling, but this
+needs measured deployment planning and capacity testing.
+●​ R17 Version inconsistency
+Cross-instance output consistency depends on strict model/runtime version
+governance. This is partially controlled today, but should be formalized with
+version pinning and deployment checks.
+Department of Computer Science & Engineering ​
+
+22
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+PROJECT MANAGEMENT
+
+CHAPTER 4
+
+SYSTEM REQUIREMENTS
+▪​ 4.1 Users and Stakeholders
+▪​ 4.2 Functional Requirements
+▪​ 4.3 Non-Functional Requirements
+▪​ 4.4
+
+Hardware
+
+and
+
+Software
+
+Requirements
+
+Department of Computer Science & Engineering ​
+
+23
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM REQUIREMENTS
+
+4.1 USER CHARACTERISTICS
+4.1.1 Human Users
+●​ Doctor / Clinician
+○​ Performs consultation, reviews draft, edits and approves final record
+●​ Admin / Operations Staff
+○​ Manages patients, doctors, appointments, queue, rooms, and visits
+4.1.2 System Principal
+●​ Room Device Principal
+○​
+
+Authenticated room endpoint used for room-bound operations in the
+consultation flow
+
+4.1.3 Indirect Stakeholder
+●​ Patient
+○​ Data subject and beneficiary of record quality, but not a direct operator in
+current system version
+
+4.2 FUNCTIONAL REQUIREMENTS
+1)​ Authentication and Access Control - user authentication and role-based route
+access
+2)​ Patient Management - patient create, read, update, and history management
+3)​ Doctor and Room Operations - doctor and room management with status tracking
+4)​ Appointment Lifecycle - appointment create, update, and check-in handling
+5)​ Queue Management - queue entry create, update, auto-assign, and completion flow
+6)​ AI Processing Pipeline -
+
+consultation transcript processing and structured draft
+
+generation
+7)​ Clinical Review Workflow - doctor-side draft review, edit, approval, and visit
+finalization
+8)​ Visit Records and Prescriptions - visit listing, filtering, prescription draft handling,
+and export
+9)​ System Auditing - audit log capture for major actions
+Department of Computer Science & Engineering ​
+
+25
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM REQUIREMENTS
+
+4.3 NON-FUNCTIONAL REQUIREMENTS
+1)​ Performance - Acceptable consultation-to-draft latency on clinic hardware with
+better performance on accelerated hardware
+2)​ Reliability - Stable service operation across frontend, backend, and room modules
+with recoverable errors
+3)​ Security - Authenticated access, password hashing, signed session tokens, and
+route-level authorization
+4)​ Data Governance - Controlled handling of consultation data and action traceability
+through audit records
+5)​ Usability - Doctor-first review interface and clear admin operational workflows
+6)​ Maintainability - Service-level modularity and clear API boundaries for incremental
+updates
+
+4.4 HARDWARE AND SOFTWARE REQUIREMENTS
+4.4.1​ Hardware Requirement
+Specification
+
+Minimum
+
+Recommended Requirement
+
+Requirement
+Processor
+
+Intel Core i5+
+
+Intel Core i7 / Ryzen 7 + NVIDIA RTX
+3060
+
+RAM
+
+16 GB
+
+32 GB
+
+Storage
+
+20 GB SSD
+
+50 GB SSD
+
+Table 4.4.1: Hardware Requirements
+
+4.4.2​ Software Requirement
+Components
+
+Technology
+
+Version
+
+Backend language
+
+Python
+
+3.11+
+
+Backend
+
+FastAPI + Uvicorn
+
+Latest Stable
+
+framework
+
+Department of Computer Science & Engineering ​
+
+26
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM REQUIREMENTS
+
+ORM / Database
+
+SQLAlchemy + SQLite
+
+2.x
+
+Transcription
+
+WhisperX
+
+Latest Stable
+
+Diarization
+
+pyannote.audio
+
+3.x
+
+LLM inference
+
+Ollama
+
+Latest Stable
+
+LLM model
+
+phi4-mini (Q4_K_M)
+
+As released by Microsoft
+
+Frontend
+
+Next.js 14 / React 19
+
+14.x
+
+Frontend language
+
+TypeScript
+
+5.x
+
+Authentication
+
+PyJWT + passlib (bcrypt)
+
+Latest Stable
+
+Deep
+
+PyTorch
+
+2.
+
+Network
+
+Local LAN
+
+Gigabit LAN
+
+OS (Server)
+
+Ubuntu 22.04 LTS
+
+Ubuntu 22.04 LTS
+
+OS (Room PC)
+
+Any modern OS
+
+Windows 10/11 or macOS
+
+framework
+
+learning
+
+runtime
+
+Table 4.4.2: Software Requirements
+
+4.4.3​ Deployment Architecture
+Alvyto uses a hub-and-spok* topology. One clinic server hosts the frontend (`:3000`),
+backend (`:8080`), and room agent (`:8000`). Room and admin PCs access via browser on
+LAN as thin clients. No consultation audio or transcript leaves the local network. This
+architecture reduces endpoint complexity while centralizing model and data controls.
+
+Department of Computer Science & Engineering ​
+
+27
+
+CHAPTER 5
+
+SYSTEM ANALYSIS
+▪​ 5.1 Study of Current System
+▪​ 5.2 Problems in Current System
+▪​ 5.3 Requirements of New System
+▪​ 5.4 Process Model
+▪​ 5.5 Feasibility Study
+▪​ 5.6 Features of New System
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM ANALYSIS
+
+5.1 STUDY OF CURRENT SYSTEM
+Current clinic documentation tools generally fall into three groups:
+1. Traditional EMR platforms - These provide patient records, billing, and administrative
+workflows, but consultation note creation is still largely manual in many deployments [12], [13].
+2. Cloud transcription services - These provide speech-to-text APIs with healthcare
+variants, but they do not directly provide complete clinic workflow integration such as queue,
+room assignment, and doctor approval gating in one product flow [14].
+3. Ambient documentation assistants - These products generate draft notes from
+conversations
+
+and
+
+integrate
+
+with
+
+enterprise
+
+environments,
+
+but
+
+are
+
+commonly
+
+cloud-dependent and product-specific in integration behavior [15], [16].
+From this comparison, the practical gap is not only transcription quality. The larger gap is
+end-to-end workflow continuity from consultation capture to doctor-approved record and
+operational queue flow within a clinic-first system.
+
+5.2 PROBLEMS IN CURRENT SYSTEM
+Based on documented behavior of these system classes , common limitations include:
+●​ manual post-consultation documentation burden in standard EMR workflows
+●​ dependence on external cloud processing in ambient documentation products
+●​ fragmented tooling where transcription, scheduling, queue, and room status
+are not unified
+●​ variable integration complexity between note-generation products and existing
+record systems
+
+5.3 REQUIREMENT OF NEW SYSTEM
+To address those gaps, the proposed system requires:
+●​ consultation-to-draft pipeline inside local clinic operations
+●​ mandatory doctor review and approval before final persistence
+Department of Computer Science & Engineering ​
+
+31
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM ANALYSIS
+
+●​ integrated appointment, queue, room, and visit lifecycle modules
+●​ role-based operational control with auditable actions
+●​ practical deployment on clinic-managed infrastructure
+
+5.4 PROCESS MODEL
+The process model used for this project is iterative incremental development with validation
+gates, not a strict linear model. This was necessary because:
+●​ transcription quality, speaker separation, and summary structure needed repeated
+tuning
+●​ backend and frontend workflows had cross-dependencies
+●​ reliability improvements required staged integration and real workflow testing
+Validation gates used in implementation:
+1)​ room capture and streaming stability
+2)​ transcript and speaker consistency
+3)​ structured draft validity
+4)​ doctor review and approval completion
+5)​ scheduling and queue linkage to clinical workflow
+
+5.5 FEASIBILITY STUDY
+5.5.1 Technical Feasibility
+Feasible under current implementation stack (Next.js, FastAPI, SQLAlchemy, local
+model runtime).
+Comparable systems show either strong EMR administration without ambient capture
+12, 13, or strong ambient capture without complete clinic operations in one stack
+14–16.
+5.5.2 Operational Feasibility
+Operationally feasible because doctor and admin tasks are separated by role and
+combined within one interface family (room flow + admin flow), reducing context
+switching compared with disconnected tools.
+
+Department of Computer Science & Engineering ​
+
+32
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM ANALYSIS
+
+5.5.3 Economic Feasibility
+The implementation is practical for local deployment due to open stack components
+and service modularity. Cost is primarily infrastructure and maintenance, rather than
+per-consultation API billing typical in cloud-first service usage 14, 15.
+5.5.4 Schedule Feasibility
+Feasible through phased implementation: pipeline setup, backend modules, frontend
+integration, and staged testing. This matches the project’s actual delivery sequence.
+
+5.6 FEATURES OF NEW SYSTEM
+The proposed system is designed as a complete consultation and clinic operations platform.
+Its features are not limited to transcript generation. It supports the full flow from consultation
+capture to approved medical record, and connects this flow with scheduling, queue, room,
+and administrative operations.
+●​ Real-Time Clinical Processing Pipeline : The system captures consultation audio
+from a room endpoint during live interaction. This allows documentation to begin
+during the consultation itself instead of after the consultation is over. Room-scoped
+access ensures that consultation actions are tied to the active room context and cannot
+be accessed as a generic public operation.
+●​ Speaker-Separated Consultation Transcript : Audio is converted to text and
+separated by speaker turns so that doctor and patient statements are not mixed in one
+undifferentiated paragraph.
+
+This directly improves readability and clinical
+
+traceability in review because doctors can verify who said what before finalizing the
+record.
+●​ Structured Draft Generation for Clinical Notes : After consultation capture, the
+system prepares a structured draft rather than a free-form block of text.
+
+The
+
+generated output is organized into clinically usable sections, including short factual
+points, action-oriented items, and narrative summaries. This structure reduces editing
+effort and improves consistency across visits.
+●​ Doctor Review and Approval Gate : No consultation draft is saved directly as final
+record content. A doctor must review and approve the draft before persistence. The
+doctor can edit text, update medication and instruction content, and correct wording
+Department of Computer Science & Engineering ​
+
+33
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM ANALYSIS
+
+before approval. This is a core safety control in the system and is central to record
+quality.
+●​
+
+Visit Lifecycle Management: Each visit moves through defined states, such as
+pending, in progress, and completed, with controlled transitions.
+
+This prevents
+
+ambiguous record states and supports predictable operational behavior for room staff
+and administrators. The visit record also supports linked prescription output and
+post-visit retrieval.
+●​
+
+Patient-Centric Longitudinal Record Handling : The system supports
+patient profile management and medical history continuity across visits.
+Approved visit summaries become part of retrievable patient history, so
+follow-up consultations can use prior structured context. This reduces repeated
+data collection and supports continuity of care.
+
+●​ Integrated Appointment, Check-In, and Queue Flow : The scheduling flow
+
+is directly connected to queue operations. When an appointment is checked in,
+queue linkage is created so the patient appears in active queue workflow. This
+removes manual duplication between scheduling and queue desks and keeps
+operational state consistent across modules.
+●​ Queue and Room Operations for Clinic Throughput : Queue entries support status
+progression such as waiting, called, in-room, and done. Room assignment and status
+updates are tracked as part of the same operational cycle. This gives staff a live
+operational view of consultation throughput and reduces handoff confusion between
+reception, room, and doctor.
+●​ Admin Control Modules in One Platform : The admin panel includes dedicated
+modules for: 1)patients 2)doctors 3)rooms 4)schedule 5)queue 6)visits 7)audit logs
+8)admin 9)users.This unifies operations that are often scattered across multiple tools,
+reducing coordination overhead.
+
+Department of Computer Science & Engineering ​
+
+34
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+SYSTEM ANALYSIS
+
+●​ Role-Based Access Control : System access is controlled by authenticated roles (for
+example super admin, admin, and room-scoped principal). This limits who can
+perform sensitive actions such as record updates, queue modifications, and user
+administration. Role checks are enforced at API level, not only at interface level.
+●​ Auditability and Action Trace : Important actions are logged through an audit layer
+so administrative and record-related events are traceable.
+
+This supports
+
+accountability and incident review in operational environments.
+●​ Modular Service Architecture : Frontend, backend, and room processing services
+are independently deployable. This provides maintainability advantages:
+o​ one module can be updated without full-stack redeployment
+o​ failures are easier to isolate
+o​ scaling decisions can be made per service based on load pattern
+●​
+
+Practical Deployment Orientation : The system is designed for clinic-managed
+infrastructure and supports local operational workflows. It is suitable for phased
+deployment where scheduling and admin modules can be adopted alongside
+consultation documentation flow
+
+Department of Computer Science & Engineering ​
+
+35
+
+CHAPTER 6
+
+DETAILED DESCRIPTION
+▪​ 6.1 Consultation and Doctor Module
+▪​ 6.2 Backend Service Module
+▪​ 6.3 Administrative Module
+▪​ 6.4
+
+Inter-Module
+
+Workflow
+
+Integration
+
+▪​ 6.5 Error Handling and Reliability
+Controls
+
+▪​ 6.6
+
+Security
+
+Controls
+
+and
+
+Governance
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+6.1 CONSULTATION AND DOCTOR MODULE
+This module handles the complete consultation-side flow from room session start to final
+approved visit record. It is designed to reduce manual typing work while keeping the doctor
+in full control of final clinical content
+6.1.1 Session Initialization in Room Context
+Each consultation begins in a room-scoped authenticated context. This ensures the
+system always knows:
+●​ which room is active
+●​ which patient is being consulted
+●​ which visit record is being updated
+The room-scoped session prevents cross-room data mixing and keeps consultation
+actions tied to the correct operational context.
+6.1.2 Live Audio Capture and Transcript Build
+During consultation, room audio is streamed and converted into text segments. The
+transcript is maintained with speaker separation so doctor and patient lines are not
+merged into a single unstructured block. This improves review quality and reduces
+confusion during post-consultation verification.
+In practical terms, the doctor is not required to type full notes while interacting with
+the patient. The system collects the spoken interaction and prepares it for structured
+review.
+6.1.3 Structured Draft Preparation
+After sufficient transcript content is available, the system prepares a structured draft.
+The draft format is designed for clinical readability and includes key sections used in
+visit documentation. Instead of a single paragraph, output is grouped so the doctor
+can quickly verify core points and treatment actions.
+This stage is a draft support stage only. It is not the final record.
+6.1.4 Clinical Review and Editing Workflow
+The doctor review screen is the most important safety stage in the consultation
+module. The doctor can:
+●​ inspect generated sections
+Department of Computer Science & Engineering ​
+
+37
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+●​ edit wording
+●​ correct medications and instructions
+●​ remove irrelevant points
+●​ add missing points based on clinical judgment
+Only after this step is the content treated as finalizable. This gives the doctor full
+authority over what enters the patient record.
+6.1.5 Approval and Record Finalization
+When the doctor approves, the system updates visit status and stores final summary
+content to the visit record. The consultation then moves from active work state to
+completed state through controlled backend transitions.
+This approval-first design ensures that unreviewed draft output is not directly
+committed to permanent records.
+6.1.6 Visit Output and Follow-Up Utility
+After finalization, the approved visit can be viewed in history and reused during
+follow-up consultations. This supports longitudinal continuity and reduces repeated
+data capture in future visits.
+
+6.2 BACKEND SERVICE MODULE
+The backend is the control center for integrity, access control, state transitions, and data
+persistence. It is implemented as a route-based service with explicit validation and role
+enforcement.
+6.2.1 Domain Modules and API Organization
+Backend routes are organized by domain:
+●​ authentication
+●​ patients
+●​ doctors
+●​ rooms
+●​ appointments
+●​ queue
+●​ visits
+●​ admin users
+
+Department of Computer Science & Engineering ​
+
+38
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+●​ audit logs
+This separation keeps code maintainable and helps isolate domain logic cleanly.
+6.2.2 Authentication and Role Enforcement
+The backend uses token-based authentication and role-based authorization.
+Sensitive operations such as user administration, queue status updates, and visit
+approval require authorized roles. Unauthorized requests are rejected at API level.
+This is important because interface-level restrictions alone are not enough for system
+security.
+6.2.3 Data Model and Relationships
+Core entities include patient, medical history, visit, doctor, room, appointment, queue
+entry, admin user, and audit log.
+Relationships are designed so clinical and operational workflows stay connected. For
+example:
+●​ appointments can be linked to queue entries
+●​ visits can be linked to appointments
+●​ visit history is tied to patient records
+●​ queue and room state can be coordinated during consultation flow
+This structure supports traceable clinic operations from scheduling through final visit
+closure.
+6.2.4 Validation and State Integrity
+Backend endpoints enforce domain rules, including:
+●​ valid status updates only
+●​ reference existence checks (patient, doctor, room, appointment)
+●​ controlled transition logic across queue and visit lifecycle states
+This prevents silent invalid states and improves reliability under real usage.
+6.2.5 Scheduling to Queue Linkage
+A critical workflow in this project is appointment check-in to queue visibility.
+When an appointment is checked in, queue linkage is ensured so that the patient
+appears in active queue state without duplicate manual entry. Existing active entries
+are reused where appropriate, and linkage fields are updated to maintain
+consistency.
+This removes operational mismatch between scheduling desk and queue desk.
+
+Department of Computer Science & Engineering ​
+
+39
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+6.2.6 Audit and Traceability
+Operationally important actions are recorded in audit logs. This includes key update
+paths in administration and clinical workflow control. Auditability supports
+accountability and post-event analysis.
+
+6.3 ADMINISTRATOR MODULE
+The admin module is designed for daily clinic operations, not only technical supervision. It
+consolidates operational workflows into one interface family.
+6.3.1 Patient Management
+Admin users can create and update patient profiles and access historical records.
+Structured historical data improves continuity between visits and helps doctors avoid
+repeated questioning for known conditions and medications.
+6.3.2 Doctor and Room Management
+The module supports doctor listings, status visibility, and room state monitoring.
+Room management includes availability and assignment context needed for
+consultation operations and queue movement.
+6.3.3 Schedule Management
+Scheduling supports appointment creation and updates with doctor, room, and timing
+fields. This serves as the upstream source for daily consultation planning.
+6.3.4 Queue Operations
+Queue entries support progression through practical states such as waiting, called,
+in-room, and done. Queue operations are linked with room and doctor assignment
+behavior, so flow remains visible to staff at each stage.
+6.3.5 Visit Administration
+Visit pages allow administrators to inspect visit progression and finalized records.
+The module also supports handling prescription-related outputs and visit status
+governance where role permissions allow.
+6.3.6 Admin User Governance
+Super-admin functions allow controlled management of admin users. This reduces
+security risk from uncontrolled account growth and ensures operational accountability
+by role.
+Department of Computer Science & Engineering ​
+
+40
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+6.4 INTER-MODULE WORKFLOW INTEGRATION
+A major strength of the project is that modules are not isolated. The system connects
+consultation and operations into one coherent cycle.
+6.4.1 End-to-End Operational Path
+Typical daily path:
+1. appointment is created in schedule module
+2. patient is checked in
+3. queue entry becomes active
+4. room and doctor workflow progresses consultation
+5. draft is reviewed and approved by doctor
+6. visit is completed and stored in patient history
+This eliminates repeated re-entry across separate systems and improves state
+consistency.
+6.4.2 Data Consistency Across Stages
+The system uses explicit IDs and validated references to connect entities. This
+prevents detached records and reduces workflow ambiguity in high-volume clinic
+operations.
+
+6.5 ERROR HANDLING AND RELIABILITY CONTROLS
+The project includes practical reliability controls across frontend hooks and backend route
+logic.
+6.5.1 Input and Transition Validation
+Invalid status transitions and invalid references are blocked early. This prevents
+downstream failures and corrupted state paths.
+6.5.2 Recovery-Oriented Session Handling
+Session and summary handling is structured to reduce breakage on interruption.
+Where possible, state normalization and safe defaults are used to avoid runtime crashes from
+partial or malformed data.
+
+Department of Computer Science & Engineering ​
+
+41
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+6.5.3 Legacy Data Tolerance
+Response shaping and sanitization are used in critical areas so old or inconsistent
+stored records do not crash current admin views.
+
+6.5 ERROR HANDLING AND RELIABILITY CONTROLS
+The project includes practical reliability controls across frontend hooks and backend route
+logic.
+6.6.1 Access Security
+Authenticated sessions and role checks are enforced for privileged operations.
+6.6.2 Operational Auditability
+Action logging provides a review trail for critical updates and governance-sensitive
+operations.
+6.6.3 Controlled Record Finalization
+The doctor approval gate is central to data quality governance. Draft content is
+reviewable and editable before final commit.
+
+Department of Computer Science & Engineering ​
+
+42
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+CHAPTER 7
+
+TESTING
+▪​ 7.1 Testing Objectives
+▪​ 7.2 Testing Strategy
+▪​ 7.3 Test Environment
+▪​ 7.4 Black Box Testing
+▪​ 7.5 White Box Testing
+▪​ 7.6 Integration Testing
+▪​ 7.7 Model Benchmark testing
+▪​ 7.8 Test Cases
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+7.1 TESTING OBJECTIVES
+The testing phase was designed to verify the implemented system along four dimensions:
+1)​ functional correctness of clinical and administrative workflows
+2)​ integration consistency across scheduling, queue, room, and visit modules
+3)​ reliability of role-based access control and route protection
+4)​ practical behavior of structured draft generation candidates under local deployment
+constraints
+The chapter combines software testing practice with project-specific validation requirements
+[16], [17].
+
+7.2 TESTING METHODOLOGY
+A layered strategy was used so that route-level correctness and end-to-end behavior were
+both validated [17], [18]:
+●​ black-box testing for externally observable behavior
+●​ white-box testing for internal branch and transition logic
+●​ integration testing for multi-module workflow continuity
+●​ quality gate checks for frontend lint and production build
+●​ model comparison tests for draft-generation candidate selection
+This structure follows common software quality engineering principles and avoids relying on
+a single test type [17], [19]].
+
+7.3 TEST ENVIRONMENT
+Testing was executed in a local development/deployment-like setup aligned with project
+architecture.
+7.3.1 Backend Validation Context
+●​ FastAPI route testing for authentication, records, queue, visits, and admin modules
+●​ database-backed state transition checks
+●​ role-restricted route assertions
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+7.3.2 Frontend Validation Context
+●​ static analysis using linting
+●​ production build checks for route and module integrity
+●​ admin route rendering verification under generated build output
+7.3.3 Workflow Simulation Context
+●​ login, schedule, check-in, queue, visit progress, approval, and completion flows
+●​ state consistency checks after each transition
+
+7.4 BLACK BOX TESTING
+Black-box tests validated expected external behavior from valid and invalid user actions [16].
+Tested Scenarios:
+Test
+
+Scenario
+
+Input
+
+Expected Output
+
+Result
+
+Real-time
+
+Live
+
+Continuous
+
+audio
+
+consultation
+
+interruption
+
+capture
+
+audio
+
+WhisperX
+
+Doctor–patient
+
+Accurate
+
+transcription
+
+conversation
+
+alignment
+
+Speaker
+
+Multi-speaker
+
+Doctor/patient
+
+diarization
+
+audio
+
+labelled
+
+Hallucinatio
+
+Transcript
+
+n validation
+
+LLM output
+
+isSupported:false
+
+AI
+
+Diarized
+
+Structured JSON within 70–100s
+
+Pass
+
+summarizati
+
+transcript
+Updated chip; no regeneration
+
+Pass
+
+ID
+BB01
+
+BB02
+BB03
+BB04
+BB05
+
+stream
+
+without Pass
+
+with
+
+word-level Pass
+
+text
+
+segments correctly Pass
+
++ Unsupported
+
+items
+
+flagged Pass
+
+on
+BB06
+
+BB07
+
+Doctor
+
+Chip
+
+inline edit
+
+modification
+
+Paragraph
+
+Edited chips + Regenerated paragraphs aligned to Pass
+
+regeneration
+
+transcrips
+
+edits
+
+IU/IITE/CSE/2026/UDP-028​
+BB08
+
+BB09
+
+​
+
+Visit
+
+Doctor
+
+approval
+
+Approve
+
+Patient
+
+Existing patient Previous
+
+history
+
+ID
+
+DETAILED DESCRIPTION
+
+clicks Summary saved; transcript erased; Pass
+MedicalHistory updated
+consultations
+
+and Pass
+
+summaries displayed
+
+retrieval
+BB10
+
+BB11
+
+Record
+
+Modify existing Updated record saved
+
+editing
+
+summary field
+
+Appointmen
+
+New
+
+Appointment
+
+t scheduling
+
+appointment
+
+conflict
+
+Pass
+
+created
+
+without Pass
+
+details
+BB12
+BB13
+BB14
+
+Room
+
+Assign room to Room Assigned ; PIN generated
+
+allocation
+
+doctor
+
+Invalid
+
+Corrupted audio Graceful error ; Informative message
+
+audio input
+
+stream
+
+JWT
+
+Doctor logs out
+
+revocation
+BB15
+
+Pass
+Pass
+
+Token hash invalidated ; subsequent Pass
+requests rejected
+
+Room
+
+Room
+
+device Access only o assigned room data
+
+Pass
+
+device scope token
+Table 7.1: Black Box Test Cases
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+​
+
+7.2 WHITE BOX TESTING
+White-box validation focused on internal logic paths where defects have high operational
+impact [17], [18].
+Key Aspects Tested:
+
+IU/IITE/CSE/2026/UDP-028​
+Test
+
+Function
+
+ID
+
+Module
+
+​
+
+DETAILED DESCRIPTION
+
+/ Scenario Tested
+
+Expected
+
+Result
+
+Behaviour
+
+WB01 Audio
+
+Pipeline Continuous
+
+(WebSocket
+
+audio
+
+chunks Audio
+
++ streamed during consultation
+
+VAD)
+
+chunks Pass
+
+processed
+sequentially
+
+with
+
+no
+
+VAD
+
+loss;
+
+correctly
+
+trims
+
+silence
+WB02 WhisperX
+
+Transcription
+
+Integration
+
+with Model
+
+loads Pass
+
+configured compute_type correctly
+
+and
+
+produces
+
+stable
+
+and cpu_threads
+
+transcription output
+WB03 Diarization Engine
+
+Adaptive speaker count using Optimal number of Pass
+silhouette scoring
+
+speakers
+
+detected
+
+dynamically
+WB04 Diarization
+Alignment
+
++ Merge
+
+speaker
+
+segments Speaker
+
+with word-level timestamps
+
+correctly
+with
+
+labels Pass
+aligned
+transcript
+
+words
+WB05 Fuzzy
+
+Matching Input with paraphrased text Tokens
+
+Algorithm
+
+variations
+
+(length
+
+extracted Pass
+>
+
+3);
+
+similarity ratio >
+0.72 enforced
+WB06 Fuzzy
+
+Matching Partial token overlap case
+
+Threshold Logic
+
+Minimum
+
+60% Pass
+
+token
+
+match
+
+threshold correctly
+applied
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+WB07 phi4-mini Prompt LLM prompt execution with Zero-inference rule Pass
+Constraints
+
+system constraints
+
+followed;
+
+no
+
+hallucinated
+reasoning output
+WB08 Output Parser
+
+LLM
+
+output
+
+markdown fences
+
+containing Markdown
+
+Pass
+
+formatting removed
+and
+
+clean
+
+structured
+
+output
+
+returned
+WB09 JWT
+Authentication
+
+Token generation and expiry Valid
+validation
+
+accepted;
+
+token Pass
+expired
+
+token rejected
+Table 7.2: White Box Test Cases
+
+7.6 INTEGRATION TESTING
+Typical validated sequence:
+1)​ create appointment
+2)​ check in appointment
+3)​ confirm queue visibility
+4)​ create and update visit progress
+5)​ approve visit
+6)​ verify downstream completion effects
+This confirms that clinical documentation flow and operations flow are connected in one
+lifecycle.
+7.6.2 Schedule-to-Queue Linkage Validation
+A critical integration gap was specifically tested and corrected: appointment check-in must
+produce queue presence.
+Post-fix validation confirmed that checked-in appointments are linked to active queue entries
+in operational view.
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+7.7 STRUCTURED DRAFT CANDIDATE EVALUATION
+
+Model benchmark testing was performed to select the most suitable summary generator for
+the implemented workflow.
+7.7.1 Candidate Set
+1)​ qwen2.5:3b
+2)​ qwen3:4b
+3)​ phi4-mini
+4)​ Llama3.1:8b
+7.7.2 Evaluation Basis
+Candidates were compared using project-specific criteria:
+●​ structured output reliability
+●​ schema compliance consistency
+●​ practical response behavior in local runtime
+●​ suitability for doctor-reviewed documentation flow
+7.7.3 Raw Benchmark Scores
+Model
+
+Test Case
+
+Time
+(s)
+
+JSON
+OK
+
+Schema
+OK
+
+Support
+Rate
+
+Cats
+Valid
+
+Pas
+s
+
+qwen2.5:
+3b
+
+GP
+Headache
+
+10.3
+
+✓
+
+✓
+
+1.00
+
+6/6
+
+✓
+
+qwen2.5:
+3b
+
+Diabetes
+
+7.4
+
+✓
+
+✓
+
+0.89
+
+5/6
+
+✓
+
+qwen2.5:
+3b
+
+Sore
+Throat
+
+6.9
+
+✓
+
+✓
+
+0.90
+
+5/6
+
+✓
+
+qwen3:4b
+
+GP
+Headache
+
+41.5
+
+✗
+
+✗
+
+0.00
+
+0/0
+
+✗
+
+qwen3:4b
+
+Diabetes
+
+30.0
+
+✗
+
+✗
+
+0.00
+
+0/0
+
+✗
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+qwen3:4b
+
+Sore
+Throat
+
+30.7
+
+✗
+
+✗
+
+0.00
+
+0/0
+
+✗
+
+phi4-mini
+
+GP
+Headache
+
+25.4*
+
+✓
+
+✓
+
+1.00
+
+6/6
+
+✓
+
+phi4-mini
+
+Diabetes
+
+7.6
+
+✓
+
+✓
+
+1.00
+
+6/6
+
+✓
+
+phi4-mini
+
+Sore
+Throat
+
+9.2
+
+✓
+
+✓
+
+1.00
+
+5/5
+
+✓
+
+llama3.1:
+8b
+
+GP
+Headache
+
+22.4
+
+✓
+
+✓
+
+1.00
+
+6/6
+
+✓
+
+llama3.1:
+8b
+
+Diabetes
+
+16.0
+
+✓
+
+✓
+
+1.00
+
+6/6
+
+✓
+
+llama3.1:
+8b
+
+Sore
+Throat
+
+12.3
+
+✓
+
+✓
+
+1.00
+
+5/6
+
+✓
+
+Table 7.4.1 : Raw Score
+Note : * phi4-mini GP Headache time is cold start (25.4s); warm inference is 7.6s. Model is pre-warmed at server startup in
+production.
+
+7.7.4 Aggregate Benchmark Summary
+Model
+
+Avg Time
+
+JSON
+OK
+
+Schema
+OK
+
+Avg Support Overall
+Rate
+
+qwen2.5:
+3b
+
+7.1s
+
+100%
+
+100%
+
+0.93
+
+✓
+(minor
+paraphrase)
+
+qwen3:4b
+
+33.4s
+
+0%
+
+0%
+
+0.00
+
+✗
+DISQUALIFIED
+
+phi4-mini
+
+12.1s
+warm)
+
+(7.6s 100%
+
+100%
+
+1.00
+
+✓ SELECTED
+
+llama3.1:
+8b
+
+15.3s
+
+100%
+
+100%
+
+1.00
+
+✓ (too slow on
+CPU)
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+DETAILED DESCRIPTION
+
+7.7.3 Outcome
+Based on internal benchmark results documented in the project tables, phi4-mini was
+selected for implementation.
+This result is presented as internal comparative evidence within project scope, not as
+universal external ranking [20], [21].
+
+7.8 TEST CASES
+
+Test
+
+Module
+
+ID
+TC01
+
+Descript
+
+Input
+
+Expected
+
+Actual
+
+Statu
+
+Output
+
+Output
+
+s
+
+Live
+
+Continuous
+
+Audio
+
+Pass
+
+real-time
+
+doctor–pati
+
+audio
+
+consultat
+
+ent
+
+without
+
+ion
+Audio Pipeline Capture
+
+ion audio conversatio
+
+stream captured
+correctly
+
+interruption
+
+n
+TC02
+
+Transcription
+
+Convert
+
+Multi-speak Accurate
+
+Transcriptio
+
+speech to er
+
+transcription
+
+n generated
+
+text
+
+conversatio
+
+with
+
+correctly
+
+using
+
+n
+
+word-level
+
+Whisper
+
+Pass
+
+alignment
+
+X
+TC03
+
+Diarization
+
+Identify
+
+Multi-speak Doctor
+
+speakers
+
+er
+
+in
+
+input
+
+audio patient
+segments
+
+conversa
+
+correctly
+
+tion
+
+labelled
+
+and Speakers
+identified
+correctly
+
+Pass
+
+IU/IITE/CSE/2026/UDP-028​
+TC04
+
+​
+
+Hallucination
+
+Validate
+
+Detection
+
+unsuppor LLM output items
+ted
+
+Transcript + Unsupported
+
+AI
+
+Flags
+
+Pass
+
+flagged applied
+
+(isSupport
+
+outputs
+
+TC05
+
+DETAILED DESCRIPTION
+
+correctly
+
+ed: false)
+
+Summarization Generate
+
+Diarized
+
+Structured
+
+structure
+
+transcript
+
+JSON
+
+Summary
+
+Pass
+
+output generated
+
+d
+
+within 70–100 correctly
+
+medical
+
+seconds
+
+summary
+TC06
+
+TC07
+
+Doctor Editing
+
+Modify
+
+Inline chip Updated values Edits
+
+extracted edit input
+
+reflected
+
+applied
+
+medical
+
+without
+
+full correctly
+
+chips
+
+regeneration
+
+Paragraph
+
+Regener
+
+Edited
+
+Updated
+
+Regeneratio
+
+Regeneration
+
+ate
+
+chips
+
++ paragraphs
+
+n successful
+
+summary transcript
+
+aligned
+
+after
+
+changes
+
+Pass
+
+Pass
+
+with
+
+edits
+TC08
+
+Visit Approval
+
+Finalize
+
+Doctor
+
+Summary
+
+Verified
+
+consultat
+
+clicks
+
+saved;
+
+successfully
+
+ion
+
+approve
+
+transcript
+
+record
+
+erased; history
+updated
+
+Pass
+
+IU/IITE/CSE/2026/UDP-028​
+TC09
+
+Patient History Retrieve
+
+DETAILED DESCRIPTION
+
+Existing
+
+Display
+
+Data
+
+patient ID
+
+previous
+
+retrieved
+
+consultat
+
+records
+
+and correctly
+
+ion data
+
+summaries
+
+past
+
+TC10
+
+​
+
+Record
+
+Update
+
+Modified
+
+Updated record Record
+
+Management
+
+existing
+
+summary
+
+saved
+
+patient
+
+fields
+
+database
+
+successfully
+
+Appointmen
+
+Pass
+
+Pass
+
+in updated
+
+record
+TC11
+
+Appointment
+
+Schedule Valid
+
+Appointment
+
+Scheduling
+
+new
+
+appointmen
+
+created without t scheduled
+
+appoint
+
+t details
+
+conflict
+
+Pass
+
+ment
+TC12
+
+Room
+
+Assign
+
+Doctor
+
++ Room assigned Room
+
+Allocation
+
+consultat
+
+room input
+
+ion room
+TC13
+
+Error Handling Handle
+
+Pass
+
+and access PIN assigned
+generated
+
+correctly
+
+Corrupted
+
+Graceful error Error
+
+invalid
+
+audio
+
+message
+
+handled
+
+audio
+
+stream
+
+returned
+
+correctly
+
+Validate
+
+Logged-out
+
+Token rejected; Security
+
+JWT
+
+token reuse
+
+request returns enforced
+
+Pass
+
+input
+TC14
+
+Authentication
+
+revocatio
+n
+
+401
+
+correctly
+
+Pass
+
+IU/IITE/CSE/2026/UDP-028​
+TC15
+
+​
+
+DETAILED DESCRIPTION
+
+Authorization
+
+Restrict
+
+Room
+
+Access limited Access
+
+(RBAC)
+
+room
+
+device
+
+to
+
+device
+
+token
+
+room data only
+
+access
+
+Table 7.3: Test Cases for each of the modules
+
+assigned restricted
+correctly
+
+Pass
+
+CHAPTER 8
+
+SYSTEM DESIGN
+▪​ 8.1 Class Diagram
+▪​ 8.2 Use Case Diagram
+▪​ 8.3 Sequence Diagram
+▪​ 8.4 Activity Diagram
+▪​ 8.5 Data Flow Diagram (DFD)
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+8.1 CLASS DIAGRAM
+
+Fig 8.1: Class Diagram
+
+Department of Computer Science & Engineering ​
+
+56
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+8.2 USE CASE DIAGRAM
+
+Fig 8.2: Use Case Diagram
+
+Department of Computer Science & Engineering ​
+
+57
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+8.3 SEQUENCE DIAGRAM
+
+Fig 8.3: Sequence Diagram
+
+Department of Computer Science & Engineering ​
+
+58
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+8.4 ACTIVITY DIAGRAM
+
+Fig 8.4: Activity Diagram
+
+Department of Computer Science & Engineering ​
+
+59
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+8.5 DATA FLOW DIAGRAM (DFD)
+LEVEL 0:
+
+Fig 8.5.1: Level 0 Data Flow Diagram
+
+Department of Computer Science & Engineering ​
+
+60
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+LEVEL 1:
+
+Fig 8.5.2: Level 1 Data Flow Diagram
+
+Department of Computer Science & Engineering ​
+
+61
+
+IU/IITE/CSE/2026/UDP-028
+
+​
+
+SYSTEM DESIGN
+
+LEVEL 2:
+
+Fig 8.5.3: Level 2 Data Flow Diagram
+
+Department of Computer Science & Engineering ​
+
+62
+
+CHAPTER 9
+
+LIMITATIONS AND FUTURE
+ENHANCEMENTS
+▪​ 9.1 Limitations
+▪​ 9.2 Future Enhancements
+
+IU/IITE/CSE/2026/UDP-028
+
+LIMITATIONS AND FUTURE ENHANCEMENT
+
+9.1 LIMITATIONS
+The current version of Alvyto is functional for the defined project scope, but several
+limitations remain. These limitations should be stated clearly so the report stays technically
+honest and academically strong.
+9.1.1 Limited Scale Validation
+The system has been validated on project-level workloads, but large concurrent
+multi-room stress behavior is not yet fully benchmarked. In practical terms,
+performance
+
+under heavy simultaneous sessions,
+
+especially on
+
+CPU-first
+
+deployments, still needs deeper capacity testing.
+9.1.2 Internal Evaluation Scope
+Model and workflow evaluations are based on internal test scenarios. While useful for
+implementation decisions, this is not equivalent to broad external clinical validation.
+More diverse datasets and independent evaluation settings are needed for stronger
+generalization claims.
+9.1.3 Non-Verbal Clinical Context Not Fully Captured
+The current consultation pipeline processes spoken content but does not directly
+capture non-verbal cues such as gesture, tone shifts, or silence patterns. In certain
+consultations, these cues may influence interpretation and should be documented
+manually by the clinician when needed.
+9.1.4 Interoperability Boundary
+The system currently operates as a clinic-local platform and does not yet provide full
+production interoperability with external hospital ecosystems through standardized
+exchange layers such as complete HL7 FHIR integration [22],[ 23].
+9.1.5 Security and Compliance Maturity Level
+Role-based access control and auditability are implemented, but full enterprise
+hardening and formal compliance packaging are outside this project phase. Examples
+include end-to-end deployment hardening, formal security verification cycles, and
+complete regulatory documentation [24], [25].
+
+Department of Computer Science & Engineering ​
+
+64
+
+IU/IITE/CSE/2026/UDP-028
+
+LIMITATIONS AND FUTURE ENHANCEMENT
+
+9.1.6 Deployment Consistency Risk
+As deployments grow, differences in runtime configuration and model versioning
+may produce output variability across environments. A stricter release and
+configuration governance process is required for multi-site consistency.
+
+9.2 FUTURE ENHANCEMENTS
+Future work is organized into technical, operational, interoperability, and governance
+improvements.
+9.2.1 Concurrency and Performance Engineering
+●​ conduct controlled load testing across multi-room sessions
+●​ define capacity thresholds per hardware profile
+●​ introduce scaling strategies for room-processing workloads
+●​ optimize queue and visit heavy-write paths for high-volume clinics
+9.2.2 Evaluation Expansion
+●​ expand test datasets across broader consultation types
+●​ add scenario sets for edge-case conversational structure
+●​ include repeated cross-hardware performance runs
+●​ add stronger statistical reporting in benchmark chapter outputs
+9.2.3 Clinical Workflow Enrichment
+●​ strengthen doctor review ergonomics for faster correction loops
+●​ improve summary continuity for very long consultations
+●​ extend structured follow-up planning sections in finalized visit records
+●​ add richer operational dashboards for queue and room throughput monitoring
+9.2.4 Interoperability Roadmap
+●​ introduce standards-aligned exchange adapters for structured record transfer
+●​ phase implementation toward production-grade HL7 FHIR resource mapping [22], [23].
+●​ support controlled integration points with existing hospital systems where required
+9.2.5 Security Hardening Roadmap
+●​ formalize deployment baselines and security verification checklists
+Department of Computer Science & Engineering ​
+
+65
+
+IU/IITE/CSE/2026/UDP-028
+
+LIMITATIONS AND FUTURE ENHANCEMENT
+
+●​ strengthen transport and infrastructure hardening in production environments
+●​ improve security event review workflows around audit data
+●​ align controls with recognized application security practices [24],[ 25].
+9.2.6 Version and Configuration Governance
+●​ enforce strict model/runtime version pinning per release
+●​ log version metadata in operational traces
+●​ standardize deployment templates to reduce environment drift
+
+Department of Computer Science & Engineering ​
+
+66
+
+CHAPTER 10
+
+CONCLUSION
+▪​ 10.1 Conclusion
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+CONCLUSION
+
+10.1 CONCLUSION
+This project set out to build a practical, clinic-oriented documentation and operations system
+that supports the real consultation workflow instead of treating transcription as an isolated
+feature. The implemented system combines consultation capture, speaker-separated transcript
+processing, structured draft preparation, doctor review and approval, and administrative
+operations in one connected platform.
+From an implementation perspective, the project achieves the following within its defined
+scope:
+1)​ a complete consultation-to-record workflow with mandatory doctor approval before
+final persistence
+2)​ integrated appointment, check-in, queue, room, and visit lifecycle management
+3)​ role-based operational control and auditable action flow
+4)​ modular architecture across frontend, backend, and room-processing services
+5)​ internal benchmark-driven selection of the draft-generation model used in
+deployment
+A major outcome of the project is workflow continuity. Scheduling, queue state, room
+operations, and visit completion are now linked instead of handled as disconnected tasks.
+This reduces repeated manual coordination and improves operational clarity for clinic staff.
+Another important outcome is quality control through clinician oversight. The system does
+not treat generated drafts as final records by default. The doctor remains the final
+decision-maker through a required review and approval step. This preserves clinical
+responsibility while still reducing documentation effort.
+Testing results within project scope indicate stable behavior across core modules, including
+access control, status transitions, integration paths, and frontend build quality checks. Defects
+identified during development were addressed through targeted backend validation
+improvements and interface-level resilience updates.
+At the same time, the project is presented with clear boundaries. High-concurrency scale
+behavior, broader external validation, and full enterprise hardening remain next-stage work.
+These are not hidden, and they define a realistic roadmap for future maturity.
+In summary, Alvyto demonstrates that a local, modular, doctor-controlled consultation
+documentation system can be implemented with integrated clinic operations and practical
+Department of Computer Science & Engineering​
+
+68
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+CONCLUSION
+
+deployment behavior. The project meets its primary objectives for final-year scope and
+establishes a strong technical base for future expansion.
+
+Department of Computer Science & Engineering​
+
+69
+
+CHAPTER 11
+
+APPENDICES
+▪​ 11.1 Business Model
+▪​ 11.2 Product Deployment Detail
+▪​ 11.3 API and Web Service Details
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+11.1 BUSINESS MODEL
+This appendix explains how the system is expected to operate in a clinic setting and how
+value is created through workflow integration.
+11.1.1 Primary Value Delivered
+The platform creates value in three direct ways:
+1)​ Documentation efficiency : Consultation notes are prepared as structured drafts,
+reducing repeated manual writing.
+2)​ Operational continuity : Scheduling, check-in, queue movement, room visibility,
+and visit completion are connected in one workflow.
+3)​ Governance visibility : Role-based access and auditable actions improve traceability
+of critical operations.
+11.1.2 Intended User Groups
+●​ Doctors and clinical staff for consultation review and final approval
+●​ Admin and operations staff for patient, schedule, queue, room, and user management
+●​ Clinic IT and governance stakeholders for deployment and audit oversight
+11.1.3 Adoption Pattern
+A practical rollout model is phased:
+●​ Phase 1: Admin operations (patients, schedule, queue, rooms)
+●​ Phase 2: Room consultation workflow for selected doctors
+●​ Phase 3: Wider operational adoption and monitoring optimization
+This phased path reduces change resistance and allows process stabilization before full
+usage.
+
+Department of Computer Science & Engineering​
+
+71
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+11.2 PRODUCT DEPLOYMENT DETAIL
+The Alvyto system is deployed as a web-based application with a real-time AI processing
+backend, capable of running on standard clinic hardware or cloud infrastructure.
+11.2.1 Deployment Architecture
+The current deployment uses three services:
+1)​ Frontend service for room and admin interfaces
+2)​ Backend service for APIs, records, access control, and state transitions
+3)​ Room processing service for consultation audio pipeline and draft preparation
+Component
+
+Detail
+
+Backend
+Framework
+
+FastAPI running on ASGI server (Uvicorn)
+
+AI Processing WhisperX (ASR), pyannote (diarization), phi4-mini (LLM)
+Frontend
+
+Web-based UI (Next.js or equivalent)
+
+Database
+
+MySQL / PostgreSQL
+
+Communicati
+on
+
+REST APIs + WebSocket for real-time streaming
+
+Operating
+System
+
+Windows, Linux (Ubuntu), macOS
+
+File Storage
+
+Local storage for temporary audio and logs
+
+Model
+Runtime
+
+Ollama / local model execution
+
+Table 11.2: Deployment Architecture
+
+11.2.2 Environment Requirements
+A typical setup includes:
+●​ clinic server for backend and room processing services
+Department of Computer Science & Engineering​
+
+72
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+●​ room-side client machines using browser interfaces
+●​ internal network connectivity between services
+●​ local data persistence with regular backup policy
+11.2.3 Startup and Runtime Operations
+Deployment scripts initialize dependencies, start services, and validate health routes.
+Operational readiness checks should include:
+●​ service health endpoint success
+●​ authentication flow validation
+●​ core route availability
+●​ basic workflow sanity check (schedule to queue to visit progression)
+11.2.4 Logging and Monitoring
+Recommended monitoring minimum:
+●​ API error rate and response latency
+●​ room-session processing latency
+●​ queue/visit transition anomalies
+●​ authentication and authorization failures
+Audit logs should be reviewed periodically for governance-sensitive operations.
+11.2.5 Deployment Constraints
+Current known constraints include:
+●​ concurrency sensitivity under high room count on CPU-first deployments
+●​ need for consistent model/runtime version control across environments
+●​ requirement for disciplined release and rollback process
+
+Department of Computer Science & Engineering​
+
+73
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+74
+
+WORKING SCREENSHOTS
+Figure 11.2.1 : Home Screen - Client Side
+
+Figure 11.2.2: Patient-Historical View
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+75
+
+Figure 11.2.3: Patient-Historical Comparision
+
+Figure 11.2. 4: Live Transcription
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+76
+
+Figure 11.2.5: Speaker Confirmation
+
+Figure 11.2..6: Complete Transcription + Summary
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+77
+
+Figure 11.2.7: Admin Dashboard
+
+Figure 11.2.8: Room Management
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+78
+
+Figure 11.2.9.: Patient Queue
+
+Figure 11.2.10: Doctor Management
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+79
+
+Figure 11.2.11: Past Visit
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+Department of Computer Science & Engineering​
+
+80
+
+Figure 11.2.12 : Scheduling
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+11.3 API AND WEB SERVICE DETAILS
+The Alvyto system exposes a set of RESTful APIs and WebSocket services to enable
+communication between frontend, backend, and AI modules.
+11.3.1 Key API Modules
+Module
+
+Description
+
+Authentication API
+
+Handles login, JWT generation, and session management
+
+Audio
+API
+
+Processing Receives and processes audio streams
+
+Transcription API
+
+Converts audio into text using WhisperX
+
+Summarization API
+
+Generates structured medical summaries
+
+Patient Records API
+
+Manages patient data and consultation history
+
+Admin API
+
+Handles scheduling and room management
+
+Audit API
+
+Tracks system actions and logs
+
+Table 11.3.1: API Modules
+
+11.3.2 Sample API Endpoints
+Endpoint
+
+Method Description
+
+/auth/login
+
+POST
+
+Authenticate user and generate JWT
+
+/audio/stream
+
+WS
+
+Stream real-time audio
+
+/transcription
+
+POST
+
+Process audio and return transcript
+
+/summary
+
+POST
+
+Generate structured summary
+
+/patients/{id}
+
+GET
+
+Retrieve patient records
+
+/visit/approve
+
+POST
+
+Finalize and store consultation
+
+/admin/schedule
+
+POST
+
+Create appointment
+
+Table 11.3.2: API Endpoints
+
+11.3.3 API Design Style
+Department of Computer Science & Engineering​
+
+81
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+APPENDICES
+
+The system uses HTTP-based route groups with JSON payloads and authenticated
+access for protected operations.
+Route grouping follows domain boundaries (auth, patients, visits, rooms, doctors,
+appointments, queue, admin users, audit logs), which improves maintainability and
+testability.
+11.3.4 Authentication and Authorization
+Protected APIs require valid token-based authentication.
+Authorization is role-aware and enforced at backend route level, not only at UI layer.
+This follows standard token and API security principles [26], [27].
+11.3.4 Service Interaction Pattern
+●​ Frontend calls backend APIs for administrative and record operations
+●​ Room workflow exchanges consultation processing data through service endpoints
+●​ Backend remains source of truth for persisted entities and state transitions
+11.3.5 API Reliability and Safety Practices
+Implemented or recommended practices include:
+●​ input validation and schema-safe parsing
+●​ strict status transition guards
+●​ explicit error codes for invalid operations
+●​ idempotent-safe handling where applicable
+●​ auditability for privileged actions
+11.3.6 Documentation Standard
+API behavior should be maintained through versioned endpoint documentation and
+request/response examples.
+Where OpenAPI descriptions are generated, they should be aligned with actual route
+behavior and updated with each release [28].
+
+Department of Computer Science & Engineering​
+
+82
+
+​
+
+BIBLIOGRAPHY
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+BIBLIOGRAPHY
+
+BIBLIOGRAPHY
+1.​ ARadford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., & Sutskever, I. (2022).
+Robust Speech Recognition via Large-Scale Weak Supervision. arXiv:2212.04356.
+https://arxiv.org/abs/2212.04356
+2.​ M. Bain et al., “WhisperX: Time-Accurate Speech Transcription of Long-Form Audio,”
+2023. https://github.com/m-bain/whisperx
+3.​
+
+H. Bredin et al., “pyannote.audio: Neural Building Blocks for Speaker Diarization,”
+2020 (toolkit and updates). https://github.com/pyannote/pyannote-audio
+
+4.​ FastAPI Documentation. https://fastapi.tiangolo.com
+5.​ SQLAlchemy Documentation. https://docs.sqlalchemy.org/
+6.​ Next.js Documentation. https://nextjs.org/docs
+7.​ Ollama Model Library. https://ollama.com/library
+8.​ Ollama - phi4-mini model entry. https://ollama.com/library/phi4-mini
+9.​ Ollama - qwen2.5 model entry. https://ollama.com/library/qwen2.5
+10.​ Ollama - qwen3 model entry. https://ollama.com/library/qwen3
+11.​Ollama - llama3.1 model entry. https://ollama.com/library/llama3.1
+12.​OpenEMR
+
+Project,
+
+“OpenEMR
+
+Documentation.”
+
+https://www.open-emr.org/wiki/index.php/OpenEMR_Documentation
+13.​Epic
+
+Systems,
+
+“Epic
+
+Electronic
+
+Health
+
+Record.”
+
+Transcribe
+
+Medical.”
+
+https://www.epic.com/software#ElectronicHealthRecord
+14.​Amazon
+
+Web
+
+Services,
+
+“Amazon
+
+https://docs.aws.amazon.com/transcribe/latest/dg/how-it-works-med.html
+15.​Nuance
+
+(Microsoft),
+
+“Dragon
+
+Ambient
+
+eXperience
+
+(DAX)
+
+Copilot.”
+
+https://www.nuance.com/healthcare/ambient-clinical-intelligence/dax-copilot.html
+16.​Abridge, “Clinical Conversations Platform.” https://www.abridge.com/
+17.​G. J. Myers, C. Sandler, and T. Badgett, The Art of Software Testing, 3rd ed., Wiley,
+2011.https://www.wiley.com/en-us/The+Art+of+Software+Testing%2C+3rd+Edition-p-9
+781118031964
+18.​R. S. Pressman and B. R. Maxim, Software Engineering: A Practitioner’s Approach, 9th
+ed.,
+
+McGraw-Hill,
+
+Department of Computer Science & Engineering ​
+
+2019.
+
+84
+
+IU/IITE/CSE/2026/UDP-028​
+
+​
+
+BIBLIOGRAPHY
+
+https://www.mheducation.com/highered/product/software-engineering-practitioner-s-appr
+oach-pressman-maxim/M9781259872976.html
+19.​ISTQB, ISTQB Glossary of Testing Terms, Version 4.0, 2023. https://glossary.istqb.org/
+20.​OpenAI, “Robust Speech Recognition via Large-Scale Weak Supervision,” 2022.
+https://arxiv.org/abs/2212.04356
+21.​Hugging
+
+Face,
+
+“Evaluate:
+
+Evaluation
+
+library
+
+documentation.”
+
+https://huggingface.co/docs/evaluate/index
+22.​HL7 International, “FHIR Release 5 Overview.” https://www.hl7.org/fhir/
+23.​Office of the National Coordinator for Health Information Technology (ONC), “United
+States
+
+Core
+
+Data
+
+for
+
+Interoperability
+
+(USCDI).”
+
+https://www.healthit.gov/isa/united-states-core-data-interoperability-uscdi
+24.​OWASP Foundation, “OWASP ASVS: Application Security Verification Standard.”
+https://owasp.org/www-project-application-security-verification-standard/
+25.​NIST, “Security and Privacy Controls for Information Systems and Organizations (SP
+800-53 Rev. 5).” https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final
+26.​IETF, “RFC 7519: JSON Web Token (JWT),” 2015.
+https://datatracker.ietf.org/doc/html/rfc7519
+27.​OWASP Foundation, “OWASP API Security Top 10.”
+https://owasp.org/www-project-api-security/
+28.​OpenAPI Initiative, “OpenAPI Specification.” https://spec.openapis.org/oas/latest.html
+
+Department of Computer Science & Engineering ​
+
+85
+
+

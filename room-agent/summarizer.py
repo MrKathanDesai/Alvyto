@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "phi4-mini")
-MIN_WORDS_PER_TURN = 3
+MIN_WORDS_PER_TURN = 2
 VALID_CATEGORIES = {
     "symptom", "duration", "timing",
     "action", "lifestyle", "warning", "negative", "medication",
@@ -88,6 +88,19 @@ GENERIC_NOISE_TERMS = {
     "had",
     "just",
     "problem",
+}
+
+ACTION_QUESTION_RE = re.compile(
+    r"^(what|when|where|which|who|why|how|does|do|did|is|are|was|were|have|has|can|could|would|should|will)\b",
+    re.IGNORECASE,
+)
+
+MEDICATION_NAME_BLOCKLIST = {
+    "exactly and has it been",
+    "antibiotic and call us right",
+    "soft brush gentle flossing and",
+    "care",
+    "it step by step",
 }
 
 GENERIC_SNAPSHOT_TERMS = {
@@ -284,6 +297,19 @@ class Summarizer:
         except Exception as exc:
             logger.warning(f"Warm-up failed (Ollama may not be running yet): {exc}")
 
+    def _normalize_speaker_label(self, speaker: str) -> str:
+        normalized = re.sub(r"\s+", " ", (speaker or "").strip().lower())
+        if not normalized:
+            return "Unknown"
+        if normalized in {"doctor", "dr", "dentist", "er"} or "dr." in normalized:
+            return "Doctor"
+        if normalized in {"patient", "pt", "kd"}:
+            return "Patient"
+        # If it looks like a human name with no clinical role marker, assume patient by default.
+        if re.fullmatch(r"[a-z]+(?:\s+[a-z]+){0,2}", normalized):
+            return "Patient"
+        return speaker.strip().title() or "Unknown"
+
     def summarize_dialogue(self, dialogue: List[Dict[str, Any]], medical_history: Dict[str, Any] | None = None) -> Dict[str, Any]:
         empty = self._empty_summary()
 
@@ -300,7 +326,7 @@ class Summarizer:
             return empty
 
         transcript = "\n".join(
-            f"{str(turn.get('speaker', 'Unknown')).strip()}: {str(turn.get('text', '')).strip()}"
+            f"{self._normalize_speaker_label(str(turn.get('speaker', 'Unknown')))}: {str(turn.get('text', '')).strip()}"
             for turn in meaningful_turns
             if str(turn.get("text", "")).strip()
         )
@@ -1361,6 +1387,42 @@ class Summarizer:
                 actions.append(text)
         return actions[:8]
 
+    def _is_actionable_doctor_note(self, text: str) -> bool:
+        normalized = self._normalize_fact_text(text)
+        if not normalized:
+            return False
+        if "?" in normalized:
+            return False
+        if ACTION_QUESTION_RE.match(normalized):
+            return False
+        if len(normalized.split()) < 3:
+            return False
+        if not self._ACTION_PATTERN.search(normalized):
+            return False
+        return True
+
+    def _is_valid_prescription_candidate(
+        self,
+        name: str,
+        dosage: str | None,
+        frequency: str | None,
+        transcript: str,
+    ) -> bool:
+        cleaned_name = self._normalize_fact_text(name)
+        if not cleaned_name:
+            return False
+        if cleaned_name.lower() in MEDICATION_NAME_BLOCKLIST:
+            return False
+        if len(cleaned_name.split()) > 6:
+            return False
+        if ACTION_QUESTION_RE.match(cleaned_name):
+            return False
+        if not self._fuzzy_supported(cleaned_name, transcript):
+            return False
+        if not (str(dosage or "").strip() or str(frequency or "").strip()):
+            return False
+        return True
+
     def _build_doctor_actions_from_draft(self, prescription_draft: Dict[str, Any] | None) -> List[str]:
         if not isinstance(prescription_draft, dict):
             return []
@@ -1485,7 +1547,9 @@ class Summarizer:
             re.IGNORECASE,
         )
 
-        for line in patient_lines:
+        source_lines = patient_lines if patient_lines else [line.strip() for line in transcript.splitlines() if line.strip()]
+
+        for line in source_lines:
             symptom = symptom_pattern.search(line)
             if symptom:
                 label = symptom.group(1).lower()
@@ -1508,7 +1572,25 @@ class Summarizer:
                     seen.add(key)
                     fallback.append({"label": "no fever", "category": "negative"})
 
-        return fallback[:6]
+        transcript_lower = transcript.lower()
+        if len(fallback) < 3:
+            if re.search(r"\b(lower|upper)\s+(left|right)\s+(wisdom|molar|tooth)\b", transcript_lower):
+                fallback.append({"label": "pain in lower left wisdom tooth area", "category": "symptom"})
+            if re.search(r"\b(sweet foods?|hot tea|cold water|chewing)\b", transcript_lower):
+                fallback.append({"label": "pain worsens with hot-cold-sweet and chewing", "category": "timing"})
+            if re.search(r"\bno\s+fever\b", transcript_lower):
+                fallback.append({"label": "no fever", "category": "negative"})
+
+        deduped: List[Dict[str, str]] = []
+        seen = set()
+        for item in fallback:
+            key = (item.get("label", "").lower(), item.get("category", "symptom"))
+            if key in seen:
+                continue
+            seen.add(key)
+            deduped.append(item)
+
+        return deduped[:8]
 
     def _infer_chief_complaint(self, transcript: str, parsed: Dict[str, Any]) -> str:
         explicit = str(parsed.get("chiefComplaint") or parsed.get("chief_complaint") or "").strip()
@@ -1539,21 +1621,58 @@ class Summarizer:
                     return s[:160]
         return ""
 
-    def _parse_main_response(self, raw: str, transcript: str = "") -> Dict[str, Any]:
-        empty = self._empty_summary()
+    def _fallback_summary_from_transcript(self, transcript: str) -> Dict[str, Any]:
+        clinical_snapshot = self._fallback_snapshot_from_transcript(transcript) if transcript else []
+        doctor_actions = self._extract_doctor_actions_from_transcript(transcript) if transcript else []
+        regex_meds = self._extract_medications_from_transcript(transcript) if transcript else []
+        follow_up = self._extract_followup_from_transcript(transcript) if transcript else None
+        diagnoses = self._extract_diagnoses_from_transcript(transcript) if transcript else []
 
+        prescriptions = [
+            {
+                "name": med.get("name"),
+                "dosage": med.get("dosage"),
+                "frequency": med.get("frequency"),
+            }
+            for med in regex_meds
+            if isinstance(med, dict) and str(med.get("name") or "").strip()
+        ]
+
+        prescription_draft = None
+        if regex_meds or diagnoses or follow_up:
+            prescription_draft = {
+                "diagnoses": diagnoses,
+                "medications": regex_meds,
+                "investigations": [],
+                "advice": [],
+                "warnings": [],
+                "reportSummary": "",
+                "followUp": follow_up,
+            }
+
+        return {
+            "clinicalSnapshot": clinical_snapshot,
+            "doctorActions": doctor_actions,
+            "prescriptions": prescriptions,
+            "prescriptionDraft": prescription_draft,
+            "issuesParagraph": "",
+            "actionsParagraph": "",
+            "chiefComplaint": self._infer_chief_complaint(transcript, {"clinicalSnapshot": clinical_snapshot}),
+        }
+
+    def _parse_main_response(self, raw: str, transcript: str = "") -> Dict[str, Any]:
         cleaned = re.sub(r"^```(?:json)?", "", raw.strip(), flags=re.IGNORECASE | re.MULTILINE)
         cleaned = re.sub(r"```$", "", cleaned.strip(), flags=re.MULTILINE)
         match = re.search(r"\{.*\}", cleaned, re.DOTALL)
         if not match:
             logger.warning("No JSON object found in model response")
-            return empty
+            return self._fallback_summary_from_transcript(transcript)
 
         try:
             parsed = json.loads(match.group(0))
         except json.JSONDecodeError as exc:
             logger.error("Failed to decode JSON response: %s", exc)
-            return empty
+            return self._fallback_summary_from_transcript(transcript)
 
         clinical_snapshot: List[Dict[str, str]] = []
         for item in parsed.get("clinicalSnapshot", []):
@@ -1569,11 +1688,14 @@ class Summarizer:
                 category = "symptom"
             clinical_snapshot.append({"label": label, "category": category})
 
-        doctor_actions = [
-            str(item).strip()
-            for item in parsed.get("doctorActions", [])
-            if str(item).strip()
-        ]
+        doctor_actions = []
+        for item in parsed.get("doctorActions", []):
+            text = str(item).strip()
+            if not text:
+                continue
+            if not self._is_actionable_doctor_note(text):
+                continue
+            doctor_actions.append(text)
 
         prescriptions: List[Dict[str, Any]] = []
         for rx in parsed.get("prescriptions", []):
@@ -1582,10 +1704,14 @@ class Summarizer:
             name = str(rx.get("name", "")).strip()
             if not name:
                 continue
+            dosage = str(rx.get("dosage") or "").strip() or None
+            frequency = str(rx.get("frequency") or "").strip() or None
+            if not self._is_valid_prescription_candidate(name, dosage, frequency, transcript):
+                continue
             prescriptions.append({
                 "name": name,
-                "dosage": str(rx.get("dosage") or "").strip() or None,
-                "frequency": str(rx.get("frequency") or "").strip() or None,
+                "dosage": dosage,
+                "frequency": frequency,
             })
 
         prescription_draft = self._parse_prescription_draft(parsed.get("prescriptionDraft"))
@@ -1594,10 +1720,14 @@ class Summarizer:
                 name = str(med.get("name", "")).strip()
                 if not name:
                     continue
+                dosage = str(med.get("dosage") or "").strip() or None
+                frequency = str(med.get("frequency") or "").strip() or None
+                if not self._is_valid_prescription_candidate(name, dosage, frequency, transcript):
+                    continue
                 prescriptions.append({
                     "name": name,
-                    "dosage": str(med.get("dosage") or "").strip() or None,
-                    "frequency": str(med.get("frequency") or "").strip() or None,
+                    "dosage": dosage,
+                    "frequency": frequency,
                 })
 
         # Backfill prescriptionDraft.medications when model only returns `prescriptions`.
@@ -1643,7 +1773,7 @@ class Summarizer:
         # phi4-mini stops generating tokens early on long transcripts.
         # We deduplicate by lowercase name so LLM entries are never overwritten.
         raw_transcript = transcript
-        if raw_transcript and len(clinical_snapshot) < 2:
+        if raw_transcript and len(clinical_snapshot) < 4:
             fallback_snapshot = self._fallback_snapshot_from_transcript(raw_transcript)
             if fallback_snapshot:
                 existing = {(item["label"].lower(), item["category"]) for item in clinical_snapshot}

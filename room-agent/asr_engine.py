@@ -26,6 +26,33 @@ logger.info(f"Hardware acceleration: {DEVICE}")
 
 SAMPLE_RATE = 16000
 
+
+def _preprocess_audio_for_asr(audio: np.ndarray) -> np.ndarray:
+    """Improve robustness for natural/noisy speech before ASR."""
+    if audio is None:
+        return np.array([], dtype=np.float32)
+    arr = np.asarray(audio, dtype=np.float32).copy()
+    if arr.size == 0:
+        return arr
+
+    # Remove DC offset
+    arr = arr - float(np.mean(arr))
+
+    # Mild pre-emphasis to reduce low-frequency rumble/wind masking
+    emphasized = np.empty_like(arr)
+    emphasized[0] = arr[0]
+    emphasized[1:] = arr[1:] - 0.95 * arr[:-1]
+    arr = 0.75 * arr + 0.25 * emphasized
+
+    # Peak normalize with conservative headroom
+    peak = float(np.max(np.abs(arr)))
+    if peak > 1e-6:
+        arr = arr / peak * 0.92
+
+    # Soft-clip outlier peaks from wind pops without hard distortion
+    arr = np.tanh(arr * 1.35).astype(np.float32)
+    return arr
+
 class HybridDiarizer:
     def __init__(self, hf_token: str):
         from pyannote.audio import Model
@@ -181,13 +208,15 @@ class ASREngine:
         logger.info(f"Loading models on device: {DEVICE}")
 
         self.wx_model = whisperx.load_model(
-            "small.en",
+            os.environ.get("WHISPERX_MODEL", "medium.en"),
             device="cpu",
             compute_type="int8",
             asr_options={
                 "suppress_blank": True,
                 "suppress_tokens": [-1],
                 "initial_prompt": build_medical_asr_prompt(),
+                "condition_on_previous_text": True,
+                "temperature": 0.0,
             }
         )
 
@@ -243,11 +272,18 @@ class ASREngine:
             logger.info("Step 1: Transcribing...")
             t0 = time.time()
 
+            asr_audio = _preprocess_audio_for_asr(audio)
+
             result = self.wx_model.transcribe(
-                audio,
+                asr_audio,
                 language="en",
                 batch_size=8,
                 print_progress=False,
+                vad_filter=True,
+                vad_parameters={
+                    "min_silence_duration_ms": 280,
+                    "speech_pad_ms": 240,
+                },
             )
 
             if not result.get("segments"):
@@ -264,7 +300,7 @@ class ASREngine:
                 result["segments"],
                 self.wx_align_model,
                 self.wx_metadata,
-                audio,
+                asr_audio,
                 device=DEVICE,
                 return_char_alignments=False,
             )

@@ -1,0 +1,610 @@
+Alvyto Voice Transcription + Summary Evaluation
+Generated at: 2026-04-19T09:51:48
+
+=== Case 1: unseen-1 ===
+session_id: voice-eval-1776572459-0-82d3e7
+recording_path: /Users/kathandesai/alvyto/room-agent/recordings/alvyto_audio_voice-eval-1776572459-0-82d3e7.raw
+recording_file_exists_after_pipeline: False
+transcription_similarity_vs_script: 0.705
+
+[Generated Script]
+Doctor: Hello Rina Kapoor, this is Dr. Kavya Shah. Tell me what changed this week.
+Patient: For six days I get burning in upper abdomen after spicy dinner, and it wakes me after midnight around 12:45. My run marker is c18eb21c.
+Doctor: Any vomiting blood, black stool, or fainting episodes?
+Patient: No vomiting blood, no black stool, and no fainting.
+Doctor: Any trigger foods, maybe fermented pickle, tea, or heavy late meals?
+Patient: Yes, fermented pickle and late dinner definitely trigger it.
+Doctor: I will start Pantoprazole forty milligram once daily before breakfast for twenty one days.
+Doctor: Also take Domperidone ten milligram twice daily before lunch and dinner for seven days.
+Doctor: Avoid lying down for three hours after dinner and follow up in ten days with symptom notes.
+Patient: Understood. I will follow the plan and save the marker c18eb21c.
+
+[Transcription]
+Hello, Reena Kapur. This is Dr. Kavya Shah. Tell me what changed this week. For six days, I get burning in upper abdomen after spicy dinner, and it wakes me up to midnight around 12.45. My run marker is C18-Eb21C. Any vomiting blood, black stool, or fainting episodes? No vomiting blood, no black stool, and no fainting. Any trigger foods, maybe fermented pickle, tea, or heavy late meals? Yes, fermented pickle and late dinner definitely trigger it. I will Pantoprazole 40 milligram once daily before breakfast for 21 days. Domperidone 10 milligram twice daily before lunch and dinner for seven days. Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes. Understood. I will follow the plan and save the marker c18eb21c.
+
+[Summary JSON]
+{
+  "clinicalSnapshot": [
+    {
+      "label": "burning upper abdomen",
+      "category": "symptom",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "burning upper abdomen",
+      "isSupported": true
+    },
+    {
+      "label": "wakes up to midnight around 12.45",
+      "category": "timing",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "wakes up to midnight around 12.45",
+      "isSupported": true
+    },
+    {
+      "label": "trigger foods: fermented pickle, late dinner",
+      "category": "lifestyle",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "trigger foods: fermented pickle, late dinner",
+      "isSupported": true
+    },
+    {
+      "label": "Any vomiting blood",
+      "category": "warning",
+      "confidence": 0.8,
+      "status": "confirmed",
+      "evidence": "Any vomiting blood",
+      "isSupported": true
+    },
+    {
+      "label": "black stool",
+      "category": "warning",
+      "confidence": 0.8,
+      "status": "confirmed",
+      "evidence": "black stool",
+      "isSupported": true
+    }
+  ],
+  "doctorActions": [
+    {
+      "id": "09079443-dfad-4adc-ac3e-284fb6c5db4e",
+      "text": "Pantoprazole 40 milligram once daily before breakfast for 21 days.",
+      "sourceFactIds": [
+        "sf-6-0-12",
+        "sf--1--1-17"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "4ec210dc-d9e3-4e3a-ae46-e4de45bdf4f8",
+      "text": "Domperidone 10 milligram twice daily before lunch and dinner for seven days.",
+      "sourceFactIds": [
+        "sf-6-1-13",
+        "sf--1--1-18"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "db9ca0e7-bcb6-46de-937a-fa4c3ee8d81a",
+      "text": "Avoid lying down for three hours after dinner",
+      "sourceFactIds": [
+        "sf-6-2-14",
+        "sf-6-2-15",
+        "sf--1--1-19"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "c6d2dc8c-3330-4432-8f97-52574df44021",
+      "text": "Follow up in 10 days with symptom notes",
+      "sourceFactIds": [
+        "sf-6-2-14",
+        "sf-6-2-15",
+        "sf--1--1-20"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "4f7eefb4-95fc-4d70-8997-c7331ba6cf49",
+      "text": "Prescribed Pantoprazole 40 mg once daily before breakfast 21 days",
+      "sourceFactIds": [
+        "sf-6-0-12",
+        "sf--1--1-17"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "11b862f7-f1e6-41f0-b307-5fcd05ced8de",
+      "text": "Prescribed Domperidone 10 mg twice daily (before lunch and dinner) 7 days",
+      "sourceFactIds": [
+        "sf-6-1-13",
+        "sf--1--1-18"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "e263e440-73cd-40cc-8a33-4eb3f6743ea3",
+      "text": "Follow-up 10 days Symptom notes required",
+      "sourceFactIds": [
+        "sf--1--1-20",
+        "sf--1--1-21"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    }
+  ],
+  "prescriptions": [
+    {
+      "name": "Pantoprazole",
+      "dosage": "40 mg",
+      "frequency": "once daily before breakfast",
+      "isSupported": true
+    },
+    {
+      "name": "Domperidone",
+      "dosage": "10 mg",
+      "frequency": "twice daily (before lunch and dinner)",
+      "isSupported": true
+    }
+  ],
+  "prescriptionDraft": {
+    "diagnoses": [],
+    "medications": [
+      {
+        "name": "Pantoprazole",
+        "dosage": "40 mg",
+        "frequency": "once daily before breakfast",
+        "duration": "21 days",
+        "route": null,
+        "instructions": null,
+        "timingDetails": null
+      },
+      {
+        "name": "Domperidone",
+        "dosage": "10 mg",
+        "frequency": "twice daily (before lunch and dinner)",
+        "duration": "7 days",
+        "route": null,
+        "instructions": null,
+        "timingDetails": null
+      }
+    ],
+    "investigations": [],
+    "advice": [
+      "Avoid lying down for three hours after dinner",
+      "Follow up in 10 days with symptom notes"
+    ],
+    "warnings": [],
+    "reportSummary": "",
+    "followUp": {
+      "timeline": "10 days",
+      "notes": "Symptom notes required."
+    }
+  },
+  "issuesParagraph": "Reena Kapur experienced burning in her upper abdomen for six consecutive nights after consuming spicy food, particularly fermented pickle or late dinners. The symptoms would wake Reena up around midnight.",
+  "actionsParagraph": "Dr. Kavya Shah prescribed Pantoprazole and Domperidone to manage the gastrointestinal discomfort triggered by certain foods.",
+  "chiefComplaint": "burning upper abdomen",
+  "sourceFacts": [
+    {
+      "id": "sf-0-1-0",
+      "speaker": "Speaker 1",
+      "turnIndex": 0,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "This is Dr",
+      "evidence": "This is Dr",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-0-2-1",
+      "speaker": "Speaker 1",
+      "turnIndex": 0,
+      "sentenceIndex": 2,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Kavya Shah",
+      "evidence": "Kavya Shah",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-0-3-2",
+      "speaker": "Speaker 1",
+      "turnIndex": 0,
+      "sentenceIndex": 3,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Tell me what changed this week",
+      "evidence": "Tell me what changed this week",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-1-0-3",
+      "speaker": "Speaker 2",
+      "turnIndex": 1,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "For six days, I get burning in upper abdomen after spicy dinner, and it wakes me up to midnight around 12.45",
+      "evidence": "For six days, I get burning in upper abdomen after spicy dinner, and it wakes me up to midnight around 12.45",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-1-1-4",
+      "speaker": "Speaker 2",
+      "turnIndex": 1,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "My run marker is C18-Eb21C",
+      "evidence": "My run marker is C18-Eb21C",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-2-0-5",
+      "speaker": "Speaker 1",
+      "turnIndex": 2,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "Any vomiting blood",
+      "evidence": "Any vomiting blood, black stool, or fainting episodes?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-2-0-6",
+      "speaker": "Speaker 1",
+      "turnIndex": 2,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "black stool",
+      "evidence": "Any vomiting blood, black stool, or fainting episodes?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-2-0-7",
+      "speaker": "Speaker 1",
+      "turnIndex": 2,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "fainting episodes?",
+      "evidence": "Any vomiting blood, black stool, or fainting episodes?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-3-0-8",
+      "speaker": "Speaker 2",
+      "turnIndex": 3,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "No vomiting blood",
+      "evidence": "No vomiting blood, no black stool, and no fainting",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-3-0-9",
+      "speaker": "Speaker 2",
+      "turnIndex": 3,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "no black stool",
+      "evidence": "No vomiting blood, no black stool, and no fainting",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-3-0-10",
+      "speaker": "Speaker 2",
+      "turnIndex": 3,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "and no fainting",
+      "evidence": "No vomiting blood, no black stool, and no fainting",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-5-0-11",
+      "speaker": "Speaker 2",
+      "turnIndex": 5,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Yes, fermented pickle and late dinner definitely trigger it",
+      "evidence": "Yes, fermented pickle and late dinner definitely trigger it",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-6-0-12",
+      "speaker": "Speaker 1",
+      "turnIndex": 6,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Pantoprazole 40 milligram once daily before breakfast for 21 days",
+      "evidence": "Pantoprazole 40 milligram once daily before breakfast for 21 days",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-6-1-13",
+      "speaker": "Speaker 1",
+      "turnIndex": 6,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Domperidone 10 milligram twice daily before lunch and dinner for seven days",
+      "evidence": "Domperidone 10 milligram twice daily before lunch and dinner for seven days",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-6-2-14",
+      "speaker": "Speaker 1",
+      "turnIndex": 6,
+      "sentenceIndex": 2,
+      "category": "follow_up",
+      "section": "followUp",
+      "text": "Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes",
+      "evidence": "Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-6-2-15",
+      "speaker": "Speaker 1",
+      "turnIndex": 6,
+      "sentenceIndex": 2,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes",
+      "evidence": "Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-7-1-16",
+      "speaker": "Speaker 2",
+      "turnIndex": 7,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I will follow the plan and save the marker c18eb21c",
+      "evidence": "I will follow the plan and save the marker c18eb21c",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-17",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "prescription",
+      "section": "medications",
+      "text": "Pantoprazole 40 mg once daily before breakfast 21 days",
+      "evidence": "Pantoprazole 40 mg once daily before breakfast 21 days",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-18",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "prescription",
+      "section": "medications",
+      "text": "Domperidone 10 mg twice daily (before lunch and dinner) 7 days",
+      "evidence": "Domperidone 10 mg twice daily (before lunch and dinner) 7 days",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-19",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Avoid lying down for three hours after dinner",
+      "evidence": "Avoid lying down for three hours after dinner",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-20",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Follow up in 10 days with symptom notes",
+      "evidence": "Follow up in 10 days with symptom notes",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-21",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "follow_up",
+      "section": "followUp",
+      "text": "10 days Symptom notes required",
+      "evidence": "10 days Symptom notes required",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    }
+  ],
+  "sections": {
+    "historyOfPresentIllness": [
+      "burning upper abdomen"
+    ],
+    "negativeFindings": [],
+    "riskFactors": [],
+    "pastHistory": [],
+    "medicationHistory": [],
+    "allergies": [],
+    "vitals": [],
+    "examination": [],
+    "assessment": [],
+    "medications": [
+      "Pantoprazole 40 mg once daily before breakfast 21 days",
+      "Domperidone 10 mg twice daily (before lunch and dinner) 7 days"
+    ],
+    "investigations": [],
+    "carePlan": [
+      "Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes",
+      "Avoid lying down for three hours after dinner",
+      "Follow up in 10 days with symptom notes",
+      "Pantoprazole 40 milligram once daily before breakfast for 21 days",
+      "Domperidone 10 milligram twice daily before lunch and dinner for seven days",
+      "Prescribed Pantoprazole 40 mg once daily before breakfast 21 days",
+      "Prescribed Domperidone 10 mg twice daily (before lunch and dinner) 7 days",
+      "Follow-up 10 days Symptom notes required"
+    ],
+    "warnings": [
+      "Any vomiting blood",
+      "black stool",
+      "fainting episodes?",
+      "No vomiting blood",
+      "no black stool",
+      "and no fainting"
+    ],
+    "followUp": [
+      "Avoid lying down for three hours after dinner and follow up in 10 days with symptom notes",
+      "10 days Symptom notes required"
+    ],
+    "unmapped": [
+      "This is Dr",
+      "Kavya Shah",
+      "Tell me what changed this week",
+      "For six days, I get burning in upper abdomen after spicy dinner, and it wakes me up to midnight around 12.45",
+      "My run marker is C18-Eb21C",
+      "Yes, fermented pickle and late dinner definitely trigger it",
+      "Pantoprazole 40 milligram once daily before breakfast for 21 days",
+      "Domperidone 10 milligram twice daily before lunch and dinner for seven days",
+      "I will follow the plan and save the marker c18eb21c"
+    ]
+  },
+  "quality": {
+    "score": 57.63,
+    "confidence": 0.812,
+    "missingFields": [],
+    "mode": "hybrid",
+    "generatedAt": null,
+    "coverage": 0.5909,
+    "sourceFactCount": 22,
+    "mappedFactCount": 13,
+    "unmappedFactIds": [
+      "sf-0-1-0",
+      "sf-0-2-1",
+      "sf-0-3-2",
+      "sf-1-0-3",
+      "sf-1-1-4",
+      "sf-5-0-11",
+      "sf-6-0-12",
+      "sf-6-1-13",
+      "sf-7-1-16"
+    ],
+    "criticalMisses": [],
+    "sectionCounts": {
+      "historyOfPresentIllness": 1,
+      "negativeFindings": 0,
+      "riskFactors": 0,
+      "pastHistory": 0,
+      "medicationHistory": 0,
+      "allergies": 0,
+      "vitals": 0,
+      "examination": 0,
+      "assessment": 0,
+      "medications": 2,
+      "investigations": 0,
+      "carePlan": 8,
+      "warnings": 6,
+      "followUp": 2,
+      "unmapped": 9
+    }
+  },
+  "transcriptionCorrections": [
+    {
+      "turnIndex": 6,
+      "speaker": "Speaker 1",
+      "from": "I will Pantoprazole",
+      "to": "Pantoprazole",
+      "score": 0.875,
+      "reason": "context_fuzzy_medication"
+    }
+  ]
+}
+
+[Storage Checks]
+- /ws/transcribe persists raw float32 audio to room-agent/recordings during capture
+- on stop_recording, room-agent runs ASR pipeline and stores final data in completed_sessions memory
+- persistent raw file is removed after processing (if cleanup succeeds)
+- transcript+dialogue are sent to backend /api/visits/{visit_id}/progress when visit_id is provided

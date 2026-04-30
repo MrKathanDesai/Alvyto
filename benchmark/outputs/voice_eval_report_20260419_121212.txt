@@ -1,0 +1,1291 @@
+Alvyto Voice Transcription + Summary Evaluation
+Generated at: 2026-04-19T12:12:12
+
+=== Case 1: unseen-1 ===
+session_id: voice-eval-1776580806-0-e80003
+recording_path: /Users/kathandesai/alvyto/room-agent/recordings/alvyto_audio_voice-eval-1776580806-0-e80003.raw
+recording_file_exists_after_pipeline: True
+transcription_similarity_vs_script: 0.134
+visit_id: 61d00a92-f8f7-4aa0-8198-4cc3490ae5a3
+approval_result: {"id": "61d00a92-f8f7-4aa0-8198-4cc3490ae5a3", "status": "completed"}
+
+[Generated Script]
+Doctor: Good morning Riya Nair, I am Dr. Kavita Rao, your dentist today. What is bothering you?
+Patient: Since for ten days I have severe pain in my lower left wisdom area.
+Doctor: When did it start exactly and has it been constant or on and off?
+Patient: It started gradually and became worse over the last two nights. Pain is about seven out of ten now.
+Doctor: Does pain increase with hot tea or cold water?
+Patient: Yes, both make it worse, and chewing on that side is very difficult.
+Doctor: Do you also get spontaneous throbbing pain that wakes you at night?
+Patient: Yes, especially after midnight. I had to wake up and rinse with warm water.
+Doctor: Any swelling on face, fever, bad taste, or pus discharge near the tooth?
+Patient: There is mild gum swelling and a bad taste, but no fever.
+Doctor: Any difficulty opening mouth or swallowing?
+Patient: Mouth opening is slightly painful but I can swallow normally.
+Doctor: Have you taken any medicine yourself for this pain?
+Patient: I took ibuprofen four hundred twice yesterday and one dose this morning. Relief lasted only two to three hours.
+Doctor: Any known allergy to antibiotics, pain medicines, or local anesthesia injections?
+Patient: No known drug allergy. I have had dental injection before without reaction.
+Doctor: Are you pregnant, breastfeeding, diabetic, or on blood thinner medications?
+Patient: Not pregnant, not breastfeeding, no diabetes, and no blood thinners.
+Doctor: Do you have history of acidity, kidney issues, asthma, or ulcers?
+Patient: I have occasional acidity, no kidney disease, no asthma, and no ulcers.
+Doctor: I will examine now. Please open your mouth wide.
+Doctor: I can see deep decay on the lower right first molar, tenderness on tapping, and gum inflammation around it.
+Doctor: There is no large facial cellulitis, but this tooth is likely acutely infected pulp with apical inflammation.
+Patient: Is this a root canal case, or will the tooth need removal?
+Doctor: Most likely root canal treatment can save the tooth if the remaining structure is strong.
+Doctor: I recommend an intraoral periapical X-ray today to check root and surrounding bone.
+Patient: Okay, please do the X-ray.
+Doctor: X-ray confirms deep caries reaching pulp and widening near root tip. Tooth is restorable.
+Doctor: Plan is: first emergency pain relief and drainage from canal, then complete root canal in two to three sittings.
+Patient: Can we start treatment today? I have an important meeting tomorrow.
+Doctor: Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing.
+Doctor: For medicines: Amoxicillin clavulanate six hundred twenty five milligram three times daily after food for five days.
+Doctor: If penicillin intolerance develops, stop and call us immediately.
+Doctor: For pain: Ibuprofen plus paracetamol combination every eight hours only as needed, maximum three doses per day.
+Doctor: Because you have acidity, take Pantoprazole forty milligram once daily before breakfast for five days.
+Patient: Should I avoid chewing completely on that side?
+Doctor: Yes, avoid chewing on the treated side for forty eight hours and avoid very hot, very cold, and sticky food.
+Doctor: Maintain oral hygiene: soft brushing, gentle flossing, and warm saline rinse three to four times daily.
+Patient: Any warning signs where I should come back urgently?
+Doctor: Yes. Return urgently for increasing facial swelling, fever above one hundred point four Fahrenheit, trouble swallowing, or reduced mouth opening.
+Doctor: Also return if pain is worsening after twenty four hours despite medicines.
+Patient: Understood. Please repeat follow-up timing.
+Doctor: Follow-up in forty eight hours for reassessment and second root canal sitting. Your run marker is dental fb1186a06c.
+Patient: Got it. I will come in two days. Marker noted as dental fb1186a06c.
+
+[Transcription]
+Good morning, Rhian Iyer. I am Dr. Kavita Rao, your dentist today. What is bothering you? Since for 10 days, I have severe pain in my lower left wisdom area. When did it start exactly and has it been constant or on and off? It started gradually and became worse over the last two nights. Pain is about 7 out of 10 now. Does pain increase with hot tea or cold water? Yes. Both make it worse, and chewing on that side is very difficult. Do you also get spontaneous throbbing pain that wakes you at night? Yes, especially after midnight. I had to wake up and rinse with warm water. Any swelling on face, fever, bad taste, or pus discharge near the tooth? There is mild gum swelling and a bad taste, but no fever. Any difficulty opening mouth or swallowing? Mouth opening is slightly painful, but I can swallow normally. Have you taken any medicine yourself for this pain? Ibuprofen 400 twice yesterday and one dose this morning. Relief lasted only two to three hours. Any known allergy to antibiotics, pain medicines, or local anesthesia injections? No known drug allergy. I have had dental injection before without reaction. Are you pregnant, breastfeeding, diabetic, or on blood thinner medications? Not pregnant, not breastfeeding, no diabetes, and no blood thinners. Do you have history of acidity, kidney issues, asthma, or ulcers? I have occasional acidity, no kidney disease, no asthma, and no ulcers. I will examine now. Please open your mouth wide. I can see deque decay on the lower right first molar, tenderness on tapping, and gum inflammation around it. There is no large facial cellulitis, but this tooth is likely a cutely infected pulp with apical inflammation. Is this a root canal case, or will the tooth need removal? Most likely root canal treatment can save the tooth if the remaining structure is strong. I recommend an intraoral periapical x-ray today to check root and surrounding bone. Okay, please do the x-ray. X-ray confirms deep caries reaching pulp and widening near root tip. Tooth is restorable. Plan is, first emergency pain relief and drainage from canal, then complete root canal in two to three sittings. Can we start treatment today? I have an important meeting tomorrow. Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing. For medicines, amoxicillin clavulanate 625 mg 3 times daily after food for 5 days. If penicillin intolerance develops, stop and call us immediately. For pain, ibuprofen plus paracetamol combination every 8 hours only is needed. Maximum 3 doses per day. Because you have acidity, Pantoprazole 40mg once daily before breakfast for 5 days. Should I avoid chewing completely on that side? Yes, avoid chewing on the treated side for 48 hours and avoid very hot, very cold, and sticky food. Maintain oral hygiene, soft brushing, gentle flossing, and warm saline rinse three to four times daily. Any warning signs where I should come back urgently? Yes, return urgently for increasing facial swelling, fever above 100.4 Fahrenheit, trouble swallowing, or reduced mouth opening. Also return if pain is worsening after 24 hours despite medicines. Understood. Please repeat follow-up timing. Follow up in 48 hours for reassessment and second route canal sitting. Your run marker is dental FB1186A06C. Got it. I will come in two days. Marker noted as dental FB1186A06C.
+
+[Summary JSON]
+{
+  "clinicalSnapshot": [
+    {
+      "label": "timing",
+      "category": "symptom",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "timing",
+      "isSupported": true
+    },
+    {
+      "label": "negative",
+      "category": "symptom",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "negative",
+      "isSupported": true
+    },
+    {
+      "label": "action",
+      "category": "symptom",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "action",
+      "isSupported": true
+    },
+    {
+      "label": "warning",
+      "category": "symptom",
+      "confidence": 0.82,
+      "status": "confirmed",
+      "evidence": "warning",
+      "isSupported": true
+    },
+    {
+      "label": "first emergency pain relief and drainage from canal",
+      "category": "warning",
+      "confidence": 0.8,
+      "status": "confirmed",
+      "evidence": "first emergency pain relief and drainage from canal",
+      "isSupported": true
+    },
+    {
+      "label": "Any warning signs where I should come back urgently?",
+      "category": "warning",
+      "confidence": 0.8,
+      "status": "confirmed",
+      "evidence": "Any warning signs where I should come back urgently?",
+      "isSupported": true
+    }
+  ],
+  "doctorActions": [
+    {
+      "id": "2710dd30-672d-4ee5-b324-ca3f9727b112",
+      "text": "Examine patient",
+      "sourceFactIds": [],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "38521fe4-442b-4cfa-94c4-9e76cf8f723b",
+      "text": "Open access for treatment today",
+      "sourceFactIds": [],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "2c1c0b6d-b290-4f01-a703-5d823f211377",
+      "text": "Prescribed Amoxicillin Clavulanate 625 mg 3 times daily after food 5 days",
+      "sourceFactIds": [
+        "sf-26-1-31",
+        "sf--1--1-49"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "72596737-0684-4379-b4f5-aceba013b58d",
+      "text": "Prescribed Ibuprofen Plus Paracetamol Combination every 8 hours only, maximum 3 doses per day",
+      "sourceFactIds": [
+        "sf-26-3-33",
+        "sf-26-4-34",
+        "sf--1--1-50"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "41460eda-b942-4c21-bd91-471ff17e45a5",
+      "text": "Prescribed Pantoprazole 40mg once daily before breakfast for 5 days",
+      "sourceFactIds": [
+        "sf-26-5-35",
+        "sf--1--1-51"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "f5eb3f54-3c83-4de8-b4b9-757e12994a34",
+      "text": "Ordered intraoral periapical x-ray today to check root and surrounding bone",
+      "sourceFactIds": [
+        "sf-22-1-23",
+        "sf-22-1-24",
+        "sf--1--1-52"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "06f90bfd-bcf9-473b-b3d2-5b0bc6316d27",
+      "text": "Avoid chewing on treated side for 48 hours",
+      "sourceFactIds": [
+        "sf-28-0-37",
+        "sf--1--1-53"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "2f12dbb6-4716-47fd-9165-8858fb131859",
+      "text": "Maintain oral hygiene, soft brushing, gentle flossing, warm saline rinse three to four times daily",
+      "sourceFactIds": [
+        "sf-28-1-39",
+        "sf--1--1-54"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "073cfad9-9eb8-4861-9fb2-3c71646bca7b",
+      "text": "Warning signs discussed: increasing facial swelling",
+      "sourceFactIds": [
+        "sf--1--1-55"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    },
+    {
+      "id": "20662258-f0d7-4de4-921b-9ae19c40e473",
+      "text": "Warning signs discussed: fever above 100.4 Fahrenheit",
+      "sourceFactIds": [
+        "sf--1--1-56"
+      ],
+      "isEdited": false,
+      "isSupported": true
+    }
+  ],
+  "prescriptions": [
+    {
+      "name": "Amoxicillin Clavulanate",
+      "dosage": "625 mg",
+      "frequency": "3 times daily after food",
+      "isSupported": true
+    },
+    {
+      "name": "Ibuprofen Plus Paracetamol Combination",
+      "dosage": null,
+      "frequency": "every 8 hours only, maximum 3 doses per day",
+      "isSupported": true
+    },
+    {
+      "name": "Pantoprazole",
+      "dosage": "40mg",
+      "frequency": "once daily before breakfast for 5 days",
+      "isSupported": true
+    }
+  ],
+  "prescriptionDraft": {
+    "diagnoses": [],
+    "medications": [
+      {
+        "name": "Amoxicillin Clavulanate",
+        "dosage": "625 mg",
+        "frequency": "3 times daily after food",
+        "duration": "5 days",
+        "route": null,
+        "instructions": null,
+        "timingDetails": null
+      },
+      {
+        "name": "Ibuprofen Plus Paracetamol Combination",
+        "dosage": null,
+        "frequency": "every 8 hours only, maximum 3 doses per day",
+        "duration": null,
+        "route": null,
+        "instructions": null,
+        "timingDetails": null
+      },
+      {
+        "name": "Pantoprazole",
+        "dosage": "40mg",
+        "frequency": "once daily before breakfast for 5 days",
+        "duration": null,
+        "route": null,
+        "instructions": null,
+        "timingDetails": null
+      }
+    ],
+    "investigations": [
+      {
+        "name": "intraoral periapical x-ray",
+        "details": "today to check root and surrounding bone",
+        "timing": null
+      }
+    ],
+    "advice": [
+      "Avoid chewing on treated side for 48 hours",
+      "Maintain oral hygiene, soft brushing, gentle flossing, warm saline rinse three to four times daily"
+    ],
+    "warnings": [
+      "increasing facial swelling",
+      "fever above 100.4 Fahrenheit",
+      "trouble swallowing",
+      "reduced mouth opening"
+    ],
+    "reportSummary": "",
+    "followUp": {
+      "timeline": "48 hours for reassessment and second route canal sitting",
+      "notes": null
+    }
+  },
+  "issuesParagraph": "Rhian Iyer has been experiencing severe pain in the lower left wisdom area, which started gradually and worsened over two nights. The patient also experiences spontaneous throbbing pain at night that wakes them up.",
+  "actionsParagraph": "Dr. Kavita Rao examined Rhian's mouth to find deque decay on a molar with tenderness upon tapping; she recommended an x-ray for further assessment.",
+  "chiefComplaint": "",
+  "sourceFacts": [
+    {
+      "id": "sf-0-1-0",
+      "speaker": "Speaker 1",
+      "turnIndex": 0,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I am Dr",
+      "evidence": "I am Dr",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-0-2-1",
+      "speaker": "Speaker 1",
+      "turnIndex": 0,
+      "sentenceIndex": 2,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Kavita Rao, your dentist today",
+      "evidence": "Kavita Rao, your dentist today",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-1-0-2",
+      "speaker": "Speaker 2",
+      "turnIndex": 1,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Since for 10 days, I have severe pain in my lower left wisdom area",
+      "evidence": "Since for 10 days, I have severe pain in my lower left wisdom area",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-2-0-3",
+      "speaker": "Speaker 1",
+      "turnIndex": 2,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "When did it start exactly and has it been constant or on and off?",
+      "evidence": "When did it start exactly and has it been constant or on and off?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-3-0-4",
+      "speaker": "Speaker 2",
+      "turnIndex": 3,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "It started gradually and became worse over the last two nights",
+      "evidence": "It started gradually and became worse over the last two nights",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-3-1-5",
+      "speaker": "Speaker 2",
+      "turnIndex": 3,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Pain is about 7 out of 10 now",
+      "evidence": "Pain is about 7 out of 10 now",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-5-1-6",
+      "speaker": "Speaker 2",
+      "turnIndex": 5,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Both make it worse, and chewing on that side is very difficult",
+      "evidence": "Both make it worse, and chewing on that side is very difficult",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-7-0-7",
+      "speaker": "Speaker 2",
+      "turnIndex": 7,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Yes, especially after midnight",
+      "evidence": "Yes, especially after midnight",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-7-1-8",
+      "speaker": "Speaker 2",
+      "turnIndex": 7,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I had to wake up and rinse with warm water",
+      "evidence": "I had to wake up and rinse with warm water",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-9-0-9",
+      "speaker": "Speaker 2",
+      "turnIndex": 9,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "There is mild gum swelling and a bad taste, but no fever",
+      "evidence": "There is mild gum swelling and a bad taste, but no fever",
+      "status": "denied",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-11-0-10",
+      "speaker": "Speaker 2",
+      "turnIndex": 11,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Mouth opening is slightly painful, but I can swallow normally",
+      "evidence": "Mouth opening is slightly painful, but I can swallow normally",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-13-0-11",
+      "speaker": "Speaker 2",
+      "turnIndex": 13,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Ibuprofen 400 twice yesterday and one dose this morning",
+      "evidence": "Ibuprofen 400 twice yesterday and one dose this morning",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-13-1-12",
+      "speaker": "Speaker 2",
+      "turnIndex": 13,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Relief lasted only two to three hours",
+      "evidence": "Relief lasted only two to three hours",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-15-0-13",
+      "speaker": "Speaker 2",
+      "turnIndex": 15,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "No known drug allergy",
+      "evidence": "No known drug allergy",
+      "status": "denied",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-15-1-14",
+      "speaker": "Speaker 2",
+      "turnIndex": 15,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I have had dental injection before without reaction",
+      "evidence": "I have had dental injection before without reaction",
+      "status": "denied",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-17-0-15",
+      "speaker": "Speaker 2",
+      "turnIndex": 17,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Not pregnant, not breastfeeding, no diabetes, and no blood thinners",
+      "evidence": "Not pregnant, not breastfeeding, no diabetes, and no blood thinners",
+      "status": "denied",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-19-0-16",
+      "speaker": "Speaker 2",
+      "turnIndex": 19,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I have occasional acidity, no kidney disease, no asthma, and no ulcers",
+      "evidence": "I have occasional acidity, no kidney disease, no asthma, and no ulcers",
+      "status": "denied",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-20-0-17",
+      "speaker": "Speaker 1",
+      "turnIndex": 20,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I will examine now",
+      "evidence": "I will examine now",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-20-1-18",
+      "speaker": "Speaker 1",
+      "turnIndex": 20,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Please open your mouth wide",
+      "evidence": "Please open your mouth wide",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-20-2-19",
+      "speaker": "Speaker 1",
+      "turnIndex": 20,
+      "sentenceIndex": 2,
+      "category": "exam",
+      "section": "examination",
+      "text": "tenderness on tapping",
+      "evidence": "I can see deque decay on the lower right first molar, tenderness on tapping, and gum inflammation around it",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-20-3-20",
+      "speaker": "Speaker 1",
+      "turnIndex": 20,
+      "sentenceIndex": 3,
+      "category": "assessment",
+      "section": "assessment",
+      "text": "There is no large facial cellulitis",
+      "evidence": "There is no large facial cellulitis, but this tooth is likely a cutely infected pulp with apical inflammation",
+      "status": "denied",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-20-3-21",
+      "speaker": "Speaker 1",
+      "turnIndex": 20,
+      "sentenceIndex": 3,
+      "category": "assessment",
+      "section": "assessment",
+      "text": "but this tooth is likely a cutely infected pulp with apical inflammation",
+      "evidence": "There is no large facial cellulitis, but this tooth is likely a cutely infected pulp with apical inflammation",
+      "status": "probable",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-22-0-22",
+      "speaker": "Speaker 1",
+      "turnIndex": 22,
+      "sentenceIndex": 0,
+      "category": "assessment",
+      "section": "assessment",
+      "text": "Most likely root canal treatment can save the tooth if the remaining structure is strong",
+      "evidence": "Most likely root canal treatment can save the tooth if the remaining structure is strong",
+      "status": "probable",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-22-1-23",
+      "speaker": "Speaker 1",
+      "turnIndex": 22,
+      "sentenceIndex": 1,
+      "category": "investigation",
+      "section": "investigations",
+      "text": "I recommend an intraoral periapical x-ray today to check root",
+      "evidence": "I recommend an intraoral periapical x-ray today to check root and surrounding bone",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-22-1-24",
+      "speaker": "Speaker 1",
+      "turnIndex": 22,
+      "sentenceIndex": 1,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "I recommend an intraoral periapical x-ray today to check root and surrounding bone",
+      "evidence": "I recommend an intraoral periapical x-ray today to check root and surrounding bone",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-24-0-25",
+      "speaker": "Speaker 1",
+      "turnIndex": 24,
+      "sentenceIndex": 0,
+      "category": "investigation",
+      "section": "investigations",
+      "text": "X-ray confirms deep caries reaching pulp",
+      "evidence": "X-ray confirms deep caries reaching pulp and widening near root tip",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-24-1-26",
+      "speaker": "Speaker 1",
+      "turnIndex": 24,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Tooth is restorable",
+      "evidence": "Tooth is restorable",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-24-2-27",
+      "speaker": "Speaker 1",
+      "turnIndex": 24,
+      "sentenceIndex": 2,
+      "category": "warning",
+      "section": "warnings",
+      "text": "first emergency pain relief and drainage from canal",
+      "evidence": "Plan is, first emergency pain relief and drainage from canal, then complete root canal in two to three sittings",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-25-0-28",
+      "speaker": "Speaker 2",
+      "turnIndex": 25,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Can we start treatment today?",
+      "evidence": "Can we start treatment today?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-25-1-29",
+      "speaker": "Speaker 2",
+      "turnIndex": 25,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I have an important meeting tomorrow",
+      "evidence": "I have an important meeting tomorrow",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-26-0-30",
+      "speaker": "Speaker 1",
+      "turnIndex": 26,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing",
+      "evidence": "Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-26-1-31",
+      "speaker": "Speaker 1",
+      "turnIndex": 26,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "For medicines, amoxicillin clavulanate 625 mg 3 times daily after food for 5 days",
+      "evidence": "For medicines, amoxicillin clavulanate 625 mg 3 times daily after food for 5 days",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-26-2-32",
+      "speaker": "Speaker 1",
+      "turnIndex": 26,
+      "sentenceIndex": 2,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "If penicillin intolerance develops, stop and call us immediately",
+      "evidence": "If penicillin intolerance develops, stop and call us immediately",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-26-3-33",
+      "speaker": "Speaker 1",
+      "turnIndex": 26,
+      "sentenceIndex": 3,
+      "category": "other",
+      "section": "unmapped",
+      "text": "For pain, ibuprofen plus paracetamol combination every 8 hours only is needed",
+      "evidence": "For pain, ibuprofen plus paracetamol combination every 8 hours only is needed",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-26-4-34",
+      "speaker": "Speaker 1",
+      "turnIndex": 26,
+      "sentenceIndex": 4,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Maximum 3 doses per day",
+      "evidence": "Maximum 3 doses per day",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-26-5-35",
+      "speaker": "Speaker 1",
+      "turnIndex": 26,
+      "sentenceIndex": 5,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Because you have acidity, Pantoprazole 40mg once daily before breakfast for 5 days",
+      "evidence": "Because you have acidity, Pantoprazole 40mg once daily before breakfast for 5 days",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-27-0-36",
+      "speaker": "Speaker 2",
+      "turnIndex": 27,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Should I avoid chewing completely on that side?",
+      "evidence": "Should I avoid chewing completely on that side?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-28-0-37",
+      "speaker": "Speaker 1",
+      "turnIndex": 28,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "avoid chewing on the treated side for 48 hours",
+      "evidence": "Yes, avoid chewing on the treated side for 48 hours and avoid very hot, very cold, and sticky food",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-28-0-38",
+      "speaker": "Speaker 1",
+      "turnIndex": 28,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "avoid very hot",
+      "evidence": "Yes, avoid chewing on the treated side for 48 hours and avoid very hot, very cold, and sticky food",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-28-1-39",
+      "speaker": "Speaker 1",
+      "turnIndex": 28,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Maintain oral hygiene, soft brushing, gentle flossing, and warm saline rinse three to four times daily",
+      "evidence": "Maintain oral hygiene, soft brushing, gentle flossing, and warm saline rinse three to four times daily",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-29-0-40",
+      "speaker": "Speaker 2",
+      "turnIndex": 29,
+      "sentenceIndex": 0,
+      "category": "warning",
+      "section": "warnings",
+      "text": "Any warning signs where I should come back urgently?",
+      "evidence": "Any warning signs where I should come back urgently?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-29-0-41",
+      "speaker": "Speaker 2",
+      "turnIndex": 29,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Any warning signs where I should come back urgently?",
+      "evidence": "Any warning signs where I should come back urgently?",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-30-0-42",
+      "speaker": "Speaker 1",
+      "turnIndex": 30,
+      "sentenceIndex": 0,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Yes, return urgently for increasing facial swelling, fever above 100.4 Fahrenheit, trouble swallowing, or reduced mouth opening",
+      "evidence": "Yes, return urgently for increasing facial swelling, fever above 100.4 Fahrenheit, trouble swallowing, or reduced mouth opening",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-30-1-43",
+      "speaker": "Speaker 1",
+      "turnIndex": 30,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Also return if pain is worsening after 24 hours despite medicines",
+      "evidence": "Also return if pain is worsening after 24 hours despite medicines",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-31-1-44",
+      "speaker": "Speaker 2",
+      "turnIndex": 31,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Please repeat follow-up timing",
+      "evidence": "Please repeat follow-up timing",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-32-0-45",
+      "speaker": "Speaker 1",
+      "turnIndex": 32,
+      "sentenceIndex": 0,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Follow up in 48 hours for reassessment and second route canal sitting",
+      "evidence": "Follow up in 48 hours for reassessment and second route canal sitting",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf-32-1-46",
+      "speaker": "Speaker 1",
+      "turnIndex": 32,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Your run marker is dental FB1186A06C",
+      "evidence": "Your run marker is dental FB1186A06C",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-33-1-47",
+      "speaker": "Speaker 2",
+      "turnIndex": 33,
+      "sentenceIndex": 1,
+      "category": "other",
+      "section": "unmapped",
+      "text": "I will come in two days",
+      "evidence": "I will come in two days",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf-33-2-48",
+      "speaker": "Speaker 2",
+      "turnIndex": 33,
+      "sentenceIndex": 2,
+      "category": "other",
+      "section": "unmapped",
+      "text": "Marker noted as dental FB1186A06C",
+      "evidence": "Marker noted as dental FB1186A06C",
+      "status": "confirmed",
+      "confidence": 0.58,
+      "mapped": false,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-49",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "prescription",
+      "section": "medications",
+      "text": "Amoxicillin Clavulanate 625 mg 3 times daily after food 5 days",
+      "evidence": "Amoxicillin Clavulanate 625 mg 3 times daily after food 5 days",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-50",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "prescription",
+      "section": "medications",
+      "text": "Ibuprofen Plus Paracetamol Combination every 8 hours only, maximum 3 doses per day",
+      "evidence": "Ibuprofen Plus Paracetamol Combination every 8 hours only, maximum 3 doses per day",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-51",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "prescription",
+      "section": "medications",
+      "text": "Pantoprazole 40mg once daily before breakfast for 5 days",
+      "evidence": "Pantoprazole 40mg once daily before breakfast for 5 days",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-52",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "investigation",
+      "section": "investigations",
+      "text": "intraoral periapical x-ray today to check root and surrounding bone",
+      "evidence": "intraoral periapical x-ray today to check root and surrounding bone",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-53",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Avoid chewing on treated side for 48 hours",
+      "evidence": "Avoid chewing on treated side for 48 hours",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-54",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "advice",
+      "section": "carePlan",
+      "text": "Maintain oral hygiene, soft brushing, gentle flossing, warm saline rinse three to four times daily",
+      "evidence": "Maintain oral hygiene, soft brushing, gentle flossing, warm saline rinse three to four times daily",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-55",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "warning",
+      "section": "warnings",
+      "text": "increasing facial swelling",
+      "evidence": "increasing facial swelling",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-56",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "warning",
+      "section": "warnings",
+      "text": "fever above 100.4 Fahrenheit",
+      "evidence": "fever above 100.4 Fahrenheit",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-57",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "warning",
+      "section": "warnings",
+      "text": "trouble swallowing",
+      "evidence": "trouble swallowing",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-58",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "warning",
+      "section": "warnings",
+      "text": "reduced mouth opening",
+      "evidence": "reduced mouth opening",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    },
+    {
+      "id": "sf--1--1-59",
+      "speaker": "Doctor",
+      "turnIndex": -1,
+      "sentenceIndex": -1,
+      "category": "follow_up",
+      "section": "followUp",
+      "text": "48 hours for reassessment and second route canal sitting",
+      "evidence": "48 hours for reassessment and second route canal sitting",
+      "status": "confirmed",
+      "confidence": 0.86,
+      "mapped": true,
+      "isSupported": true
+    }
+  ],
+  "sections": {
+    "historyOfPresentIllness": [],
+    "negativeFindings": [],
+    "riskFactors": [],
+    "pastHistory": [],
+    "medicationHistory": [],
+    "allergies": [],
+    "vitals": [],
+    "examination": [
+      "tenderness on tapping"
+    ],
+    "assessment": [
+      "There is no large facial cellulitis",
+      "but this tooth is likely a cutely infected pulp with apical inflammation",
+      "Most likely root canal treatment can save the tooth if the remaining structure is strong"
+    ],
+    "medications": [
+      "Amoxicillin Clavulanate 625 mg 3 times daily after food 5 days",
+      "Ibuprofen Plus Paracetamol Combination every 8 hours only, maximum 3 doses per day",
+      "Pantoprazole 40mg once daily before breakfast for 5 days"
+    ],
+    "investigations": [
+      "I recommend an intraoral periapical x-ray today to check root",
+      "X-ray confirms deep caries reaching pulp",
+      "intraoral periapical x-ray today to check root and surrounding bone"
+    ],
+    "carePlan": [
+      "When did it start exactly and has it been constant or on and off?",
+      "I recommend an intraoral periapical x-ray today to check root and surrounding bone",
+      "Can we start treatment today?",
+      "Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing",
+      "If penicillin intolerance develops, stop and call us immediately",
+      "Should I avoid chewing completely on that side?",
+      "avoid chewing on the treated side for 48 hours",
+      "avoid very hot",
+      "Any warning signs where I should come back urgently?",
+      "Follow up in 48 hours for reassessment and second route canal sitting",
+      "Avoid chewing on treated side for 48 hours",
+      "Maintain oral hygiene, soft brushing, gentle flossing, warm saline rinse three to four times daily",
+      "Examine patient",
+      "Open access for treatment today",
+      "Prescribed Amoxicillin Clavulanate 625 mg 3 times daily after food 5 days",
+      "Prescribed Ibuprofen Plus Paracetamol Combination every 8 hours only, maximum 3 doses per day",
+      "Prescribed Pantoprazole 40mg once daily before breakfast for 5 days",
+      "Ordered intraoral periapical x-ray today to check root and surrounding bone",
+      "Warning signs discussed: increasing facial swelling",
+      "Warning signs discussed: fever above 100.4 Fahrenheit"
+    ],
+    "warnings": [
+      "first emergency pain relief and drainage from canal",
+      "Any warning signs where I should come back urgently?",
+      "increasing facial swelling",
+      "fever above 100.4 Fahrenheit",
+      "trouble swallowing",
+      "reduced mouth opening"
+    ],
+    "followUp": [
+      "48 hours for reassessment and second route canal sitting"
+    ],
+    "unmapped": [
+      "I am Dr",
+      "Kavita Rao, your dentist today",
+      "Since for 10 days, I have severe pain in my lower left wisdom area",
+      "It started gradually and became worse over the last two nights",
+      "Pain is about 7 out of 10 now",
+      "Both make it worse, and chewing on that side is very difficult",
+      "Yes, especially after midnight",
+      "I had to wake up and rinse with warm water",
+      "There is mild gum swelling and a bad taste, but no fever",
+      "Mouth opening is slightly painful, but I can swallow normally",
+      "Ibuprofen 400 twice yesterday and one dose this morning",
+      "Relief lasted only two to three hours",
+      "No known drug allergy",
+      "I have had dental injection before without reaction",
+      "Not pregnant, not breastfeeding, no diabetes, and no blood thinners",
+      "I have occasional acidity, no kidney disease, no asthma, and no ulcers",
+      "I will examine now",
+      "Please open your mouth wide",
+      "Tooth is restorable",
+      "I have an important meeting tomorrow",
+      "For medicines, amoxicillin clavulanate 625 mg 3 times daily after food for 5 days",
+      "For pain, ibuprofen plus paracetamol combination every 8 hours only is needed",
+      "Maximum 3 doses per day",
+      "Because you have acidity, Pantoprazole 40mg once daily before breakfast for 5 days",
+      "Maintain oral hygiene, soft brushing, gentle flossing, and warm saline rinse three to four times daily",
+      "Yes, return urgently for increasing facial swelling, fever above 100.4 Fahrenheit, trouble swallowing, or reduced mouth opening",
+      "Also return if pain is worsening after 24 hours despite medicines",
+      "Please repeat follow-up timing",
+      "Your run marker is dental FB1186A06C",
+      "I will come in two days",
+      "Marker noted as dental FB1186A06C"
+    ]
+  },
+  "quality": {
+    "score": 46.53,
+    "confidence": 0.8133,
+    "missingFields": [
+      "chiefComplaint"
+    ],
+    "mode": "hybrid",
+    "generatedAt": null,
+    "coverage": 0.4833,
+    "sourceFactCount": 60,
+    "mappedFactCount": 29,
+    "unmappedFactIds": [
+      "sf-0-1-0",
+      "sf-0-2-1",
+      "sf-1-0-2",
+      "sf-3-0-4",
+      "sf-3-1-5",
+      "sf-5-1-6",
+      "sf-7-0-7",
+      "sf-7-1-8",
+      "sf-9-0-9",
+      "sf-11-0-10",
+      "sf-13-0-11",
+      "sf-13-1-12",
+      "sf-15-0-13",
+      "sf-15-1-14",
+      "sf-17-0-15",
+      "sf-19-0-16",
+      "sf-20-0-17",
+      "sf-20-1-18",
+      "sf-24-1-26",
+      "sf-25-1-29",
+      "sf-26-1-31",
+      "sf-26-3-33",
+      "sf-26-4-34",
+      "sf-26-5-35",
+      "sf-28-1-39",
+      "sf-30-0-42",
+      "sf-30-1-43",
+      "sf-31-1-44",
+      "sf-32-1-46",
+      "sf-33-1-47",
+      "sf-33-2-48"
+    ],
+    "criticalMisses": [],
+    "sectionCounts": {
+      "historyOfPresentIllness": 0,
+      "negativeFindings": 0,
+      "riskFactors": 0,
+      "pastHistory": 0,
+      "medicationHistory": 0,
+      "allergies": 0,
+      "vitals": 0,
+      "examination": 1,
+      "assessment": 3,
+      "medications": 3,
+      "investigations": 3,
+      "carePlan": 20,
+      "warnings": 6,
+      "followUp": 1,
+      "unmapped": 31
+    }
+  },
+  "transcriptionCorrections": []
+}
+
+[Storage Checks]
+- /ws/transcribe persists raw float32 audio to room-agent/recordings during capture
+- on stop_recording, room-agent runs ASR pipeline and stores final data in completed_sessions memory
+- persistent raw file is removed after processing (if cleanup succeeds)
+- transcript+dialogue are sent to backend /api/visits/{visit_id}/progress when visit_id is provided

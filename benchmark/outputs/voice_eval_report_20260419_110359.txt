@@ -1,0 +1,123 @@
+Alvyto Voice Transcription + Summary Evaluation
+Generated at: 2026-04-19T11:03:59
+
+=== Case 1: unseen-1 ===
+session_id: voice-eval-1776576763-0-6ba655
+recording_path: /Users/kathandesai/alvyto/room-agent/recordings/alvyto_audio_voice-eval-1776576763-0-6ba655.raw
+recording_file_exists_after_pipeline: False
+transcription_similarity_vs_script: 0.714
+visit_id: 65bdbdc5-28b3-49de-8234-6e9e7987f117
+
+[Generated Script]
+Doctor: Good morning Riya Nair, I am Dr. Meera Sethi, your dentist today. What is bothering you?
+Patient: Since for one week I have severe pain in my lower left wisdom area.
+Doctor: When did it start exactly and has it been constant or on and off?
+Patient: It started gradually and became worse over the last two nights. Pain is about seven out of ten now.
+Doctor: Does pain increase with hot tea or cold water?
+Patient: Yes, both make it worse, and chewing on that side is very difficult.
+Doctor: Do you also get spontaneous throbbing pain that wakes you at night?
+Patient: Yes, especially after midnight. I had to wake up and rinse with warm water.
+Doctor: Any swelling on face, fever, bad taste, or pus discharge near the tooth?
+Patient: There is mild gum swelling and a bad taste, but no fever.
+Doctor: Any difficulty opening mouth or swallowing?
+Patient: Mouth opening is slightly painful but I can swallow normally.
+Doctor: Have you taken any medicine yourself for this pain?
+Patient: I took mefenamic acid twice yesterday and one dose this morning. Relief lasted only two to three hours.
+Doctor: Any known allergy to antibiotics, pain medicines, or local anesthesia injections?
+Patient: No known drug allergy. I have had dental injection before without reaction.
+Doctor: Are you pregnant, breastfeeding, diabetic, or on blood thinner medications?
+Patient: Not pregnant, not breastfeeding, no diabetes, and no blood thinners.
+Doctor: Do you have history of acidity, kidney issues, asthma, or ulcers?
+Patient: I have occasional acidity, no kidney disease, no asthma, and no ulcers.
+Doctor: I will examine now. Please open your mouth wide.
+Doctor: I can see deep decay on the lower right first molar, tenderness on tapping, and gum inflammation around it.
+Doctor: There is no large facial cellulitis, but this tooth is likely acutely infected pulp with apical inflammation.
+Patient: Is this a root canal case, or will the tooth need removal?
+Doctor: Most likely root canal treatment can save the tooth if the remaining structure is strong.
+Doctor: I recommend an intraoral periapical X-ray today to check root and surrounding bone.
+Patient: Okay, please do the X-ray.
+Doctor: X-ray confirms deep caries reaching pulp and widening near root tip. Tooth is restorable.
+Doctor: Plan is: first emergency pain relief and drainage from canal, then complete root canal in two to three sittings.
+Patient: Can we start treatment today? I have an important meeting tomorrow.
+Doctor: Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing.
+Doctor: For medicines: Amoxicillin clavulanate six hundred twenty five milligram three times daily after food for five days.
+Doctor: If penicillin intolerance develops, stop and call us immediately.
+Doctor: For pain: Ibuprofen plus paracetamol combination every eight hours only as needed, maximum three doses per day.
+Doctor: Because you have acidity, take Pantoprazole forty milligram once daily before breakfast for five days.
+Patient: Should I avoid chewing completely on that side?
+Doctor: Yes, avoid chewing on the treated side for forty eight hours and avoid very hot, very cold, and sticky food.
+Doctor: Maintain oral hygiene: soft brushing, gentle flossing, and warm saline rinse three to four times daily.
+Patient: Any warning signs where I should come back urgently?
+Doctor: Yes. Return urgently for increasing facial swelling, fever above one hundred point four Fahrenheit, trouble swallowing, or reduced mouth opening.
+Doctor: Also return if pain is worsening after twenty four hours despite medicines.
+Patient: Understood. Please repeat follow-up timing.
+Doctor: Follow-up in forty eight hours for reassessment and second root canal sitting. Your run marker is dental 802ea4ef20.
+Patient: Got it. I will come in two days. Marker noted as dental 802ea4ef20.
+
+[Transcription]
+Good morning, Rhian Iyer. I am Dr. Mira Sethi, your dentist today. What is bothering you? Since for one week I have severe pain in my lower left wisdom area. When did it start exactly and has it been constant or on and off? It started gradually and became worse over the last two nights. Pain is about 7 out of 10 now. Does pain increase with hot tea or cold water? Yes. Both make it worse, and chewing on that side is very difficult. Do you also get spontaneous throbbing pain that wakes you at night? Yes, especially after midnight. I had to wake up and rinse with warm water. Any swelling on face, fever, bad taste, or pus discharge near the tooth? There is mild gum swelling and a bad taste, but no fever. Any difficulty opening mouth or swallowing? Mouth opening is slightly painful, but I can swallow normally. Have you taken any medicine yourself for this pain? I took methanamic acid twice yesterday and one dose this morning. Relief lasted only two to three hours. Any known allergy to antibiotics, pain medicines, or local anesthesia injections? No known drug allergy. I have had dental injection before without reaction. Are you pregnant, breastfeeding, diabetic, or on blood thinner medications? Not pregnant, not breastfeeding, no diabetes, and no blood thinners. Do you have history of acidity, kidney issues, asthma, or ulcers? I have occasional acidity, no kidney disease, no asthma, and no ulcers. I will examine now. Please open your mouth wide. I can see deep decay on the lower right first molar, tenderness on tapping, and gum inflammation around it. There is no large facial cellulitis, but this tooth is likely a cutely infected pulp with apical inflammation. Is this a root canal case, or will the tooth need removal? Most likely root canal treatment can save the tooth if the remaining structure is strong. I recommend an intraoral periapical x-ray today to check root and surrounding bone. Okay, please do the x-ray. X-ray confirms deep caries reaching pulp and widening near root tip. Tooth is restorable. Plan is, first emergency pain relief and drainage from canal, then complete root canal in two to three sittings. Can we start treatment today? I have an important meeting tomorrow. Yes, we can start today with local anesthesia, open access, cleaning, and temporary dressing. For medicines, amoxicillin clavulanate 625 mg 3 times daily after food for 5 days. If penicillin intolerance develops, stop and call us immediately. For pain, ibuprofen plus paracetamol combination every 8 hours only as needed. Maximum 3 doses per day. Because you have acidity, Pantoprazole 40mg once daily before breakfast for 5 days. Should I avoid chewing completely on that side? Yes, avoid chewing on the treated side for 48 hours and avoid very hot, very cold, and sticky food. Maintain oral hygiene, soft brushing, gentle flossing, and warm saline rinse three to four times daily. Any warning signs where I should come back urgently? Yes, return urgently for increasing facial swelling, fever above 100.4 Fahrenheit, trouble swallowing, or reduced mouth opening. Also return if pain is worsening after 24 hours despite medicines. Understood. Please repeat follow-up timing. Follow up in 48 hours for reassessment and second route canal sitting. Your run marker is dental 802a4F20. Got it. I will come in two days. Marker noted as dental 802a4F20.
+
+[Summary JSON]
+{
+  "clinicalSnapshot": [],
+  "doctorActions": [],
+  "prescriptions": [],
+  "prescriptionDraft": null,
+  "issuesParagraph": "",
+  "actionsParagraph": "",
+  "chiefComplaint": "",
+  "sourceFacts": [],
+  "sections": {
+    "historyOfPresentIllness": [],
+    "negativeFindings": [],
+    "riskFactors": [],
+    "pastHistory": [],
+    "medicationHistory": [],
+    "allergies": [],
+    "vitals": [],
+    "examination": [],
+    "assessment": [],
+    "medications": [],
+    "investigations": [],
+    "carePlan": [],
+    "warnings": [],
+    "followUp": [],
+    "unmapped": []
+  },
+  "quality": {
+    "score": 0.0,
+    "confidence": 0.0,
+    "missingFields": [],
+    "mode": "hybrid",
+    "generatedAt": null,
+    "coverage": 0.0,
+    "sourceFactCount": 0,
+    "mappedFactCount": 0,
+    "unmappedFactIds": [],
+    "criticalMisses": [],
+    "sectionCounts": {
+      "historyOfPresentIllness": 0,
+      "negativeFindings": 0,
+      "riskFactors": 0,
+      "pastHistory": 0,
+      "medicationHistory": 0,
+      "allergies": 0,
+      "vitals": 0,
+      "examination": 0,
+      "assessment": 0,
+      "medications": 0,
+      "investigations": 0,
+      "carePlan": 0,
+      "warnings": 0,
+      "followUp": 0,
+      "unmapped": 0
+    }
+  },
+  "transcriptionCorrections": []
+}
+
+[Storage Checks]
+- /ws/transcribe persists raw float32 audio to room-agent/recordings during capture
+- on stop_recording, room-agent runs ASR pipeline and stores final data in completed_sessions memory
+- persistent raw file is removed after processing (if cleanup succeeds)
+- transcript+dialogue are sent to backend /api/visits/{visit_id}/progress when visit_id is provided

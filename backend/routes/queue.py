@@ -51,22 +51,26 @@ def _set_doctor_available_if_in_session(db: DBSession, doctor_id: str | None) ->
 @router.get("", response_model=QueueSummaryOut)
 @router.get("/", response_model=QueueSummaryOut)
 def get_queue(
-    ctx: RequestContext = Depends(require_admin),
+    ctx: RequestContext = Depends(require_any_auth),
     db: DBSession = Depends(get_db),
 ):
+    base_query = db.query(models.WaitingQueue)
+    if ctx.is_room_device:
+        base_query = base_query.filter(models.WaitingQueue.room_id == ctx.room_id)
+
     waiting = (
-        db.query(models.WaitingQueue)
+        base_query
         .filter(models.WaitingQueue.status == models.WaitingQueueStatusEnum.waiting)
         .order_by(models.WaitingQueue.priority, models.WaitingQueue.check_in_time)
         .all()
     )
     in_room = (
-        db.query(models.WaitingQueue)
+        base_query
         .filter(models.WaitingQueue.status == models.WaitingQueueStatusEnum.in_room)
         .all()
     )
     all_active = (
-        db.query(models.WaitingQueue)
+        base_query
         .filter(
             models.WaitingQueue.status.in_(
                 [

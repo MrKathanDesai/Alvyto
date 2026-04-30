@@ -1,0 +1,2740 @@
+                      A
+                PROJECT REPORT
+                           ON
+      Alvyto - Smart EMR System
+                            AT
+
+
+
+
+      In the partial fulfillment of the requirement
+                     for the degree of ​
+                Bachelor of Technology ​
+                             in
+          Computer Science and Engineering
+
+                   PREPARED BY
+              Khush Patel(IU2241230528)​
+              Kathan Desai(IU2241230483)​
+               Jeet Patel(IU2241230480)
+
+             UNDER GUIDANCE OF
+              Internal Guide
+              Prof. Zalak Vyas,
+              Head of Department,​      ​    ​     ​
+              Department of Computer Science and Engineering,
+              I.T.E, Indus University, Ahmedabad.​ ​
+
+                  SUBMITTED TO
+   INSTITUTE OF TECHNOLOGY AND ENGINEERING
+INDUS UNIVERSITY CAMPUS, RANCHARDA, VIA-THALTEJ
+        AHMEDABAD-382115, GUJARAT, INDIA,
+                WEB: www.indusuni.ac.in
+                       APRIL 2026
+CANDIDATE’S DECLARATION
+
+
+I declare that the final semester report entitled “Alvyto-Smart EMR System” is our own
+work conducted under the supervision of the guide Prof Zalak Vyas.
+
+I further declare that to the best of our knowledge, the report for B.Tech final semester does
+not contain part of the work which has been submitted for the award of B.Tech Degree either
+in this university or any other university without proper citation.
+
+
+
+
+___________________________________
+Candidate’s Signature
+
+Khush Patel(IU2241230528)
+
+
+
+
+___________________________________
+Candidate’s Signature
+
+Kathan Desai (IU2241230483)
+
+
+
+
+___________________________________
+Candidate’s Signature
+
+Jeet Patel (IU2241230480)
+
+
+
+___________________________________
+Guide:
+Prof. Zalak Vyas
+Department of Computer Science And Engineering,
+Indus Institute of Technology and Engineering
+INDUS UNIVERSITY– Ahmedabad,
+State: Gujarat
+     INDUS INSTITUTE OF TECHNOLOGY AND ENGINEERING
+            COMPUTER SCIENCE AND ENGINEERING
+                                     2025 -2026
+
+
+
+
+                               CERTIFICATE
+                                                                     Date: 14-04-2026
+
+
+This is to certify that the project work entitled “Alvyto - Smart EMR System” has been
+carried out by Khush Patel, Kathan Desai and Jeet Patel under my guidance in partial
+fulfillment of degree of Bachelor of Technology in COMPUTER SCIENCE AND
+ENGINEERING (Final Year) of Indus University, Ahmedabad during the academic year
+2025- 2026.
+
+
+
+
+ ______________________      ______________________      ______________________
+ Prof. Zalak Vyas            Dr. Kaushal Jani            Prof. Zalak Vyas
+ Head of Department,         Head of Department,         Head of Department,
+ Department of Computer      Department of Computer      Department of Computer
+ Science And Engineering,    Science And Engineering,    Science And Engineering,
+ IITE, Indus University,     IITE, Indus University,     IITE, Indus University,
+ Ahmedabad                   Ahmedabad                   Ahmedabad
+                         TABLE OF CONTENT
+Title​ ​      ​                        ​ ​                                Page No
+ABSTRACT…………………………………………………………                                               i
+LIST OF FIGURES………………………………………………...                                        ii
+LIST OF TABLES………………………………………………….                                          iii
+ABBREVIATIONS…………………………………………………​                                            iv
+CHAPTER 1 INTRODUCTION…………………………………..​                                           1​
+​      1.1​   Project Summary……………………………………..​                        ​          2​
+​      1.2​   Project Purpose……………………………………….​                        ​          3​
+​      1.3​   Project Scope…………………………………………​                          ​          4​
+​      1.4​   Objectives…………………………………………….​                           ​          5
+​      ​      1.4.1​ Main Objectives……………………………...​                   ​          5
+​      ​      1.4.2​ Secondary Objectives………………………..​                            5
+​      1.5​   Technology and Literature Overview…………….....​           ​          6
+​      1.6​   Synopsis……………………………………………...​                           ​          8
+CHAPTER 2 LITERATURE SURVEY…………………………..​                              ​          9
+       2.1​   Introduction of Survey………………………………​                                10
+       2.2​   Why Survey?……………..………………………….​                          ​          11
+CHAPTER 3 PROJECT MANAGEMENT……………………..​​                              ​          12
+       3.1​   Project Planning Objectives………………………..​​                           13
+              3.1.1​ Software Scope……………………………..​​                    ​          13
+              3.1.2​ Resource……………………………………​​                         ​          13
+                    3.1.2.1​Human Resource…………………...​​                ​          13
+                    3.1.2.2​Reusable Software Resources……...​ ​       ​          13
+                    3.1.2.3​Environment Resource……………..​ ​            ​          14
+              3.1.3​ Project Development Approach…………..​ ​            ​          15
+       3.2​   Project Scheduling………………………………....​ ​                   ​          15
+              3.2.1​ Basic Principle……………………………..​ ​                  ​          15
+       3.3​   Risk Management……………………………….…..​                        ​          16
+              3.3.1​ Risk Identification……………………….​               ​   ​          16
+                    3.3.1.1​Risk Identification artifacts…...…​   ​   ​          17
+              3.3.2​ Risk Projection…………………………..​        ​    ​   18
+CHAPTER 4 SYSTEM REQUIREMENTS……………….....​                ​    ​   24
+    4.1​​     User Characteristics…………………………...…​ ​           ​   25
+    4.2​      Functional Requirement………………………....​       ​    ​   25​
+    4.3​      Non-Functional Requirement……………………​        ​    ​   27
+    4.4​      Hardware and Software Requirement…………..​   ​    ​   28
+              4.4.1​ Hardware Requirement………………….​       ​    ​   28
+              4.4.2​ Software Requirement ………………….​      ​    ​   28
+              4.4.3​ Deployment Architecture……………….               29
+CHAPTER 5 SYSTEM ANALYSIS………………………….​                    ​    ​   30
+    5.1​ ​ Study of Current System………………………..​           ​    ​   31
+    5.2​      Problems in Current System…………………….​       ​    ​   31
+    5.3​      Requirement of new System……………….……​        ​    ​   32
+    5.4​      Process Model………………….…………..……​             ​    ​   32
+    5.5       Feasibility Study………………….………..…… ​ ​            ​   33
+              5.5.1   Technical Feasibility……….……………​    ​        33
+              5.5.2   Operational Feasibility……………….…​   ​        34
+              5.5.3​ Economic Feasibility……………………​       ​        34
+              5.5.4   Schedule Feasibility……………………​      ​        34
+    5.6       Features of New System………………..………​         ​    ​   34
+CHAPTER 6 DETAILED DESCRIPTION…………………​                   ​    ​   37
+    6.1​      User/Employee Module…………………………             ​​   ​   38
+    6.2​      Company Module………………………………. ​ ​                 ​   39
+    6.3​      Administrator Module…………………………..​          ​    ​   40
+CHAPTER 7 TESTING…………………..…………………….​ ​                        ​   41
+    7.1​      Black-Box Testing…………………………….…             ​    ​   42
+    7.2​      White-Box Testing ………………………………. ​​              ​   43
+    7.3​      Test Cases ……………………………………….​               ​    ​   45
+    7.4​      Model Benchmark………………………………​               ​    ​   48
+          ​   7.4.1   Raw Benchmark Scores……………….​       ​    ​   48​
+          ​   7.4.2   Aggregate Benchmark Summary………​    ​    ​   49​
+          ​   7.4.3   Key Findings.………………………….​          ​    ​   50
+CHAPTER 8 SYSTEM DESIGN…………………..………..…​ ​             ​        51
+    8.1​    Class Diagram………………………..…………...​ ​             ​   52
+    8.2​    Use Case Diagram………………….…………..…​ ​        ​        53
+    8.3​    Sequence Diagram…………………………….….​ ​         ​        54
+    8.4​    Activity Diagram……………………………….…​ ​         ​        55
+    8.5​    Data Flow Diagram……………………………….​ ​         ​        56
+CHAPTER 9 LIMITATION AND FUTURE ENHANCEMENT…​          ​       59
+    9.1​    Limitation…………………………………………. ​​                     60
+    9.2​    Future Enhancement…………………………….…​ ​        ​        61
+CHAPTER 10 CONCLUSION……………………………….…​ ​                ​        63
+​   10.1    Conclusion…………………………………………​ ​             ​        64
+CHAPTER 11 APPENDICES …..……………………………....​ ​           ​        66​
+​   11.1​   Business Model ………………………………..….​ ​        ​        67
+    11.2    Product Deployment Detail……………………..…​ ​   ​        69
+    11.3    API and Web Services..……..……………………..​ ​   ​        78
+BIBLIOGRAPHY……………………………………………..….​ ​                  ​        80
+ABSTRACT
+
+
+Alvyto is a fully local, AI-powered clinical automation system that transforms live
+doctor–patient consultations into structured electronic medical records. The system captures
+real-time audio from exam rooms, performs speech-to-text transcription using WhisperX (an
+advanced extension of OpenAI's Whisper), applies speaker diarization via pyannote.audio to
+distinguish doctor and patient speech, and generates structured clinical summaries using
+phi4-mini, a compact instruction-tuned language model selected after a formal
+benchmarking evaluation.
+The summarization pipeline operates under a strict zero-inference rule: the language model
+may only use words explicitly spoken during the consultation. Every generated fact is
+subsequently validated against the source transcript using fuzzy string matching, with
+unverifiable items flagged for doctor review. This design ensures that no AI-generated
+content enters the patient's permanent medical record without human approval.
+The system architecture comprises three services : a Next.js frontend, a FastAPI backend
+managing EMR data and authentication, and a room agent handling the AI pipeline. The
+backend implements PHI minimization by design: raw transcripts are never written to the
+database and are erased after the doctor approves the summary. An immutable audit log
+records all actions.
+Model selection involved a structured benchmark across four candidates qwen2.5:3b,
+qwen3:4b, phi4-mini, and llama3.1:8b. phi4-mini was selected for achieving a perfect
+hallucination support rate of 1.00 and 100% schema compliance across all test cases, at a
+warm inference speed of approximately 7.6 seconds on GPU and 30 seconds on CPU-only
+clinic hardware.
+Alvyto addresses the fragmentation between existing transcription tools, EMR systems, and
+clinic management software by combining real-time audio processing, AI-driven
+summarization, patient record management, and administrative workflows into a single
+unified platform.
+
+
+
+
+Department of Computer Science and Engineering​                                                i
+LIST OF FIGURE
+
+
+         Figure No.                     Title         Page No.
+
+            8.1                    Class Diagram        48
+
+            8.2                   Use Case Diagram      49
+
+            8.3                  Sequence Diagram       50
+
+            8.4                   Activity Diagram      51
+
+                                 Data Flow Diagram
+
+                                      ●​ Level – 0
+            8.5                                        52-54
+                                      ●​ Level – 1
+                                      ●​ Level – 2
+
+
+
+           11.2                 Working Screenshots    68-73
+
+
+
+
+Department of Computer Science & Engineering​                    ii
+IU/IITE/CSE/2026/UDP-028
+
+
+LIST OF TABLES
+
+
+         Table No.                      Title             Page No.
+
+          3.1.2.2                Software Resources         12
+
+          3.1.2.3              Environment Resources        12
+
+          3.2.1.1                  Project Timeline         14
+
+                               Risk Projection for each
+           3.3.2
+                                    working KPI             18
+
+           4.4.1               Hardware Requirement         24
+
+           4.4.2                Software Requirement        25
+
+            7.1                  Black Box Test Case        39
+
+            7.2                  White Box Testing          41
+
+            7.3                       Test Case             44
+
+           7.4.1               Raw Benchmark Scores         45
+
+                                Aggregate Benchmark
+           7.4.2
+                                       Scores               45
+
+           11.2               Deployment Architecture       67
+
+          11.3.1                    API Modules             75
+
+          11.3.2                   API Endpoints            75
+
+
+
+
+Department of Computer Science & Engineering​                        iii
+IU/IITE/CSE/2026/UDP-028
+
+
+ABBREVIATIONS
+
+
+This section provides a list of abbreviations used throughout the report for quick reference.
+   ●​ AI – Artificial Intelligence
+   ●​ API – Application Programming Interface
+   ●​ ASR – Automatic Speech Recognition
+   ●​ CPU – Central Processing Unit
+   ●​ DB – Database
+   ●​ DFD – Data Flow Diagram
+   ●​ EMR – Electronic Medical Record
+   ●​ FR – Functional Requirement
+   ●​ GPU – Graphics Processing Unit
+   ●​ GGUF – GPT-Generated Unified Format (quantized model format)
+   ●​ HTTP – Hypertext Transfer Protocol
+   ●​ JWT – JSON Web Token
+   ●​ LLM – Large Language Model
+   ●​ NFR – Non-Functional Requirement
+   ●​ NLP – Natural Language Processing
+   ●​ PHI – Protected Health Information
+   ●​ RAM v Random Access Memory
+   ●​ REST – Representational State Transfer
+   ●​ SQL – Structured Query Language
+   ●​ UI – User Interface
+   ●​ UDP – Under-Development Project
+   ●​ VAD – Voice Activity Detection
+   ●​ WS – WebSocket
+
+
+
+
+Department of Computer Science & Engineering​                                                   iii
+                    CHAPTER 1
+  INTRODUCTION
+▪​ 1.1 Project Summary
+
+▪​ 1.2 Project Purpose
+
+▪​ 1.3 Project Scope
+
+▪​ 1.4 Objectives
+
+▪​ 1.5 Technology and Literature
+
+  Overview
+
+▪​ 1.6 Synopsis
+IU/IITE/CSE/2026/UDP-028​                       ​                        INTRODUCTION
+
+
+1.1 PROJECT SUMMARY
+
+
+Alvyto is an AI-powered real-time clinical automation system designed to transform
+doctor–patient interactions into structured electronic medical records. The system integrates
+real-time audio capture, speaker diarization, speech-to-text transcription, and AI-based
+summarization into a unified platform, enabling automated and efficient clinical
+documentation.
+
+
+During a consultation, the system continuously captures audio and processes it using
+WhisperX, a state-of-the-art speech recognition framework that provides word-level
+alignment and speaker-aware transcription. Speaker diarization via pyannote.audio
+distinguishes between doctor and patient speech, ensuring clarity and proper structuring of
+the conversation.
+
+
+Beyond transcription, Alvyto incorporates an intelligent summarization module powered by
+phi4-mini, a compact language model selected after formal benchmarking. The model
+extracts key medical insights — symptoms, diagnoses, medications, and treatment plans and
+generates a structured JSON summary. All generated facts are validated against the source
+transcript using fuzzy string matching before being presented to the doctor for review.
+End-to-end pipeline latency is approximately 70–100 seconds on CPU-only clinic hardware.
+
+
+The system also includes patient record management, allowing doctors to access historical
+data, review, edit, and approve AI-generated summaries before they are committed to the
+permanent record. An integrated admin module supports clinic operations such as
+appointment scheduling and room management.
+
+
+
+
+Department of Computer Science & Engineering ​                                             2
+IU/IITE/CSE/2026/UDP-028​                        ​                        INTRODUCTION
+
+
+1.2 PROJECT PURPOSE
+
+The primary purpose of Alvyto is to automate clinical documentation by leveraging artificial
+intelligence to process doctor–patient conversations in real time. In traditional healthcare
+environments, doctors are required to document patient interactions manually, a process that
+is time-consuming and reduces time available for patient care. Even with digital EMR
+systems, data entry remains largely manual and repetitive.
+
+
+Alvyto addresses this by
+   ●​ capturing live conversations,
+   ●​ converting them to structured text, and
+   ●​ generating meaningful summaries automatically.
+
+
+A key design principle is the zero-inference rule: the AI model is constrained to extract only
+information explicitly spoken during the consultation, with every generated claim validated
+against the transcript before being surfaced. This ensures accuracy and eliminates the risk of
+AI hallucinations reaching the patient record.
+
+
+The system also aims to improve consistency and quality of medical records by ensuring
+structured, standardized output. By integrating administrative functionalities within the same
+platform, Alvyto reduces the fragmentation that plagues existing healthcare tooling.
+
+
+
+
+Department of Computer Science & Engineering ​                                              3
+IU/IITE/CSE/2026/UDP-028​                       ​                         INTRODUCTION
+
+
+1.3 PROJECT SCOPE
+
+
+The scope of Alvyto covers the full lifecycle of a clinical consultation, from audio capture
+through to approved medical record entry, and extends to clinic administrative management.
+The following core functionalities are within scope:
+In Scope:
+       o​ Real-time audio capture during consultations via WebSocket streaming
+       o​ Speaker diarization to differentiate doctor and patient speech (pyannote.audio)
+       o​ Speech-to-text transcription using WhisperX with word-level alignment
+       o​ AI-based summarization using phi4-mini with hallucination validation
+       o​ Doctor review, inline editing, and approval of generated summaries
+       o​ Patient record management: create, view, edit, and maintain history
+       o​ Administrative module: appointment scheduling and room allocation
+       o​ JWT-based authentication with three roles: super_admin, admin, room_device
+       o​ Immutable audit log for all system events
+       o​ PHI minimization: raw transcripts never persisted to database
+Out of Scope for Version 1 (Future Enhancements):
+       o​ Advanced medical decision support or diagnosis prediction
+       o​ Full integration with large-scale hospital EMR infrastructures (e.g., HL7/FHIR)
+       o​ Multi-language transcription optimization
+       o​ Cloud-based multi-clinic deployment
+       o​ HIPAA/healthcare compliance certification mechanisms
+
+
+
+
+Department of Computer Science & Engineering ​                                              4
+IU/IITE/CSE/2026/UDP-028​                       ​                         INTRODUCTION
+
+
+1.4 OBJECTIVES
+
+
+1.4.1 Main Objectives :
+   ●​ Real-time Documentation Develop a real-time clinical documentation system that
+      captures and processes doctor–patient conversations during live consultations.
+   ●​ Accurate Transcription Implement accurate speech-to-text transcription using
+      WhisperX, providing word-level alignment and speaker differentiation.
+   ●​ Speaker    Diarization     Integrate   pyannote.audio    speaker    diarization    using
+      silhouette-based adaptive speaker count detection, no hardcoded speaker assumptions.
+   ●​ AI Summarization Design an AI-based summarization system using phi4-mini that
+      produces   structured clinical JSON output covering: symptoms, diagnoses,
+      medications, and treatment plans.
+   ●​ Hallucination Guard Implement a hallucination guard: fuzzy-match every generated
+      fact against the source transcript and flag unsupported items for doctor review.
+   ●​ Backend System Build a backend system that handles real-time data processing,
+      JWT authentication, and RBAC across three user roles.
+   ●​ PHI Minimization Ensure PHI minimization by design: transcripts held in-memory
+      client-side and never written to the database until doctor approval erases them.
+
+
+1.4.2 Secondary Objectives :
+   ●​ Doctor Interface Develop a user-friendly doctor interface for reviewing, editing
+      chips/bullets, and approving summaries before they enter the permanent record.
+   ●​ Patient History Enable patient history management with access to past consultations
+      and structured records.
+   ●​ Admin Module Integrate an admin module for appointment scheduling, room
+      allocation, and waiting queue management.
+   ●​ Modular Design Design a modular architecture with three independently deployable
+      services: frontend, backend, and room agent.
+   ●​ Audit Log Implement an immutable audit log capturing all events without storing
+      PHI content.
+   ●​ Future Foundation Provide a foundation for future enhancements: GPU-accelerated
+      inference, mobile review interface, and hospital EMR integration.
+Department of Computer Science & Engineering ​                                              5
+IU/IITE/CSE/2026/UDP-028​                          ​                      INTRODUCTION
+
+
+1.5 TECHNOLOGY AND LITERATURE OVERVIEW
+
+
+   ●​ WhisperX: WhisperX (Bain et al., 2022) is an advanced extension of OpenAI's
+      Whisper model that adds word-level timestamp alignment and integrates speaker
+      diarization into the transcription pipeline. While standard Whisper produces
+      segment-level transcripts, WhisperX aligns output at the word level using forced
+      alignment, enabling precise attribution of each word to a speaker turn. The small.en
+      model variant is used, operating with INT8 quantization for CPU-efficiency.
+      WhisperX is suited to clinical environments because its diarization-aware output
+      eliminates the need for a separate post-processing alignment step, reducing latency
+      and improving speaker attribution accuracy in two-speaker doctor–patient scenarios.
+   ●​ pyannote.audio: pyannote.audio (Bredin et al., 2023) provides the speaker
+      diarization pipeline. The system uses silhouette scoring to adaptively determine the
+      number of speakers without hardcoding an assumption — important in scenarios
+      where a family member or nurse may be present in addition to the doctor and patient.
+      Speaker segments are merged with WhisperX word-level timestamps to produce a
+      structured, speaker-labelled transcript.
+   ●​ phi4-mini: The summarization module uses phi4-mini, a 3.8B parameter
+      instruction-tuned model from Microsoft Research. phi4-mini was selected after a
+      formal four-model benchmark evaluation (see Section 7.1). The model receives the
+      speaker-labelled transcript and returns a structured JSON object with four fields:
+      clinicalSnapshot (4–6 verbatim clinical chips labelled by category), doctorActions
+      (3–5 action strings), issuesParagraph, and actionsParagraph. The zero-inference
+      constraint is enforced via a fuzzy matching algorithm that tokenizes each generated
+      claim and checks whether at least 60% of tokens with length greater than 3 can be
+      matched to the source transcript with a SequenceMatcher ratio above 0.72. Items
+      failing this check are flagged as isSupported: false and visually highlighted in the
+      doctor review UI. phi4-mini is served via Ollama, which provides cross-platform
+      model    management      (Windows,         Linux,   macOS)   and   replaces   the   prior
+      llama-cpp-python with Metal-specific configuration. Warm inference time is
+      approximately 7.6 seconds on MPS and 30 seconds on CPU-only clinic hardware.
+
+
+Department of Computer Science & Engineering ​                                               6
+IU/IITE/CSE/2026/UDP-028​                         ​                       INTRODUCTION
+
+
+   ●​ FastAPI: The backend is built with FastAPI, a high-performance asynchronous
+       Python web framework. FastAPI handles JWT authentication (HS256, bcrypt-12),
+       RBAC, WebSocket connections for audio streaming, RESTful API endpoints, and
+       SQLAlchemy ORM operations against a SQLite database. The system implements 10
+       data models: Patient, MedicalHistory, Visit, Room, Doctor, DoctorAvailability,
+       Appointment, WaitingQueue, AdminUser, and AuditLog.
+   ●​ Next.js with TypeScript: The frontend is built with Next.js 14, React 19, and
+       TypeScript. Key custom hooks include useWhisperLive (WebSocket audio streaming
+       and live preview), useVisitSummary (in-memory visit state — transcript never
+       touches the backend until approval), and AuthContext (JWT storage, auto-expiry,
+       role-based routing). The admin dashboard provides dedicated pages for patients,
+       doctors, rooms, scheduling, visits, audit logs, and user management.
+
+
+LITERATURE REVIEW
+Speech recognition and AI-based documentation have evolved from rule-based,
+limited-vocabulary systems to large-scale transformer models. Early systems required
+structured grammars and failed on spontaneous conversational speech. The introduction of
+CTC-based models and later attention-based transformers, culminating in Whisper's weakly
+supervised pre-training on 680,000 hours of audio, achieved robust cross-accent and
+noisy-environment performance.
+
+
+AI in healthcare documentation has progressed from basic dictation tools (which require
+structured input from the physician) to ambient intelligence systems (which operate passively
+during the consultation). However, most existing commercial solutions are cloud-dependent,
+raising significant PHI and data privacy concerns. Alvyto is fully local, no audio, transcript,
+or patient data ever leaves the clinic network.
+
+
+The literature consistently identifies the following unmet needs that Alvyto directly
+addresses: real-time speaker-aware transcription during live consultations, structured
+extraction of medical entities without relying on general-purpose NLP pipelines,
+hallucination validation specific to clinical documentation, and integration of transcription
+with administrative workflows in a single platform.
+
+Department of Computer Science & Engineering ​                                               7
+IU/IITE/CSE/2026/UDP-028​                         ​                         INTRODUCTION
+
+
+
+1.6 SYNOPSIS
+
+
+Alvyto is a real-time AI-powered clinical automation system designed to eliminate manual
+documentation during doctor–patient consultations. Audio is captured live from the exam
+room and streamed via WebSocket to a locally running room agent. WhisperX transcribes the
+audio with word-level precision while pyannote.audio attributes each segment to the correct
+speaker. After the consultation ends, phi4-mini processes the diarized transcript and
+generates a structured clinical summary in approximately 70–100 seconds on standard clinic
+hardware.
+
+
+The doctor reviews the summary on the exam room PC immediately after the visit. Any
+AI-generated facts that cannot be verified against the transcript are highlighted for correction.
+The doctor edits, approves, and the summary is committed to the permanent patient record.
+The raw transcript is then erased — it never touches the database. An audit log records every
+action without storing clinical content.
+
+
+The system is fully local, requires no internet connection, and is designed for deployment on
+a clinic-grade server with multiple room PCs acting as thin clients. The architecture is
+modular: the frontend, backend, and room agent are independent services that can be updated
+independently.
+
+
+
+
+​
+
+
+​
+
+
+
+
+Department of Computer Science & Engineering ​                                                 8
+                                                           CHAPTER 2
+                              LITERATURE SURVEY
+                                         ▪​ 2.1 Introduction Of Survey
+
+                                         ▪​ 2.2 Why Survey?
+
+
+
+
+Department of Computer Science & Engineering ​                    7FDSSDFSFsdf
+IU/IITE/CSE/2026/UDP-028​                         ​               LITERATURE SURVEY
+
+
+2.1 INTRODUCTION OF SURVEY
+
+
+The literature survey examines existing technologies and systems in the domains of
+automatic    speech recognition,     speaker diarization, clinical    NLP, and healthcare
+documentation automation. The goal is to identify the state of the art, understand why current
+solutions fail to meet the needs of active clinical environments, and justify the technology
+choices made in Alvyto.
+
+
+Speech recognition has advanced substantially since the introduction of deep neural network
+acoustic models. Transformer-based architectures, particularly those trained on large
+weakly-supervised corpora, have demonstrated robustness across accents, noise conditions,
+and domains that earlier HMM/GMM systems could not handle. Whisper (Radford et al.,
+2022) represents a significant milestone: a single model trained on 680,000 hours of
+multilingual audio achieves near-human accuracy on multiple benchmarks without
+domain-specific fine-tuning.
+
+
+Speaker     diarization   has   similarly   matured.   Modern    neural    approaches   using
+embedding-based clustering (x-vectors, ECAPA-TDNN) combined with overlap detection
+achieve diarization error rates below 5% on two-speaker conversations in clean conditions.
+pyannote.audio provides a well-maintained, state-of-the-art pipeline accessible through a
+Python API, making it practical for integration into production systems.
+
+
+AI-based clinical documentation has attracted significant research attention. Systems such as
+Amazon Transcribe Medical and Nuance DAX offer cloud-based ambient clinical
+intelligence, but their dependence on external APIs raises privacy and regulatory concerns,
+particularly for smaller clinics that may not have the infrastructure for cloud EMR
+integration. Fully local solutions remain rare.
+
+
+
+
+Department of Computer Science & Engineering ​                                             10
+IU/IITE/CSE/2026/UDP-028​                        ​                 LITERATURE SURVEY
+
+
+2.2 WHY SURVEY?
+
+
+The survey was conducted to answer three specific questions:
+   ●​ which transcription technology best handles clinical conversational speech without
+       cloud dependency;
+   ●​ how to reliably validate AI-generated medical claims against a source transcript to
+       prevent hallucinations from entering permanent records; and
+   ●​ whether a compact LLM in the 3–4B parameter range can produce structured clinical
+       output reliably enough for production use.
+
+
+The analysis of WhisperX against standard Whisper confirmed that word-level alignment is
+necessary for accurate speaker attribution, segment-level timestamps from standard Whisper
+create misattribution errors at speaker transitions. The analysis of LLM candidates revealed a
+critical failure mode in Qwen3:4b: its hybrid thinking architecture consumed the entire token
+budget on internal chain-of-thought traces before producing output, rendering it incompatible
+with token-budgeted structured output tasks. This finding, and the subsequent selection of
+phi4-mini, is documented in the benchmark results in Chapter 7.
+
+
+The survey also confirmed that no existing open-source system combines real-time
+speaker-aware transcription, hallucination-validated summarization, and clinic workflow
+management in a single fully local platform. This gap directly motivates Alvyto's design.
+
+
+
+
+Department of Computer Science & Engineering ​                                               11
+                       CHAPTER 3
+PROJECT MANAGEMENT
+     ▪​ 3.1 Project Planning Objectives
+
+     ▪​ 3.2 Project Scheduling
+
+     ▪​ 3.3 Risk Management
+IU/IITE/CSE/2026/UDP-028​                       ​               PROJECT MANAGEMENT
+
+
+3.1 PROJECT PLANNING OBJECTIVES
+
+
+3.1.1​ Software Scope
+Alvyto is a multi-service system spanning AI model integration, real-time audio processing,
+WebSocket communication, a full EMR data model, and clinic administration. Planning
+identified three independently deployable services: the Next.js frontend, the FastAPI
+backend, and the FastAPI room agent. This separation allows each component to be
+developed, tested, and deployed independently, reducing integration risk.
+3.1.2​ Resources
+       3.1.2.1​Human Resource
+           ●​ Backend developer: FastAPI, SQLAlchemy, JWT authentication, RBAC
+           ●​ Frontend developer: Next.js, React, TypeScript, WebSocket hooks
+           ●​ AI/ML     engineer:   WhisperX     integration,   pyannote diarization, LLM
+              benchmarking, phi4-mini deployment
+           ●​ QA and documentation: test case design, report preparation
+       3.1.2.2​Reusable Software Resources
+       To accelerate development and build on proven solutions, the following reusable
+       software resources were leveraged:
+        Resource                                    Purpose
+        Python 3.11+                                Backend and room agent development
+
+
+        Node.js 20+                                 Frontend development (Next.js)
+
+
+        WhisperX                                    Speech recognition and alignment
+
+
+        pyannote.audio 3.x                          Speaker diarization
+
+
+        Ollama                                      LLM model management and inference
+
+
+        phi4-mini (GGUF Q4_K_M)                     Clinical summarization
+
+
+
+Department of Computer Science & Engineering ​                                           13
+IU/IITE/CSE/2026/UDP-028​                              ​                PROJECT MANAGEMENT
+
+
+       FastAPI + Uvicorn                                   Backend and room agent API servers
+
+
+       SQLAlchemy + SQLite                                 Data persistence
+
+
+       Next.js 14 / React 19                               Frontend UI
+
+
+       JWT / bcrypt                                        Authentication and security
+
+
+                               Table 3.1.2.2: Software Resources
+
+
+      3.1.2.3​Environment Resource
+      The application was designed to run across multiple operating systems and database
+      environments. The key environment resources are outlined below:
+       Resource                                            Details
+       Development OS                                      macOS (Apple Silicon) / Ubuntu 22.04
+
+
+       Minimum server (CPU)                                Intel Core i5, 16 GB RAM, 20 GB SSD
+
+
+       Recommended server                                  Above +       NVIDIA RTX 3060 or
+                                                           equivalent
+       Room PCs (thin clients)                             Any modern browser, no local AI
+                                                           dependencies
+
+
+       Network                                             Local clinic LAN no internet required
+
+
+                               Table 3.1.2.3: Environment Resources
+
+
+
+
+Department of Computer Science & Engineering ​                                                     14
+IU/IITE/CSE/2026/UDP-028​                        ​             PROJECT MANAGEMENT
+
+
+
+3.1.3​ Project Development Approach
+The project adopted an incremental, module-first development approach. Each service was
+built and tested in isolation before integration. The room agent pipeline was the highest-risk
+component — model selection, quantization, and latency validation were completed before
+the frontend and backend were integrated against it.
+
+
+3.2 PROJECT SCHEDULING
+
+
+3.2.1​ Basic Principle
+The scheduling of the project follows a phased, incremental development approach aligned
+with a hybrid Waterfall–Agile model. The project is structured into clearly defined
+sequential phases such as research, setup, core development, backend, frontend, integration,
+testing, and documentation, which reflects a Waterfall-style progression where each stage
+builds upon the completion of the previous one. At the same time, within these phases, the
+work is organized to deliver functional and testable components (such as the Room Agent
+core, API services, and UI modules), demonstrating Agile principles of iterative development
+and continuous validation. This hybrid scheduling ensures that foundational elements like
+environment setup and core model integration are established first, followed by modular
+development and system integration, reducing technical risks and enabling systematic testing.
+The approach emphasizes dependency management, incremental validation, and progressive
+system refinement, ensuring that each phase contributes to a stable and scalable final product.
+
+
+         Phase                   Activity                        Duration
+
+
+         1 - Research            Technology survey, model        2 Weeks
+                                 evaluation, architecture
+                                 design
+
+         2 - Environment         Python venv, dependency         1 Week
+         Setup                   installation, Ollama
+                                 configuration
+
+
+
+
+Department of Computer Science & Engineering ​                                               15
+IU/IITE/CSE/2026/UDP-028​                                ​         PROJECT MANAGEMENT
+
+
+         3 - Room Agent             WhisperX, pyannote,            2 Weeks
+         Core                       phi4-mini integration,
+                                    benchmark validation
+
+
+         4 - Backend                FastAPI services,              2 Weeks
+         Development                SQLAlchemy models, JWT
+                                    auth, RBAC
+
+         5 - Frontend               Next.js UI, WebSocket          2 Weeks
+         Development                hooks, doctor review flow,
+                                    admin pages
+
+
+         6 - Integration            End-to-end pipeline testing,   1 Week
+                                    WebSocket tuning, API
+                                    validation
+
+         7 - Testing & QA           Black-box and white-box        1 Week
+                                    testing, test case execution
+
+
+         8 - Documentation          Project report, API            2 Weeks
+                                    documentation, deployment
+                                    guide
+                                 Table 3.2.1.1:Project Timeline
+
+
+3.3 RISK MANAGEMENT
+
+
+   3.3.1 Risk Identification
+Potential risks were identified early in the EMR (Electronic Medical Record) system
+lifecycle to ensure proactive mitigation and system reliability. The system involves real-time
+transcription, sensitive healthcare data handling, AI processing, and multi-role access
+(doctor, admin, patient), which introduces technical, project, and external risks.
+       3.3.1.1​Risk Identification artifacts
+       The following key risks were documented:
+           ●​ Technical Risks:
+                   o​ R1:       Pipeline     Drift     Between Modules :     Mismatch between
+                       transcription, diarization, and summarization outputs may cause loss of
+                       contextual alignment (e.g., summary not matching actual conversation
+                       flow).
+
+Department of Computer Science & Engineering ​                                             16
+IU/IITE/CSE/2026/UDP-028​                        ​           PROJECT MANAGEMENT
+
+                 o​ R2: Incremental Data Loss in Streaming Pipeline : During real-time
+                    audio streaming, packet drops or buffering issues may lead to missing
+                    segments in transcription.
+                 o​ R3: Context Fragmentation in Long Consultations : Chunk-based
+                    processing     may    break      conversational   continuity,   reducing
+                    summarization quality.
+                 o​ R4: Model Cold Start and Reload Latency : AI models (WhisperX /
+                    LLM) may introduce delays when reloaded after inactivity or failure.
+                 o​ R5: Database Write Bottlenecks : Continuous real-time data writes
+                    (transcripts + summaries) may cause performance degradation or
+                    locking issues.
+          ●​ Project Risks:
+             o​ R6: Tight Coupling of Real-Time Pipeline Components : Failure in one
+                 component (e.g., diarization) may cascade and disrupt the entire pipeline.
+             o​ R7: State Management Inconsistency : Session-level data (audio →
+                 transcript → summary) may become inconsistent if interrupted
+                 mid-process.
+             o​ R8: WebSocket Synchronization Failure : Frontend may display outdated
+                 or misordered transcription data due to async communication delays.
+
+
+          ●​ Healthcare Specific Risks:
+                 o​ R9: Clinical Misinterpretation Risk : Even correct transcription may be
+                    clinically misinterpreted by the summarization model due to lack of
+                    domain reasoning.
+                 o​ R10: Over-Reliance on Automation by Doctors : Doctors may trust
+                    AI-generated summaries without proper validation, leading to
+                    incorrect medical records.
+                 o​ R11: Incomplete Capture of Non-Verbal Context : System ignores
+                    tone, pauses, or emphasis, which may be clinically significance
+          ●​ Operational Risks
+
+
+
+Department of Computer Science & Engineering ​                                            17
+IU/IITE/CSE/2026/UDP-028​                         ​              PROJECT MANAGEMENT
+
+
+                   ○​ R12: Workflow Disruption Due to System Latency : If transcription or
+                       summarization lags, it may disrupt the natural consultation flow.
+                   ○​ R13: User Resistance to Real-Time Systems : Doctors may find
+                       continuous monitoring intrusive or distracting.
+           ●​ Security & Data Risks
+
+                   ○​ R14: Session-Level Data Exposure : Temporary in-memory or
+                      streaming data may be exposed if not properly secured.
+
+                   ○​ R15: Improper Data Lifecycle Management : Audio and transcripts
+                      may persist longer than necessary, increasing risk of data leakage.
+
+           ●​ Scalability & Deployment Risks
+                   ○​ R16: Concurrent Session Degradation : Multiple simultaneous
+                       consultations may degrade performance significantly on CPU-based
+                       systems.
+                   ○​ R17: Model Version Inconsistency : Different deployments may use
+                       different model versions, leading to inconsistent outputs across clinics.
+   3.3.2 Risk Projection
+      Each risk was assessed based on its probability and potential impact.
+
+ Risk ID              Risk          Likelihood          Impact        Mitigation
+
+ R1        Pipeline           drift Medium            High         Cross-stage
+           between modules                                         validation
+                                                                   checks
+
+ R2        Streaming data loss      Medium            High         Buffering + retry
+                                                                   mechanisms
+
+ R3        Context                  High              Medium       Context stitching
+           fragmentation                                           before
+                                                                   summarization
+
+ R4        Model       cold   start Medium            Medium       Keep-alive
+           latency                                                 model sessions
+
+
+Department of Computer Science & Engineering ​                                               18
+IU/IITE/CSE/2026/UDP-028​                       ​               PROJECT MANAGEMENT
+
+
+ Risk ID              Risk         Likelihood         Impact        Mitigation
+
+ R5        DB write bottlenecks    Medium           High         Batch writes +
+                                                                 async DB ops
+
+ R6        Pipeline      coupling Low               High         Decoupled
+           failure                                               microservice
+                                                                 design
+
+ R7        State inconsistency     Medium           High         Session tracking
+                                                                 + checkpoints
+
+ R8        WebSocket         sync Medium            Medium       Message
+           issues                                                ordering        +
+                                                                 timestamps
+
+ R9        Clinical                Medium           Very High    Mandatory
+           misinterpretation                                     doctor validation
+
+ R10       Over-reliance on AI     Low              Very High    UI warnings +
+                                                                 approval step
+
+ R11       Missing     non-verbal High              Medium       Highlight
+           cues                                                  limitations in UI
+
+ R12       Workflow disruption     Medium           Medium       Optimize latency
+                                                                 thresholds
+
+ R13       User resistance         Medium           Medium       UX
+                                                                 simplification +
+                                                                 onboarding
+
+ R14       Session             data Low             Very High    Secure memory
+           exposure                                              + encryption
+
+
+
+
+Department of Computer Science & Engineering ​                                       19
+IU/IITE/CSE/2026/UDP-028​                            ​                 PROJECT MANAGEMENT
+
+
+ Risk ID           Risk              Likelihood            Impact                 Mitigation
+
+ R15       Data lifecycle issues    Medium               High                  Auto-deletion
+                                                                               policies
+
+ R16       Concurrent               High                 High                  Load balancing
+           performance drop                                                    + scaling
+
+ R17       Model inconsistency      Low                  Medium                Version     control
+                                                                               + standardization
+                           Table 3.3.2: Risk Projection for each working KPI
+
+
+Mitigation strategies:
+R1 – Pipeline Drift (Medium | High)
+   ●​ Introduce validation checkpoints between modules.
+   ●​ Ensure summarization uses aligned diarized transcripts only.
+   ●​ Log inconsistencies for debugging.
+
+
+R2 – Streaming Data Loss (Medium | High)
+   ●​ Implement buffering with retry mechanisms.
+   ●​ Use acknowledgment-based streaming (ACK system).
+   ●​ Store intermediate chunks temporarily.
+
+
+R3 – Context Fragmentation (High | Medium)
+   ●​ Merge adjacent transcription chunks before summarization.
+   ●​ Maintain rolling context windows.
+   ●​ Use conversation boundary detection.
+
+
+R4 – Model Cold Start Latency (Medium | Medium)
+   ●​ Keep models loaded in memory during active sessions.
+   ●​ Use warm-up calls at system startup.
+   ●​ Implement lazy reload with caching.
+
+
+
+Department of Computer Science & Engineering ​                                                       20
+IU/IITE/CSE/2026/UDP-028​                        ​            PROJECT MANAGEMENT
+
+R5 – Database Bottlenecks (Medium | High)
+   ●​ Use asynchronous database operations.
+   ●​ Batch insert transcription data.
+   ●​ Optimize indexing and schema design.
+
+
+R6 – Pipeline Coupling (Low | High)
+   ●​ Adopt modular microservice architecture.
+   ●​ Allow fallback if one module fails.
+   ●​ Isolate failures without stopping entire pipeline.
+
+
+R7 – State Inconsistency (Medium | High)
+   ●​ Maintain session IDs across pipeline stages.
+   ●​ Use checkpoints after each stage.
+   ●​ Enable recovery from last valid state.
+
+
+R8 – WebSocket Sync Issues (Medium | Medium)
+   ●​ Attach timestamps to each message.
+   ●​ Ensure ordered delivery on frontend.
+   ●​ Implement reconciliation logic.
+
+
+R9 – Clinical Misinterpretation (Medium | Very High)
+   ●​ Use structured templates (SOAP format).
+   ●​ Restrict LLM output scope.
+   ●​ Require doctor approval before saving.
+
+
+R10 – Over-Reliance on AI (Low | Very High)
+   ●​ Display disclaimers in UI.
+   ●​ Force manual confirmation before record finalization.
+   ●​ Highlight uncertain sections.
+
+
+R11 – Missing Non-Verbal Context (High | Medium)
+   ●​ Indicate limitation clearly in system.
+
+Department of Computer Science & Engineering ​                                21
+IU/IITE/CSE/2026/UDP-028​                       ​         PROJECT MANAGEMENT
+
+
+   ●​ Allow manual notes addition by doctor.
+
+
+R12 – Workflow Disruption (Medium | Medium)
+   ●​ Optimize processing latency.
+   ●​ Provide background processing instead of blocking UI.
+
+
+R13 – User Resistance (Medium | Medium)
+   ●​ Simplify UI interactions.
+   ●​ Provide training/demo mode.
+   ●​ Minimize required actions.
+
+
+R14 – Session Data Exposure (Low | Very High)
+   ●​ Encrypt in-memory sensitive data where possible.
+   ●​ Secure API endpoints.
+   ●​ Avoid logging sensitive content.
+
+
+R15 – Data Lifecycle Issues (Medium | High)
+   ●​ Implement automatic data cleanup policies.
+   ●​ Allow configurable retention periods.
+
+
+R16 – Concurrent Session Degradation (High | High)
+   ●​ Introduce load balancing.
+   ●​ Limit concurrent sessions per instance.
+   ●​ Enable horizontal scaling.
+
+
+R17 – Model Version Inconsistency (Low | Medium)
+   ●​ Maintain centralized model version control.
+   ●​ Log model version per session.
+
+
+
+
+Department of Computer Science & Engineering ​                            22
+                        CHAPTER 4
+SYSTEM REQUIREMENTS
+     ▪​ 4.1 User Characteristics
+
+     ▪​ 4.2 Functional Requirements
+
+     ▪​ 4.3 Non-Functional Requirements
+
+     ▪​ 4.4 Hardware and Software
+
+       Requirements
+IU/IITE/CSE/2026/UDP-028​                          ​                SYSTEM REQUIREMENTS
+
+
+4.1 USER CHARACTERISTICS
+
+
+The Electronic Medical Record System is designed to serve users who work in Healthcare
+field.. The typical user of this application is expected to have:
+       Primary Users – Doctors / Healthcare Professionals
+           ●​   Interact with the system during and immediately after patient consultations
+           ●​   Require fast, accurate transcription with minimal manual input
+           ●​   Must be able to review, correct, and approve AI-generated summaries before
+                they enter records
+           ●​   No advanced technical knowledge required — basic computer literacy
+                sufficient
+           ●​   Operate within time pressure — the review interface must be scannable in
+                under 60 seconds
+       Secondary Users – Medical Assistants / Clinic Staff
+           ●​   Manage patient records and appointment scheduling via admin interface
+           ●​   Require a simple, task-oriented interface with minimal complexity
+       Technical Users – System Administrators
+           ●​   Handle server deployment, model updates, and Ollama configuration
+           ●​   Require knowledge of Python environments, Docker, and basic networking
+
+
+4.2 FUNCTIONAL REQUIREMENTS
+
+
+The functional requirements define the specific capabilities that the Electronic Medical
+Record Application must provide. These requirements describe what the system does in
+terms of inputs, processing, and outputs.
+   ●​ FR1 – Real-Time Audio Capture
+        ○​ The frontend must enable real-time audio recording during consultations.
+            Audio is streamed via WebSocket to the room agent. The system must
+            maintain a stable stream without interruption for consultations up to 60
+            minutes.
+
+   ●​ FR2 – Speaker Diarization
+
+
+
+Department of Computer Science & Engineering ​                                                25
+IU/IITE/CSE/2026/UDP-028​                      ​             SYSTEM REQUIREMENTS
+
+
+          ○​ The system must identify and separate doctor and patient speech segments
+             using pyannote.audio. The speaker count must be determined adaptively using
+             silhouette scoring. Each transcription segment must carry a speaker label.
+
+   ●​ FR3 – Speech-to-Text Transcription
+        ○​ The system must transcribe audio using WhisperX (small.en, INT8 compute
+            type) with word-level timestamp alignment. Transcription must handle
+            conversational speech in clinical settings and produce accurate output for
+            standard North American English.
+
+   ●​ FR4 – AI-Based Medical Summarization
+        ○​ The system must generate a structured JSON summary from the diarized
+            transcript using phi4-mini via Ollama. The summary must include:
+            clinicalSnapshot (4–6 items with valid categories), doctorActions (3–5 items),
+            issuesParagraph, and actionsParagraph. The model must return raw JSON
+            without markdown fences.
+
+   ●​ FR5 – Hallucination Validation
+        ○​ Every generated clinical fact must be fuzzy-matched against the source
+            transcript. Items where fewer than 60% of meaningful tokens match
+            (SequenceMatcher ratio > 0.72) must be flagged isSupported: false and
+            visually distinguished in the UI.
+
+   ●​ FR6 – Doctor Review and Approval
+        ○​ The doctor must be able to inline-edit chips and bullets, trigger paragraph
+            regeneration, and approve the final summary. Approval must POST to the
+            backend, trigger permanent record update, and erase the transcript from local
+            state.
+   ●​ FR7 – Patient Record Management
+        ○​ The system must store approved summaries linked to individual patients.
+            Doctors must be able to access full consultation history, edit records, and view
+            structured medical history including merged conditions and medications.
+
+   ●​ FR8 – Administrative Module
+        ○​ The admin dashboard must support appointment scheduling, room
+            assignment, waiting queue management, doctor availability, and audit log
+            access.
+
+   ●​ FR9 – Authentication and RBAC
+        ○​ The system must implement JWT-based authentication with three roles:
+            super_admin, admin, and room_device. Room device tokens must be scoped
+            to their assigned room only. Server-side JWT revocation must be implemented
+            via token hash.
+
+
+
+   ●​ FR10 – Audit Logging
+
+Department of Computer Science & Engineering ​                                           26
+IU/IITE/CSE/2026/UDP-028​                         ​         SYSTEM REQUIREMENTS
+
+
+           ○​ All significant system events must be recorded in an immutable, append-only
+              AuditLog. Log entries must not contain PHI content — only event type, entity
+              IDs, and timestamps.
+
+
+4.3 NON-FUNCTIONAL REQUIREMENTS
+
+
+Non-functional requirements define the quality attributes and constraints that the system
+must satisfy beyond its core functional capabilities.
+   ●​ NFR1 – Performance
+        o​ End-to-end pipeline (audio stop to summary displayed): 70–100 seconds on
+           CPU-only hardware
+        o​ Warm LLM inference: approximately 7.6 seconds (GPU) / 30 seconds (CPU)
+        o​ Live transcription preview must stream incrementally during recording
+        o​ Target: under 60 seconds total on GPU-equipped clinic server
+
+   ●​ NFR2 – Accuracy
+        o​ Transcription: WhisperX small.en with INT8 production-grade for North
+           American clinical English
+        o​ Summarization: phi4-mini support rate 1.00 on all benchmark test cases (zero
+           hallucinations detected)
+        o​ Category compliance: 100% all snapshot items use valid schema categories
+        o​ Residual inaccuracies correctable through doctor inline editing before
+           approval
+
+   ●​ NFR3 – Security and Privacy
+        o​ Raw transcripts never written to database — held in-memory client-side only
+        o​ Transcripts erased after doctor approval — PHI minimization by design
+        o​ Audit log stores event metadata only — no clinical content
+        o​ JWT HS256 with bcrypt-12 password hashing
+        o​ Server-side token revocation on logout
+
+   ●​ NFR4 – Reliability
+        o​ System must handle consultations up to 60 minutes without failure
+        o​ WebSocket disconnection must be recoverable without data loss
+        o​ Background job queue ensures processing continues if room PC navigates
+           away
+
+   ●​ NFR5 – Usability
+        o​ Doctor review interface must be operable without technical training
+        o​ Flagged (isSupported: false) items must be visually prominent — amber
+           highlight
+        o​ Transcript must be accessible in a side panel during review for fact-checking
+
+
+Department of Computer Science & Engineering ​                                          27
+IU/IITE/CSE/2026/UDP-028​                         ​                 SYSTEM REQUIREMENTS
+
+
+   ●​ NFR6 – Maintainability and Scalability
+        o​ Three-service architecture allows independent updates to frontend, backend,
+           and AI pipeline
+        o​ Ollama model management enables model replacement without code changes
+        o​ SQLite suitable for single-clinic deployment; architecture supports migration
+           to PostgresSQL
+
+
+4.4 HARDWARE AND SOFTWARE REQUIREMENTS
+
+
+4.4.1​ Hardware Requirement
+    Specification      Minimum                         Recommended Requirement
+                       Requirement
+ Processor             Intel Core i5+                  Intel Core i7 / Ryzen 7 + NVIDIA RTX
+                                                       3060
+ RAM                   16 GB                           32 GB
+ Storage               20 GB SSD                       50 GB SSD
+ Network               Local LAN                       Gigabit LAN
+ OS (Server)           Ubuntu 22.04 LTS                Ubuntu 22.04 LTS
+ OS (Room PC)          Any modern OS                   Windows 10/11 or macOS
+                               Table 4.4.1: Hardware Requirements
+
+
+
+4.4.2​ Software Requirement
+    Components             Technology                               Version
+    Backend language       Python                                   3.11+
+    Backend                FastAPI + Uvicorn                        Latest Stable
+    framework
+    ORM / Database         SQLAlchemy + SQLite                      2.x
+    Transcription          WhisperX                                 Latest Stable
+    Diarization            pyannote.audio                           3.x
+    LLM inference          Ollama                                   Latest Stable
+    LLM model              phi4-mini (Q4_K_M)                       As released by Microsoft
+    Frontend               Next.js 14 / React 19                    14.x
+    framework
+
+Department of Computer Science & Engineering ​                                                 28
+IU/IITE/CSE/2026/UDP-028​                           ​                 SYSTEM REQUIREMENTS
+
+
+    Frontend language        TypeScript                               5.x
+    Authentication           PyJWT + passlib (bcrypt)                 Latest Stable
+    Deep       learning      PyTorch                                  2.
+    runtime
+                                 Table 4.4.2: Software Requirements
+
+
+4.4.3​ Deployment Architecture
+Alvyto follows a hub-and-spoke deployment model for clinic environments. One clinic
+server runs all three services (frontend on port 3000, backend on port 8080, room agent on
+port 8000). Room PCs connect to the server via local network and access the system through
+a standard browser, no AI software installed on room PCs.
+   ●​ Server: hosts all services, models, and database
+   ●​ Room PCs: browser-only thin clients — no local dependencies
+   ●​ Admin PC: browser access to admin dashboard
+   ●​ Network: all communication on local LAN — no internet required
+
+
+
+
+Department of Computer Science & Engineering ​                                               29
+                   CHAPTER 5
+SYSTEM ANALYSIS
+▪​ 5.1 Study of Current System
+
+▪​ 5.2 Problems in Current System
+
+▪​ 5.3 Requirements of New System
+
+▪​ 5.4 Process Model
+
+▪​ 5.5 Feasibility Study
+
+▪​ 5.6 Features of New System
+IU/IITE/CSE/2026/UDP-028​                        ​                        SYSTEM ANALYSIS
+
+
+5.1 STUDY OF CURRENT SYSTEM
+
+
+Existing approaches to clinical documentation fall into four categories, each with significant
+limitations:
+   ●​ Manual Documentation
+           ○​ Doctors record notes manually during or after consultations, handwritten or
+               typed. This divides attention between patient interaction and documentation,
+               reduces consultation quality, and creates inconsistent record structure.
+   ●​ EMR Systems (e.g., Epic, Cerner)
+           ○​ Digital record management systems reduce paper but retain manual data entry.
+               No automated capture of conversations. Structured templates require doctors
+               to fill fields explicitly increasing administrative overhead rather than reducing
+               it.
+   ●​ Voice Dictation Systems
+           ○​ Doctors dictate notes post-consultation. Speech is converted to text but
+               requires manual structuring and correction. No speaker differentiation, no live
+               operation during the consultation, no automated medical insight extraction.
+   ●​ Cloud-Based AI Transcription (e.g., Amazon Transcribe Medical, Nuance DAX)
+           ○​ High-accuracy transcription with some clinical NLP, but cloud-dependent
+               audio and patient data transmitted to external servers. Creates regulatory and
+               privacy risks for smaller clinics. No integrated clinic management.
+               Subscription cost prohibitive for independent practices.
+
+
+5.2 PROBLEMS IN CURRENT SYSTEM
+
+
+The existing solutions present several key problems for users seeking a holistic EMR tool:
+   ●​ Inconsistent accuracy: existing tools struggle with conversational medical speech,
+       accents, and overlapping dialogue
+   ●​ No speaker diarization: doctor and patient speech mixed without attribution,
+       reducing utility for record generation
+
+
+
+Department of Computer Science & Engineering ​                                               31
+IU/IITE/CSE/2026/UDP-028​                         ​                     SYSTEM ANALYSIS
+
+
+    ●​ No hallucination control: AI-generated summaries are presented without validation
+        against the source conversation
+    ●​ Privacy risk: cloud-dependent tools transmit PHI to external servers
+    ●​ Fragmentation: transcription tools, EMR systems, and clinic management software
+        operate independently no unified platform
+    ●​ Manual approval gap: AI-generated content enters records without structured doctor
+        review and sign-off
+
+
+5.3 REQUIREMENT OF NEW SYSTEM
+
+
+Based on the identified problems, Alvyto must provide:
+    1.​ Real-time audio capture and processing during live consultations, not post-session
+    2.​ Speaker diarization that reliably attributes doctor and patient speech
+    3.​ Accurate transcription using WhisperX with word-level alignment
+    4.​ Structured AI summarization with mandatory hallucination validation before
+        surfacing
+    5.​ A doctor review interface enabling inline editing and mandatory approval before
+        record commitment
+    6.​ PHI minimization — transcripts never persisted; erased after approval
+    7.​ Fully local operation — no external network dependency
+    8.​ Integrated clinic management in a single platform
+
+
+
+
+5.4 PROCESS MODEL
+
+
+The Generic Data Reconciliation Application follows an iterative and modular process
+model. This model was chosen because the application consists of clearly separable
+functional components — ingestion, comparison, post-processing, filtering, and export —
+each of which could be developed, tested, and refined independently before being integrated
+into the full pipeline:
+
+
+
+Department of Computer Science & Engineering ​                                               32
+IU/IITE/CSE/2026/UDP-028​                          ​                    SYSTEM ANALYSIS
+
+Why Iterative? The requirements of the reconciliation pipeline evolved during development
+as edge cases such as one-to-many field mappings, composite key handling, and
+reclassification logic were discovered.
+An iterative model allowed these refinements to be incorporated into existing modules
+without disrupting the overall system.
+Process Flow The application follows a two-stage execution model that maps directly to its
+process structure:
+   ●​ Stage 1 – Comparison: Data is ingested, schemas are analyzed, reconciliation is
+        configured, and the core field-level comparison is executed to produce statistics and
+        mismatch DataFrames.
+   ●​ Stage 2 – Post-Processing: The Stage 1 outputs are filtered, reclassified, transformed
+        into standardized output tables, and exported to the target database along with the
+        saved configuration.
+Key Characteristics of the Process Model
+   ●​   Each stage produces a well-defined output that serves as the input to the next stage,
+        ensuring clean boundaries between processing phases.
+   ●​   All configurations are persisted at the end of each run, enabling any reconciliation job
+        to be reproduced or audited at a later point.
+   ●​   The modular design allows individual components such as the filter engine or
+        reclassification engine to be updated independently without impacting the rest of the
+        pipeline.
+
+
+5.5 FEASIBILITY STUDY
+
+
+The feasibility study evaluates whether the Electronic Medical Record System is viable from
+technical, operational, economic, and scheduling perspectives.
+5.5.1​ Technical Feasibility
+   ●​ All technologies used in Alvyto are open-source, well-documented, and actively
+        maintained. WhisperX, pyannote.audio, and phi4-mini via Ollama have been
+        validated in production-equivalent benchmark conditions. The system has been
+        confirmed to run on standard CPU-only clinic hardware within acceptable latency
+        bounds. The project is technically feasible.
+Department of Computer Science & Engineering ​                                               33
+IU/IITE/CSE/2026/UDP-028​                        ​                        SYSTEM ANALYSIS
+
+
+
+5.5.2​ Operational Feasibility
+   ●​ The system is designed for use by non-technical healthcare professionals. The doctor
+       review interface requires no training beyond basic computer use. The hub-and-spoke
+       deployment (server + browser-only room PCs) matches the existing IT infrastructure
+       of most small-to-medium clinics. The project is operationally feasible.
+
+
+5.5.3​ Economic Feasibility
+   ●​ All software components are open-source with no licensing cost. Deployment
+       requires a single server machine (approximately USD 800–1500 for a mid-range
+       machine with GPU). No per-API-call costs. Maintenance requires only routine
+       software updates. For clinics currently paying for cloud transcription services, Alvyto
+       offers significant cost reduction. The project is economically feasible.
+
+
+5.5.4​ Schedule Feasibility
+   ●​ The incremental, module-first development approach enabled each component to be
+       validated independently before integration. Core AI pipeline, backend, and frontend
+       were developed in parallel across an approximately 10-week timeline. The project is
+       schedule feasible within a standard final-year project duration.
+
+
+5.6 FEATURES OF NEW SYSTEM
+
+
+The Electronic Medical Record system (Alvyto) introduces the following key features that
+directly address the limitations of existing clinical documentation and healthcare workflow
+systems:
+   ●​ Real-Time Clinical Processing Pipeline : The system enables continuous real-time
+       processing of doctor–patient conversations during live consultations. Unlike
+       traditional systems that operate post-session, Alvyto captures audio, performs
+       transcription, and structures data simultaneously. This ensures that clinical
+       documentation is generated alongside the consultation, significantly reducing
+       post-consultation workload and improving efficiency.
+
+
+Department of Computer Science & Engineering ​                                             34
+IU/IITE/CSE/2026/UDP-028​                       ​                        SYSTEM ANALYSIS
+
+
+   ●​ Integrated Multi-Stage AI Pipeline : The system combines multiple AI components
+      — speech recognition, speaker diarization, and summarization — into a unified
+      pipeline. Each stage seamlessly feeds into the next, ensuring structured
+      transformation of raw audio into meaningful medical records. This integration
+      eliminates   fragmentation    seen   in       existing   systems   where   transcription,
+      summarization, and record management operate independently.
+   ●​ Speaker-Aware Transcription and Structuring : The system incorporates speaker
+      diarization to distinguish between doctor and patient speech. This ensures that the
+      generated transcript maintains conversational clarity and context. Structured speaker
+      labeling enhances readability and enables accurate extraction of medical insights from
+      dialogues.
+   ●​ AI-Based Medical Insight Extraction : The system automatically extracts key
+      medical information such as symptoms, diagnoses, medications, and treatment plans
+      from conversational data. Using natural language processing techniques, it converts
+      unstructured text into structured clinical records, improving consistency and reducing
+      manual effort in documentation.
+   ●​ Human-in-the-Loop Validation Mechanism : To ensure clinical reliability, the
+      system includes a mandatory review and approval workflow. Doctors can edit,
+      validate, and finalize generated records before storage. This balances automation with
+      human oversight, ensuring that errors from AI models do not directly affect patient
+      records.
+
+   ●​ Unified Clinical and Administrative Platform : The system integrates
+      clinical documentation with administrative functionalities such as appointment
+      scheduling and room allocation. This eliminates the need for multiple
+      disconnected systems and provides a single interface for managing both
+      medical and operational workflows within a clinic.
+
+   ●​ Patient Record Lifecycle Management : The system provides comprehensive
+      patient record management, including creation, retrieval, updating, and
+      deletion of records. It maintains structured patient histories, enabling easy
+      access to past consultations and improving continuity of care.
+
+Department of Computer Science & Engineering ​                                              35
+IU/IITE/CSE/2026/UDP-028​                       ​                   SYSTEM ANALYSIS
+
+
+   ●​ CPU-Optimized AI Processing : The system is designed to operate efficiently on
+      CPU-based hardware commonly available in clinics. By using optimized and
+      quantized models, it ensures that real-time transcription and summarization are
+      achievable without requiring high-end GPU infrastructure, making it cost-effective
+      and widely deployable.
+
+   ●​ Session-Based Stateful Processing : Each consultation is treated as a structured
+      session, where audio, transcription, and summarization data are linked and managed
+      cohesively. This ensures consistency across all stages of processing and enables
+      recovery or continuation in case of interruptions.
+
+   ●​ Modular and Scalable Architecture : The system is designed with a modular
+      architecture, allowing individual components such as transcription, summarization, or
+      database modules to be updated independently. This ensures scalability and flexibility
+      for future enhancements such as multi-language support, advanced analytics, or
+      integration with large-scale hospital systems.
+
+
+
+
+Department of Computer Science & Engineering ​                                           36
+                       CHAPTER 6
+DETAILED DESCRIPTION
+      ▪​ 6.1 Doctor / User Module
+
+      ▪​ 6.2 System / Backend Module
+
+      ▪​ 6.3 Administrator Module
+IU/IITE/CSE/2026/UDP-028​                          ​              DETAILED DESCRIPTION
+
+
+6.1 DOCTOR / USER MODULE
+
+
+The doctor-facing interface is the primary touchpoint with Alvyto. It is designed for
+operation under time pressure in clinical environments.
+Key Functions:
+   ●​ Room Login : Each exam room PC logs in with a Room ID and PIN. The
+       room_device JWT is scoped to that room's data only — a room device cannot access
+       other rooms' patient records.
+
+   ●​ Recording Interface : The doctor starts recording with a single button press. A live
+       transcription preview streams incrementally during the consultation — giving the
+       doctor real-time visibility of what is being captured. A speaker confirmation overlay
+       appears after diarization completes, allowing the doctor to verify or correct speaker
+       assignments before summarization.
+
+   ●​ Summary Review Interface : After processing, the summary is displayed as editable
+       chips (clinicalSnapshot) and bullets (doctorActions) alongside the two generated
+       narrative paragraphs. Items flagged isSupported: false are highlighted in amber — the
+       doctor's attention is directed to these first. The diarized transcript is accessible in a
+       collapsible side panel: hovering over a chip highlights the corresponding transcript
+       turn.
+
+   ●​ Inline Editing : The doctor edits chips and bullets directly — no page navigation
+       required. Simple corrections (word changes, item removal) require no AI round-trip.
+       When the doctor wants the narrative paragraphs regenerated to reflect edits, the
+       /expand endpoint is called.
+
+   ●​ Approval : The doctor clicks Approve. The system POSTs to
+       /api/visits/{id}/approve. The backend saves the structured summary, auto-merges new
+       conditions and medications into the patient's MedicalHistory with case-insensitive
+       deduplication, records an audit event, and erases the transcript from local state.
+
+
+
+
+Department of Computer Science & Engineering ​                                                     38
+IU/IITE/CSE/2026/UDP-028​                      ​             DETAILED DESCRIPTION
+
+
+   ●​ Patient History : Doctors can access full consultation history — previous
+      transcriptions, summaries, and the structured medical history — for any patient
+      assigned to their room.
+
+
+6.2 SYSTEM / BACKEND MODULE
+
+
+The backend (port 8080) manages all persistent data operations, authentication, and
+coordinates between the frontend and room agent
+
+   ●​ Data Models : Ten SQLAlchemy models: Patient + MedicalHistory (1:1,
+      demographics and history), Visit (core encounter — holds transcript ephemeral in
+      memory, dialogue erased post-approval, summary kept permanently), Room (device
+      PIN auth), Doctor, DoctorAvailability, Appointment, WaitingQueue, AdminUser +
+      Session (RBAC with server-side JWT revocation via token hash), AuditLog
+      (immutable, append-only).
+
+   ●​ Authentication : JWT HS256 with bcrypt-12 password hashing. Three roles:
+      super_admin (full access), admin (clinic management), room_device (scoped to
+      assigned room). Server-side revocation stores token hash on logout — reused tokens
+      are rejected.
+
+   ●​ Key Visit Logic : On approval: structured summary saved to Visit.summary.
+      Visit.transcript and Visit.dialogue set to null — PHI erased. Conditions and
+      medications from clinicalSnapshot and doctorActions extracted and merged into
+      Patient.MedicalHistory with case-insensitive deduplication.
+
+   ●​ Room Agent (Port 8000) : The room agent runs the AI pipeline independently. A
+      background job queue (in-memory, single worker thread per server) processes audio
+      submissions asynchronously. Pipeline: audio received → VAD trim → WhisperX
+      transcribe → word-level align → pyannote diarize → silhouette speaker count →
+      transcript merge → phi4-mini summarize → fuzzy validation → result stored →
+      frontend notified. Models are pre-warmed at server startup to eliminate cold-start
+      latency during actual consultations.
+
+
+Department of Computer Science & Engineering ​                                             39
+IU/IITE/CSE/2026/UDP-028​                        ​              DETAILED DESCRIPTION
+
+
+6.3 ADMINISTRATOR MODULE
+
+
+The admin dashboard (accessible to super_admin and admin roles) provides centralized
+control over clinic operations:
+   ●​   Patient management: search, view, edit patient records and consultation history
+   ●​   Doctor management: register doctors, set availability schedules
+   ●​   Room management: create rooms, assign doctors, manage device PINs
+   ●​   Appointment scheduling: book, reschedule, and cancel appointments
+   ●​   Waiting queue: real-time queue management for walk-in patients
+   ●​   Visit oversight: view all visits, their status, and approved summaries
+   ●​   Audit log viewer: paginated, filterable event log with timestamps and actor IDs
+   ●​   User management: create and manage admin users with role assignment
+
+
+
+
+Department of Computer Science & Engineering ​                                            40
+                     CHAPTER 7
+                     TESTING
+▪​ 7.1 Black Box Testing
+
+▪​ 7.2 White Box Testing
+
+▪​ 7.3 Test Case
+
+▪​ 7.4 Model Benchmark
+IU/IITE/CSE/2026/UDP-028​                              ​                                TESTING
+
+
+7.1 BLACK BOX TESTING
+
+
+Black Box Testing was performed on the Electronic Medical Record System (Alvyto) by
+testing the system purely from the user's perspective - providing inputs through the API and
+UI and validating the outputs without any knowledge of the internal implementation. The
+focus was on verifying that each functional requirement produced the correct and expected
+result for a given input.
+Tested Scenarios:
+ Test     Scenario          Input              Expected Output                           Result
+ ID
+ BB01     Real-time         Live               Continuous            stream     without Pass
+          audio             consultation       interruption
+          capture           audio
+ BB02     WhisperX          Doctor–patient     Accurate       text    with    word-level Pass
+          transcription     conversation       alignment
+ BB03     Speaker           Multi-speaker      Doctor/patient        segments correctly Pass
+          diarization       audio              labelled
+ BB04     Hallucinatio      Transcript      + Unsupported             items     flagged Pass
+          n validation      LLM output         isSupported:false
+ BB05     AI                Diarized           Structured JSON within 70–100s            Pass
+          summarizati       transcript
+          on
+ BB06     Doctor            Chip               Updated chip; no regeneration             Pass
+          inline edit       modification
+
+
+ BB07     Paragraph         Edited chips + Regenerated paragraphs aligned to Pass
+          regeneration      transcript         edits
+
+
+
+
+ BB08     Visit             Doctor       clicks Summary saved; transcript erased; Pass
+          approval          Approve            MedicalHistory updated
+
+
+Department of Computer Science & Engineering ​                                                    42
+IU/IITE/CSE/2026/UDP-028​                                    ​                                       TESTING
+
+
+
+    BB09       Patient            Existing patient Previous              consultations           and Pass
+               history            ID                  summaries displayed
+               retrieval
+
+
+    BB10       Record             Modify existing Updated record saved                               Pass
+               editing            summary field
+
+
+    BB11       Appointmen         New                 Appointment                 created   without Pass
+               t scheduling       appointment         conflict
+                                  details
+
+
+    BB12       Room               Assign room to Room Assigned ; PIN generated                       Pass
+               allocation         doctor
+    BB13       Invalid            Corrupted audio Graceful error ; Informative message               Pass
+               audio input        stream
+    BB14       JWT                Doctor logs out     Token hash invalidated ; subsequent Pass
+               revocation                             requests rejected
+    BB15       Room               Room      device Access only o assigned room data                  Pass
+               device scope token
+                                            Table 7.1: Black Box Test Cases
+
+
+​          ​         ​        ​         ​       ​        ​        ​           ​         ​    ​       ​
+7.2 WHITE BOX TESTING
+
+
+White Box Testing was performed on the Electronic Medical Record System (Alvyto) by
+examining and validating the internal logic, code paths, and data transformations within the
+application. The focus was on ensuring that core functions behaved correctly at the
+implementation level, covering edge cases, branching logic, and error handling that may not
+be visible from the outside.
+Key Aspects Tested:
+
+
+
+Department of Computer Science & Engineering ​                                                              43
+IU/IITE/CSE/2026/UDP-028​                         ​                                       TESTING
+
+
+  Test       Function /               Scenario Tested                   Expected              Result
+  ID          Module                                                  Behaviour
+
+ WB01 Audio            Pipeline Continuous      audio    chunks Audio             chunks Pass
+         (WebSocket         + streamed during consultation       processed
+         VAD)                                                    sequentially         with
+                                                                 no      loss;       VAD
+                                                                 correctly           trims
+                                                                 silence
+
+ WB02 WhisperX                  Transcription              with Model                loads Pass
+         Integration            configured compute_type correctly                      and
+
+                                and cpu_threads                  produces            stable
+                                                                 transcription output
+
+ WB03 Diarization Engine        Adaptive speaker count using Optimal number of Pass
+                                silhouette scoring               speakers        detected
+                                                                 dynamically
+
+ WB04 Diarization           + Merge      speaker        segments Speaker             labels Pass
+         Alignment              with word-level timestamps       correctly        aligned
+                                                                 with        transcript
+                                                                 words
+
+ WB05 Fuzzy       Matching Input with paraphrased text Tokens                extracted Pass
+         Algorithm              variations                       (length         >      3);
+                                                                 similarity ratio >
+                                                                 0.72 enforced
+
+ WB06 Fuzzy       Matching Partial token overlap case            Minimum              60% Pass
+         Threshold Logic                                         token               match
+                                                                 threshold correctly
+                                                                 applied
+
+
+
+Department of Computer Science & Engineering ​                                                     44
+IU/IITE/CSE/2026/UDP-028​                           ​                                            TESTING
+
+
+ WB07 phi4-mini Prompt LLM prompt execution with Zero-inference rule Pass
+         Constraints         system constraints                         followed;           no
+                                                                        hallucinated
+                                                                        reasoning output
+
+ WB08 Output Parser          LLM          output        containing Markdown                       Pass
+                             markdown fences                            formatting removed
+                                                                        and              clean
+                                                                        structured      output
+                                                                        returned
+
+ WB09 JWT                    Token generation and expiry Valid                           token Pass
+         Authentication      validation                                 accepted;      expired
+                                                                        token rejected
+                                   Table 7.2: White Box Test Cases
+
+
+7.3 TEST CASES
+
+
+
+  Test      Module        Descript          Input              Expected              Actual        Statu
+  ID                        ion                                 Output               Output          s
+
+
+ TC01    Audio Pipeline   Capture            Live             Continuous              Audio        Pass
+                          real-time      doctor–pati         audio stream            captured
+                          consultat           ent               without              correctly
+                          ion audio      conversatio         interruption
+                                               n
+
+
+ TC02     Transcription   Convert        Multi-speak           Accurate            Transcriptio    Pass
+                          speech to            er            transcription         n generated
+                            text         conversatio                 with            correctly
+                           using               n
+
+
+
+Department of Computer Science & Engineering ​                                                           45
+IU/IITE/CSE/2026/UDP-028​                        ​                                 TESTING
+
+
+                          Whisper                      word-level
+                             X                         alignment
+
+
+ TC03      Diarization    Identify    Multi-speak     Doctor and       Speakers      Pass
+                          speakers      er audio        patient        identified
+                             in          input         segments        correctly
+                          conversa                     correctly
+                            tion                        labelled
+
+
+ TC04     Hallucination   Validate    Transcript +    Unsupported        Flags       Pass
+            Detection     unsuppor LLM output        items flagged      applied
+                           ted AI                    (isSupport        correctly
+                          outputs                    ed: false)
+
+
+ TC05    Summarization Generate        Diarized        Structured      Summary       Pass
+                          structure    transcript     JSON output      generated
+                             d                       within 70–100     correctly
+                          medical                       seconds
+                          summary
+
+
+ TC06    Doctor Editing   Modify      Inline chip    Updated values      Edits       Pass
+                          extracted    edit input       reflected       applied
+                          medical                     without full     correctly
+                           chips                      regeneration
+
+
+ TC07      Paragraph      Regener       Edited          Updated       Regeneratio    Pass
+          Regeneration       ate        chips +        paragraphs     n successful
+                          summary      transcript     aligned with
+                            after                       changes
+                            edits
+
+
+
+Department of Computer Science & Engineering ​                                          46
+IU/IITE/CSE/2026/UDP-028​                         ​                                  TESTING
+
+
+ TC08    Visit Approval    Finalize      Doctor         Summary           Verified     Pass
+                           consultat     clicks           saved;        successfully
+                             ion        approve         transcript
+                            record                    erased; history
+                                                         updated
+
+
+ TC09    Patient History   Retrieve     Existing         Display           Data        Pass
+                             past      patient ID        previous        retrieved
+                           consultat                   records and       correctly
+                           ion data                     summaries
+
+
+ TC10        Record        Update       Modified      Updated record      Record       Pass
+          Management       existing     summary          saved in         updated
+                            patient      fields          database       successfully
+                            record
+
+
+ TC11     Appointment      Schedule      Valid         Appointment      Appointmen     Pass
+           Scheduling        new       appointmen     created without   t scheduled
+                           appoint      t details        conflict
+                             ment
+
+
+ TC12        Room           Assign      Doctor +      Room assigned       Room         Pass
+           Allocation      consultat   room input     and access PIN     assigned
+                           ion room                     generated        correctly
+
+
+ TC13    Error Handling    Handle      Corrupted      Graceful error       Error       Pass
+                            invalid      audio           message          handled
+                            audio        stream          returned        correctly
+                            input
+
+
+
+
+Department of Computer Science & Engineering ​                                            47
+IU/IITE/CSE/2026/UDP-028​                               ​                                            TESTING
+
+
+ TC14       Authentication   Validate        Logged-out       Token rejected;            Security      Pass
+                               JWT           token reuse       request returns           enforced
+                             revocatio                                401                correctly
+                                   n
+
+
+ TC15       Authorization     Restrict         Room            Access limited             Access       Pass
+               (RBAC)          room            device            to assigned             restricted
+                              device            token          room data only            correctly
+                              access
+
+
+
+
+                               Table 7.3: Test Cases for each of the modules
+
+
+
+
+7.4 MODEL BENCHMARK
+
+
+Before functional testing, a formal benchmark was conducted to select the production
+summarization model. Four models were evaluated against three clinical test cases (GP visit,
+diabetes follow-up, sore throat) and one expand task using the exact system prompt from
+production.
+
+
+7.4.1 Raw Benchmark Scores
+
+
+  Model        Test Case     Time         JSON              Schema             Support        Cats      Pas
+                              (s)          OK                 OK                Rate          Valid      s
+
+ qwen2.5:     GP             10.3        ✓              ✓                1.00               6/6         ✓
+ 3b           Headache
+
+ qwen2.5:     Diabetes       7.4         ✓              ✓                0.89               5/6         ✓
+ 3b
+
+ qwen2.5:     Sore           6.9         ✓              ✓                0.90               5/6         ✓
+ 3b           Throat
+
+
+
+
+Department of Computer Science & Engineering ​                                                              48
+IU/IITE/CSE/2026/UDP-028​                                      ​                                            TESTING
+
+
+ qwen3:4b        GP                41.5         ✗               ✗                0.00                0/0            ✗
+                 Headache
+
+ qwen3:4b        Diabetes          30.0         ✗               ✗                0.00                0/0            ✗
+
+ qwen3:4b        Sore              30.7         ✗               ✗                0.00                0/0            ✗
+                 Throat
+
+ phi4-mini       GP                25.4*        ✓               ✓                1.00                6/6            ✓
+                 Headache
+
+ phi4-mini       Diabetes          7.6          ✓               ✓                1.00                6/6            ✓
+
+ phi4-mini       Sore              9.2          ✓               ✓                1.00                5/5            ✓
+                 Throat
+
+ llama3.1:       GP                22.4         ✓               ✓                1.00                6/6            ✓
+ 8b              Headache
+
+ llama3.1:       Diabetes          16.0         ✓               ✓                1.00                6/6            ✓
+ 8b
+
+ llama3.1:       Sore              12.3         ✓               ✓                1.00                5/6            ✓
+ 8b              Throat
+                                                 Table 7.4.1 : Raw Score
+
+Note : * phi4-mini GP Headache time is cold start (25.4s); warm inference is 7.6s. Model is pre-warmed at server startup in
+                                                       production.
+
+
+
+
+7.4.2 Aggregate Benchmark Summary
+
+   Model            Avg Time              JSON           Schema            Avg Support                  Overall
+                                           OK              OK                 Rate
+
+ qwen2.5:        7.1s                    100%          100%              0.93                    ✓ (minor
+ 3b                                                                                              paraphrase)
+
+ qwen3:4b        33.4s                   0%            0%                0.00                    ✗
+                                                                                                 DISQUALIFIED
+
+ phi4-mini       12.1s (7.6s             100%          100%              1.00                    ✓ SELECTED
+                 warm)
+
+ llama3.1:       15.3s                   100%          100%              1.00                    ✓ (too slow on
+ 8b                                                                                              CPU)
+
+
+Department of Computer Science & Engineering ​                                                                          49
+IU/IITE/CSE/2026/UDP-028​                        ​                                 TESTING
+
+7.4.3 Key Findings
+
+qwen3:4b disqualified: hybrid thinking architecture consumed entire 768-token budget on
+internal chain-of-thought before producing output. Increasing budget to 4096 tokens did not
+resolve — 2,400+ words of reasoning generated, zero content produced.
+qwen2.5:3b rejected: consistent paraphrasing in 2 of 3 test cases (support rates 0.89 and
+0.90) indicates it does not reliably uphold the zero-inference rule. Produced category 'test
+result' not in valid schema.
+llama3.1:8b rejected: perfect quality but 4.9 GB footprint and ~60s CPU inference pushes
+total pipeline past 2 minutes on clinic hardware — operationally unsuitable.
+phi4-mini selected: perfect support rate (1.00), 100% schema compliance, warm inference
+matching qwen2.5:3b at 7.6s. Zero detected hallucinations across all test cases.
+
+
+
+
+Department of Computer Science & Engineering ​                                           50
+                  CHAPTER 8
+ SYSTEM DESIGN
+▪​ 8.1 Class Diagram
+
+▪​ 8.2 Use Case Diagram
+
+▪​ 8.3 Sequence Diagram
+
+▪​ 8.4 Activity Diagram
+
+▪​ 8.5 Data Flow Diagram (DFD)
+IU/IITE/CSE/2026/UDP-028                                   ​   SYSTEM DESIGN
+
+
+8.1 CLASS DIAGRAM
+
+
+
+
+                                  Fig 8.1: Class Diagram
+
+
+
+
+Department of Computer Science & Engineering ​                            52
+IU/IITE/CSE/2026/UDP-028                                     ​   SYSTEM DESIGN
+
+
+8.2 USE CASE DIAGRAM
+
+
+
+
+                                 Fig 8.2: Use Case Diagram
+
+
+
+
+Department of Computer Science & Engineering ​                              53
+IU/IITE/CSE/2026/UDP-028                                     ​   SYSTEM DESIGN
+
+
+8.3 SEQUENCE DIAGRAM
+
+
+
+
+                                 Fig 8.3: Sequence Diagram
+
+
+
+
+Department of Computer Science & Engineering ​                              54
+IU/IITE/CSE/2026/UDP-028                                      ​   SYSTEM DESIGN
+
+
+
+
+8.4 ACTIVITY DIAGRAM
+
+
+
+
+                                  Fig 8.4: Activity Diagram
+
+Department of Computer Science & Engineering ​                               55
+IU/IITE/CSE/2026/UDP-028                                    ​       SYSTEM DESIGN
+
+
+
+8.5 DATA FLOW DIAGRAM (DFD)
+
+
+LEVEL 0:
+
+
+
+
+                             Fig 8.5.1: Level 0 Data Flow Diagram
+
+
+
+
+Department of Computer Science & Engineering ​                                 56
+IU/IITE/CSE/2026/UDP-028                                     ​    SYSTEM DESIGN
+
+LEVEL 1:
+
+
+
+
+                           Fig 8.5.2: Level 1 Data Flow Diagram
+
+
+
+
+Department of Computer Science & Engineering ​                               57
+IU/IITE/CSE/2026/UDP-028                                     ​    SYSTEM DESIGN
+
+LEVEL 2:
+
+
+
+
+                           Fig 8.5.3: Level 2 Data Flow Diagram
+
+
+
+
+Department of Computer Science & Engineering ​                               58
+                             CHAPTER 9
+LIMITATIONS AND FUTURE
+        ENHANCEMENTS
+        ▪​ 9.1 Limitations
+
+        ▪​ 9.2 Future Enhancements
+IU/IITE/CSE/2026/UDP-028                LIMITATIONS AND FUTURE ENHANCEMENT
+
+
+9.1 LIMITATIONS
+
+
+While the current version of the Electronic Medical Record System (Alvyto) is a fully
+functional system that successfully meets its core objectives to achieve during the course of
+MVP - 1, it has several limitations inherent to its design as a locally-deployed, batch-oriented
+reconciliation platform.
+   1.​ Processing Latency on CPU-Only Hardware : The end-to-end pipeline (audio stop
+       to summary displayed) takes approximately 70–100 seconds on CPU-only clinic
+       servers — comprising WhisperX transcription (~30–45s), pyannote diarization
+       (~15–20s), and phi4-mini inference (~30s). This requires the doctor to remain at the
+       room PC for approximately 1–2 minutes post-consultation. A GPU-equipped server
+       reduces total latency to under 45 seconds, which is the recommended production
+       configuration.
+   2.​ Audio Quality Dependency : Transcription accuracy is sensitive to background
+       noise, microphone quality, and overlapping speech. Significant ambient noise in exam
+       rooms or poor microphone placement can degrade WhisperX output, which in turn
+       reduces diarization accuracy and summary quality.
+   3.​ Domain Vocabulary Coverage : WhisperX small.en performs well on general
+       clinical English but may struggle with highly specialized medical terminology, rare
+       drug names, or heavy accents. phi4-mini's zero-inference constraint means it will not
+       hallucinate unfamiliar terms — but it may also fail to extract them if transcription has
+       corrupted the input.
+   4.​ Single-Clinic Deployment : The current architecture supports one clinic per
+       deployment instance. Multi-location clinic chains require separate deployments,
+       which is the correct approach for PHI isolation but requires operational management
+       of multiple instances.
+   5.​ Security    Completeness      : The    current   implementation     does not include
+       transport-layer encryption (HTTPS), full HIPAA compliance mechanisms, or formal
+       penetration testing. These are production requirements before deployment in
+       regulated healthcare environments.
+
+
+
+
+Department of Computer Science & Engineering ​                                               60
+IU/IITE/CSE/2026/UDP-028                LIMITATIONS AND FUTURE ENHANCEMENT
+
+   6.​ Limited Concurrent Session Support : The single-worker job queue on the room
+       agent processes one audio submission at a time. A clinic with many simultaneous
+       room recordings would require a multi-worker queue or horizontal scaling of the
+       room agent service.
+9.2 FUTURE ENHANCEMENTS
+
+
+The limitations of the current version provide a clear and exciting roadmap for future
+enhancements that could elevate Moodify into a production-grade, commercial-quality
+wellness application.
+   1.​ GPU-First Deployment with Hardware Specification : Formalise an NVIDIA
+       GPU (RTX 3060 minimum) as a recommended deployment requirement, reducing
+       total pipeline latency to under 45 seconds and making the doctor wait time tolerable
+       without any architectural changes.
+
+   2.​ VAD-Based Pipeline Optimization : Implement Silero VAD preprocessing to strip
+       silence from recordings before WhisperX processing, reducing transcription input by
+       30–40% and cutting pipeline time proportionally.
+
+   3.​ Incremental Summarization : Begin Qwen/phi4-mini summarization on the first
+       60% of the transcript while diarization processes the remainder, then merge results.
+       Estimated saving: 40–60 seconds on the critical path.
+
+   4.​ Mobile Review Interface : A lightweight mobile application for doctors to review
+       and approve summaries from their personal device — addressing the workflow
+       challenge of doctors moving between rooms in North American clinic configurations.
+
+   5.​ HL7 FHIR Integration : Implement export of approved summaries to standard
+       healthcare interoperability formats, enabling integration with hospital-scale EMR
+       systems.
+
+   6.​ Multi-Language Support : Extend WhisperX to multilingual models (Whisper
+       medium or large) to support clinical environments with non-English-speaking
+       patients, particularly relevant for diverse urban clinic populations.
+
+Department of Computer Science & Engineering ​                                                61
+IU/IITE/CSE/2026/UDP-028             LIMITATIONS AND FUTURE ENHANCEMENT
+
+
+   7.​ Advanced Security and Compliance : HTTPS/TLS for all service communication,
+      HIPAA compliance documentation, role-based access auditing, and formal
+      penetration testing prior to production deployment in regulated environments.
+
+   8.​ qwen3:4b-nothink Re-evaluation : Re-evaluate Qwen3:4b when a variant with
+      thinking suppressed at quantization time (qwen3:4b-nothink) becomes available on
+      Ollama. The model's reasoning capability could improve summarization quality on
+      complex multi-issue consultations if the token budget overhead is eliminated.
+
+
+
+
+Department of Computer Science & Engineering ​                                           62
+                CHAPTER 10
+        CONCLUSION
+▪​ 10.1 Conclusion
+IU/IITE/CSE/2026/UDP-028​                        ​                           CONCLUSION
+
+
+
+10.1 CONCLUSION
+
+
+Alvyto demonstrates that a fully local, hallucination-controlled AI clinical documentation
+system is practical on commodity clinic hardware. By integrating WhisperX transcription,
+pyannote.audio diarization, and phi4-mini summarization into a single pipeline — and
+enforcing a zero-inference rule with fuzzy-matching validation at every step — the system
+produces structured clinical records that a doctor can review, correct, and approve in under
+two minutes.
+
+
+The formal four-model benchmark was a critical contribution of this project. The discovery
+that Qwen3:4b's hybrid thinking architecture is fundamentally incompatible with
+token-budgeted structured output tasks — consuming its entire budget on internal reasoning
+traces before producing any content — is a practically significant finding for anyone
+deploying small LLMs in constrained-output applications. phi4-mini's selection was justified
+by measurable evidence: a perfect support rate of 1.00 across all test cases, 100% schema
+compliance, and warm inference time statistically identical to the faster baseline model.
+
+
+The PHI minimization design — where raw transcripts are held in-memory client-side, never
+written to the database, and erased after approval — represents a principled approach to
+patient data protection that goes beyond minimum requirements. The immutable audit log
+and server-side JWT revocation complete a security posture appropriate for a system
+handling sensitive clinical data.
+
+
+The primary remaining challenge is end-to-end pipeline latency: 70–100 seconds on
+CPU-only hardware requires the doctor to wait at the room PC post-consultation. A
+GPU-equipped server resolves this, and is the recommended deployment configuration. The
+incremental summarization and VAD optimizations identified for future work could further
+reduce latency without hardware changes.
+
+
+
+
+Department of Computer Science & Engineering​                                               64
+IU/IITE/CSE/2026/UDP-028​                        ​                            CONCLUSION
+
+Alvyto represents a meaningful step toward AI-powered clinical documentation that is
+accurate, privacy-preserving, and deployable in the resource-constrained environments of
+real-world small-to-medium clinics
+
+Beyond its immediate clinical utility, Alvyto establishes a replicable blueprint for responsible
+AI deployment in regulated domains. The architectural decisions made here —
+zero-inference constraints, human-in-the-loop approval gates, PHI minimization by design
+rather than by policy, and immutable audit trails — are not Alvyto-specific innovations. They
+are transferable patterns that any team building AI-assisted tooling for healthcare, legal, or
+financial environments can adopt. The benchmark methodology, in particular, offers a
+concrete template: evaluate candidate models not on general benchmarks but on the exact
+prompts, token budgets, and output schemas the production system will use.
+
+Looking further ahead, the limitations documented in this report point toward a natural
+second phase of development. GPU-first deployment with Silero VAD preprocessing and
+incremental summarization could compress end-to-end latency to under 30 seconds,
+effectively eliminating the post-consultation wait entirely. Integration with HL7 FHIR
+standards would allow Alvyto-generated records to flow directly into hospital-scale EMR
+infrastructures, extending its reach beyond independent clinics into larger healthcare
+networks. Multi-language transcription support, enabled by switching to Whisper medium or
+large variants, would make the system viable in linguistically diverse clinical environments
+where English-only ASR currently excludes a significant patient population.
+
+Ultimately, the most significant validation of Alvyto's design is not its benchmark scores but
+its constraint: the system is engineered to fail safely. If the AI produces an unsupported
+claim, it is flagged — not silently committed. If the transcript is not approved, it is erased —
+not retained. If a token is reused after logout, it is rejected — not honored. These
+negative-space design choices, the things the system deliberately refuses to do, are what
+make it trustworthy enough to sit in a clinical environment. As AI systems take on
+increasingly consequential roles in healthcare, this kind of principled restraint may prove to
+be the most important engineering contribution of all.
+
+
+
+
+Department of Computer Science & Engineering​                                                65
+                CHAPTER 11
+         APPENDICES
+▪​ 11.1 Business Model
+
+▪​ 11.2 Product Deployment Detail
+
+▪​ 11.3 API and Web Service Details
+IU/IITE/CSE/2026/UDP-028​                       ​                             APPENDICES
+
+
+11.1 BUSINESS MODEL
+
+   ●​ Business Model : The Alvyto Electronic Medical Record (EMR) system operates on
+      a clinical productivity and automation model, designed primarily for deployment
+      within clinics, healthcare centers, and small-to-medium medical facilities rather than
+      as a direct consumer-facing product. The system delivers value by reducing manual
+      documentation effort, improving clinical efficiency, and enhancing the quality and
+      consistency of medical records..
+   ●​ Value Proposition : The system eliminates the need for manual note-taking and
+      post-consultation documentation by automatically converting doctor–patient
+      conversations into structured medical records in real time. By integrating
+      transcription, summarization, and record management into a single platform, Alvyto
+      reduces cognitive load on doctors, minimizes documentation errors, and ensures
+      standardized clinical records. Additionally, it improves patient interaction quality by
+      allowing doctors to focus entirely on consultations rather than administrative tasks.
+   ●​ Target Users : The primary users of the system include:
+
+                 ▪​ Doctors / Healthcare Professionals – Use the system during
+
+                     consultations for real-time documentation
+
+                 ▪​ Clinic Staff / Assistants – Manage patient records and verify system
+
+                     outputs
+
+                 ▪​ Clinic Administrators – Handle scheduling, room allocation, and
+
+                     operational workflows
+          o​ The system is particularly suited for:
+
+                 ▪​ Private clinics
+
+
+                 ▪​ Multi-doctor practices
+
+
+                 ▪​ Small hospitals
+
+
+                 ▪​ Diagnostic and consultation centers
+
+Department of Computer Science & Engineering​                                                 67
+IU/IITE/CSE/2026/UDP-028​                       ​                          APPENDICES
+
+
+   ●​ Cost Structure : The system is built using modern and largely open-source
+      technologies, making it cost-efficient.
+          o​ Software Costs: Minimal (open-source stack including Python, FastAPI,
+             WhisperX, and NLP libraries)
+          o​ Infrastructure Costs:
+
+                 ▪​ Local deployment on clinic systems (low cost)
+
+
+                 ▪​ Optional cloud deployment for scalability
+
+          o​ Hardware Costs:
+
+                 ▪​ CPU-based systems sufficient for operation
+
+
+                 ▪​ Optional GPU for performance enhancement
+
+          o​ Maintenance Costs:
+
+                 ▪​ Model updates
+
+
+                 ▪​ System monitoring and debugging
+
+
+                 ▪​ Minor UI/UX improvements
+
+   ●​ Revenue / Return on Investment :
+
+          o​ The return on investment is realized through:
+
+
+                 ▪​ Reduction in manual documentation time
+
+
+
+                 ▪​ Increased number of consultations handled per day
+
+
+
+                 ▪​ Improved accuracy and consistency of medical records
+
+
+
+                 ▪​ Reduced administrative overhead
+
+Department of Computer Science & Engineering​                                        68
+IU/IITE/CSE/2026/UDP-028​                        ​                            APPENDICES
+
+
+                   ▪​ Enhanced patient satisfaction and workflow efficiency
+
+
+           o​ In future commercial deployment, the system can adopt:
+
+
+                   ▪​ Subscription-based model (per clinic / per doctor)
+
+
+
+                   ▪​ SaaS-based cloud deployment
+
+
+
+                   ▪​ Enterprise licensing for hospital chains
+
+
+11.2 PRODUCT DEPLOYMENT DETAIL
+
+
+The appliThe Alvyto system is deployed as a web-based application with a real-time AI
+processing backend, capable of running on standard clinic hardware or cloud infrastructure.
+
+
+Deployment Architecture
+
+
+        Component                                    Detail
+
+       Backend          FastAPI running on ASGI server (Uvicorn)
+       Framework
+
+       AI Processing WhisperX (ASR), pyannote (diarization), phi4-mini (LLM)
+
+       Frontend         Web-based UI (Next.js or equivalent)
+
+       Database         MySQL / PostgreSQL
+
+       Communicati      REST APIs + WebSocket for real-time streaming
+       on
+
+       Operating        Windows, Linux (Ubuntu), macOS
+       System
+
+       File Storage     Local storage for temporary audio and logs
+
+
+
+Department of Computer Science & Engineering​                                            69
+IU/IITE/CSE/2026/UDP-028​                              ​                     APPENDICES
+
+
+        Model           Ollama / local model execution
+        Runtime
+
+                                    Table 11.2: Deployment Architecture
+
+
+Deployment Steps
+   1.​ Install Python 3.10+ and required system dependencies
+   2.​ Set up virtual environment using venv
+   3.​ Install dependencies using:
+           ○​ pip install -r requirements.txt
+   4.​ Configure AI models (WhisperX, diarization, phi4-mini)
+   5.​ Set up database connection (MySQL/PostgreSQL)
+   6.​ Start backend server:
+           ○​ uvicorn main:app --host 0.0.0.0 --port 8000
+   7.​ Start frontend application
+   8.​ Access system via:
+           ○​ http://<host>:3000
+Environment Notes
+   ●​   System is optimized for CPU-based deployment, suitable for clinics
+   ●​   GPU can be used optionally to reduce latency
+   ●​   Models are pre-warmed at startup to reduce inference delay
+   ●​   Real-time communication uses WebSocket for streaming audio and responses
+   ●​   Logs and temporary files are stored locally for debugging
+
+
+
+
+Department of Computer Science & Engineering​                                        70
+IU/IITE/CSE/2026/UDP-028​                         ​                     APPENDICES
+
+
+
+WORKING SCREENSHOTS
+
+                            Figure 11.2.1 : Home Screen - Client Side
+
+
+
+
+                             Figure 11.2.2: Patient-Historical View
+
+
+
+
+Department of Computer Science & Engineering​                                   71
+IU/IITE/CSE/2026/UDP-028​                          ​                      APPENDICES
+
+                          Figure 11.2.3: Patient-Historical Comparision
+
+
+
+
+                                Figure 11.2. 4: Live Transcription
+
+
+
+
+Department of Computer Science & Engineering​                                     72
+IU/IITE/CSE/2026/UDP-028​                         ​                        APPENDICES
+
+                              Figure 11.2.5: Speaker Confirmation
+
+
+
+
+                        Figure 11.2..6: Complete Transcription + Summary
+
+
+
+
+Department of Computer Science & Engineering​                                      73
+IU/IITE/CSE/2026/UDP-028​                       ​               APPENDICES
+
+                               Figure 11.2.7: Admin Dashboard
+
+
+
+
+                              Figure 11.2.8: Room Management
+
+
+
+
+Department of Computer Science & Engineering​                           74
+IU/IITE/CSE/2026/UDP-028​                        ​                APPENDICES
+
+                                 Figure 11.2.9.: Patient Queue
+
+
+
+
+                              Figure 11.2.10: Doctor Management
+
+
+
+
+Department of Computer Science & Engineering​                             75
+IU/IITE/CSE/2026/UDP-028​                       ​             APPENDICES
+
+
+                                 Figure 11.2.11: Past Visit
+
+
+
+
+Department of Computer Science & Engineering​                         76
+IU/IITE/CSE/2026/UDP-028​                       ​              APPENDICES
+
+                                 Figure 11.2.12 : Scheduling
+
+
+
+
+Department of Computer Science & Engineering​                          77
+IU/IITE/CSE/2026/UDP-028​                            ​                      APPENDICES
+
+
+11.3 API AND WEB SERVICE DETAILS
+
+
+The Alvyto system exposes a set of RESTful APIs and WebSocket services to enable
+communication between frontend, backend, and AI modules.
+11.3.1 Key API Modules
+
+
+        Module                                       Description
+
+ Authentication API         Handles login, JWT generation, and session management
+
+ Audio Processing           Receives and processes audio streams
+ API
+
+ Transcription API          Converts audio into text using WhisperX
+
+ Summarization API          Generates structured medical summaries
+
+ Patient Records API        Manages patient data and consultation history
+
+ Admin API                  Handles scheduling and room management
+
+ Audit API                  Tracks system actions and logs
+
+                                       Table 11.3.1: API Modules
+
+
+11.3.2 Sample API Endpoints
+
+     Endpoint          Method                   Description
+
+ /auth/login           POST       Authenticate user and generate JWT
+
+ /audio/stream         WS         Stream real-time audio
+
+ /transcription        POST       Process audio and return transcript
+
+ /summary              POST       Generate structured summary
+
+ /patients/{id}        GET        Retrieve patient records
+
+ /visit/approve        POST       Finalize and store consultation
+
+ /admin/schedule       POST       Create appointment
+                                      Table 11.3.2: API Endpoints
+
+
+
+
+Department of Computer Science & Engineering​                                       78
+IU/IITE/CSE/2026/UDP-028​                     ​                             APPENDICES
+
+11.3.3WebSocket Services
+   ●​ Used for real-time communication between frontend and backend
+   ●​ Enables continuous streaming of audio and incremental transcription
+   ●​ Supports low-latency updates during live consultations
+
+
+11.3.4 Security Features
+   ●​ JWT-based authentication for secure access
+   ●​ Role-Based Access Control (RBAC) for authorization
+   ●​ PHI protection mechanisms (transcript removal after approval)
+   ●​ Secure API endpoints with validation and error handling
+
+
+11.3.5 Data Flow Overview
+   ●​ Audio captured from frontend
+   ●​ Streamed via WebSocket to backend
+   ●​ Processed through ASR → Diarization → LLM
+   ●​ Structured output returned via API
+   ●​ Doctor reviews and approves
+   ●​ Data stored securely in database
+
+
+
+
+Department of Computer Science & Engineering​                                       79
+          ​
+
+
+
+
+BIBLIOGRAPHY
+IU/IITE/CSE/2026/UDP-028​                            ​                       BIBLIOGRAPHY
+
+
+BIBLIOGRAPHY
+
+
+1.​ ARadford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., & Sutskever, I. (2022).
+   Robust Speech Recognition via Large-Scale Weak Supervision. arXiv:2212.04356.
+   https://arxiv.org/abs/2212.04356
+2.​ Bain, M., Huh, J., Han, T., & Zisserman, A. (2022). WhisperX: Time-Accurate Speech
+   Transcription of Long-Form Audio. arXiv:2303.00747. https://arxiv.org/abs/2303.00747
+3.​ Bredin, H., & Laurent, A. (2023). End-to-end speaker segmentation for overlap-aware
+   resegmentation.               Proceedings               of         ICASSP               2023.
+   https://github.com/pyannote/pyannote-audio
+4.​ Microsoft        Research.        (2024).            Phi-4-Mini    Technical          Report.
+   https://aka.ms/phi4-mini-report
+5.​ FastAPI Documentation. (2025). FastAPI — Modern, fast (high-performance) web
+   framework for building APIs with Python. https://fastapi.tiangolo.com/
+6.​ PyTorch Documentation. (2025). PyTorch — An open source machine learning
+   framework. https://pytorch.org/docs/
+7.​ Ollama. (2025). Run large language models locally. https://ollama.com/
+8.​ SQLAlchemy Documentation. (2025). The Python SQL Toolkit and Object Relational
+   Mapper. https://docs.sqlalchemy.org/
+9.​ Next.js     Documentation.     (2025).     The       React   Framework    for   the     Web.
+   https://nextjs.org/docs
+10.​Vaswani, A., et al. (2017). Attention Is All You Need. Advances in Neural Information
+   Processing Systems, 30. arXiv:1706.03762
+
+
+
+
+Department of Computer Science & Engineering ​                                                81
+

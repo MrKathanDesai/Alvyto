@@ -25,6 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("RoomAgent")
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8080")
+KEEP_RAW_RECORDINGS = os.environ.get("ROOM_AGENT_KEEP_RAW", "0").strip().lower() in {"1", "true", "yes", "on"}
 
 
 def _save_progress_to_backend(
@@ -295,11 +296,14 @@ def execute_pipeline(session_id: str, doctor_name: str, patient_name: str):
         audio_data = pending_sessions.pop(session_id, None)
         # Cleanup persistent file
         if isinstance(audio_data, str) and os.path.exists(audio_data):
-            try:
-                os.remove(audio_data)
-                logger.info(f"Cleaned up persistent audio file: {audio_data}")
-            except Exception as e:
-                logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
+            if KEEP_RAW_RECORDINGS:
+                logger.info(f"Keeping persistent audio file (ROOM_AGENT_KEEP_RAW=1): {audio_data}")
+            else:
+                try:
+                    os.remove(audio_data)
+                    logger.info(f"Cleaned up persistent audio file: {audio_data}")
+                except Exception as e:
+                    logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
 
         session_stages.pop(session_id, None)
 
@@ -433,11 +437,14 @@ async def websocket_transcribe(
                         finally:
                             audio_data = pending_sessions.pop(session_id, None)
                             if isinstance(audio_data, str) and os.path.exists(audio_data):
-                                try:
-                                    os.remove(audio_data)
-                                    logger.info(f"Cleaned up persistent audio file: {audio_data}")
-                                except Exception as e:
-                                    logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
+                                if KEEP_RAW_RECORDINGS:
+                                    logger.info(f"Keeping persistent audio file (ROOM_AGENT_KEEP_RAW=1): {audio_data}")
+                                else:
+                                    try:
+                                        os.remove(audio_data)
+                                        logger.info(f"Cleaned up persistent audio file: {audio_data}")
+                                    except Exception as e:
+                                        logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
 
                         continue
 

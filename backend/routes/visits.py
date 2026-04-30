@@ -60,11 +60,26 @@ CONDITION_HINT_TERMS = {
     "pharyngitis", "gastritis", "tonsillitis", "sinusitis", "bronchitis", "pneumonia", "hypertension",
     "diabetes", "migraine", "asthma", "dermatitis", "arthritis", "infection", "uti", "cystitis",
     "anemia", "rhinitis", "otitis", "sprain", "strain", "reflux", "gerd", "copd",
+    "caries", "pulpitis", "cellulitis", "decay", "abscess",
+}
+
+MEDICATION_STOP_TERMS = {
+    "check", "contact", "care", "step", "today", "right", "left", "soft", "toothbrush", "flossing",
+    "xray", "x-ray", "urgent", "warning", "signs", "return", "follow", "avoid",
 }
 
 
 def _normalize_condition_label(label: str) -> str:
     return re.sub(r"\s+", " ", (label or "").strip())
+
+
+def _clean_condition_label(label: str) -> str:
+    value = _normalize_condition_label(label)
+    if not value:
+        return ""
+    value = re.sub(r"^(most likely|likely|probable)\s+", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"\s+(as long as|if)\b.*$", "", value, flags=re.IGNORECASE)
+    return _normalize_condition_label(value)
 
 
 def _looks_like_condition(label: str) -> bool:
@@ -81,9 +96,63 @@ def _looks_like_condition(label: str) -> bool:
         return True
     if any(value.endswith(suffix) for suffix in ("itis", "osis", "emia", "pathy", "oma")):
         return True
-    if len(tokens) >= 2 and all(token not in CONDITION_STOP_TERMS for token in tokens):
+    if len(tokens) >= 2 and len(tokens) <= 8 and all(token not in CONDITION_STOP_TERMS for token in tokens):
         return True
     return False
+
+
+def _looks_like_medication_name(name: str) -> bool:
+    value = _normalize_condition_label(name)
+    if not value:
+        return False
+    tokens = [t.lower() for t in re.findall(r"\b[a-zA-Z][a-zA-Z0-9+-]*\b", value)]
+    if not tokens or len(tokens) > 5:
+        return False
+    if any(token in MEDICATION_STOP_TERMS for token in tokens):
+        return False
+    return True
+
+
+def _extract_medication_from_action_text(text: str) -> dict | None:
+    raw = _normalize_condition_label(text)
+    if not raw:
+        return None
+
+    # Example: "Prescribed Amoxicillin Clavulanate 625 mg 3 times daily after food for 5 days"
+    if not re.search(r"\bprescrib", raw, flags=re.IGNORECASE):
+        return None
+
+    candidate = re.sub(r"^.*?\bprescrib(?:ed|e)?\s+", "", raw, flags=re.IGNORECASE)
+    candidate = re.sub(r"\bfor\b.*$", "", candidate, flags=re.IGNORECASE).strip(" .")
+    if not candidate:
+        return None
+
+    dosage_match = re.search(r"\b\d+(?:\.\d+)?\s*(?:mg|milligram|mcg|g|ml)\b", candidate, flags=re.IGNORECASE)
+    dosage = dosage_match.group(0) if dosage_match else None
+
+    frequency_match = re.search(
+        r"\b(?:once|twice|thrice|\d+\s*times?)\s+(?:daily|a day)|every\s+\d+\s+hours?\b[^.]*",
+        candidate,
+        flags=re.IGNORECASE,
+    )
+    frequency = frequency_match.group(0).strip() if frequency_match else None
+
+    # Strip dosage/frequency to isolate the medication name
+    name = candidate
+    if dosage:
+        name = re.sub(re.escape(dosage), "", name, flags=re.IGNORECASE)
+    if frequency:
+        name = re.sub(re.escape(frequency), "", name, flags=re.IGNORECASE)
+    name = _normalize_condition_label(name).strip(" -,:;")
+
+    if not _looks_like_medication_name(name):
+        return None
+
+    return {
+        "name": name,
+        "dosage": dosage,
+        "frequency": frequency,
+    }
 
 
 def _extract_condition_candidates(summary) -> list[str]:
@@ -92,12 +161,17 @@ def _extract_condition_candidates(summary) -> list[str]:
     draft = summary.prescriptionDraft
     if draft and draft.diagnoses:
         for diagnosis in draft.diagnoses:
-            normalized = _normalize_condition_label(diagnosis)
+            normalized = _clean_condition_label(diagnosis)
             if normalized and _looks_like_condition(normalized):
                 candidates.append(normalized)
 
-    # Do not infer long-term conditions from symptoms/snapshot directly.
-    # Only doctor-facing structured diagnoses should be merged into history.
+    # Include explicit assessment statements as condition candidates.
+    sections = summary.sections
+    if sections and sections.assessment:
+        for item in sections.assessment:
+            normalized = _clean_condition_label(str(item))
+            if normalized and _looks_like_condition(normalized):
+                candidates.append(normalized)
 
     deduped: list[str] = []
     seen = set()
@@ -110,6 +184,59 @@ def _extract_condition_candidates(summary) -> list[str]:
     return deduped
 
 
+def _extract_allergy_candidates(summary) -> list[str]:
+    candidates: list[str] = []
+
+    sections = summary.sections
+    if sections and sections.allergies:
+        for item in sections.allergies:
+            value = _normalize_condition_label(str(item))
+            if value:
+                candidates.append(value)
+
+    source_facts = summary.sourceFacts or []
+    for fact in source_facts:
+        category = str(getattr(fact, "category", "") or "").strip().lower()
+        status = str(getattr(fact, "status", "confirmed") or "confirmed").strip().lower()
+        if category != "allergy" or status == "denied":
+            continue
+        value = _normalize_condition_label(str(getattr(fact, "text", "") or ""))
+        if value:
+            candidates.append(value)
+
+    deduped: list[str] = []
+    seen = set()
+    for item in candidates:
+        key = item.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    return deduped
+
+
+def _extract_snapshot_notes(summary) -> str | None:
+    notes_parts: list[str] = []
+
+    issues = str(summary.issuesParagraph or "").strip()
+    actions = str(summary.actionsParagraph or "").strip()
+    chief = str(summary.chiefComplaint or "").strip()
+    if chief:
+        notes_parts.append(f"Chief complaint: {chief}")
+    if issues:
+        notes_parts.append(issues)
+    if actions:
+        notes_parts.append(actions)
+
+    draft = summary.prescriptionDraft
+    if draft and draft.reportSummary:
+        report_summary = str(draft.reportSummary).strip()
+        if report_summary:
+            notes_parts.append(f"Report summary: {report_summary}")
+
+    return "\n\n".join(notes_parts) if notes_parts else None
+
+
 def _extract_medication_candidates(summary) -> list[dict]:
     meds: list[dict] = []
 
@@ -117,7 +244,7 @@ def _extract_medication_candidates(summary) -> list[dict]:
     if draft and draft.medications:
         for med in draft.medications:
             name = str(med.name or "").strip()
-            if not name:
+            if not _looks_like_medication_name(name):
                 continue
             meds.append({
                 "name": name,
@@ -128,13 +255,20 @@ def _extract_medication_candidates(summary) -> list[dict]:
     if not meds and summary.prescriptions:
         for rx in summary.prescriptions:
             name = str(rx.name or "").strip()
-            if not name:
+            if not _looks_like_medication_name(name):
                 continue
             meds.append({
                 "name": name,
                 "dosage": rx.dosage,
                 "frequency": rx.frequency,
             })
+
+    if not meds and summary.doctorActions:
+        for action in summary.doctorActions:
+            text = str(action.text or "").strip()
+            parsed = _extract_medication_from_action_text(text)
+            if parsed:
+                meds.append(parsed)
 
     deduped: list[dict] = []
     seen = set()
@@ -167,19 +301,15 @@ def _merge_summary_into_medical_history(
     summary_payload: VisitApprove,
     actor_id: str,
 ) -> None:
-    existing_conditions = {str(c).strip().lower() for c in (med_history.conditions or []) if str(c).strip()}
-    new_conditions = list(med_history.conditions or [])
-
-    for condition in _extract_condition_candidates(summary_payload.summary):
-        key = condition.lower()
-        if key in existing_conditions:
-            continue
-        existing_conditions.add(key)
-        new_conditions.append(condition)
-
-    med_history.conditions = new_conditions
+    # Product requirement: approved summary should replace current medical snapshot.
+    med_history.conditions = _extract_condition_candidates(summary_payload.summary)
+    med_history.allergies = _extract_allergy_candidates(summary_payload.summary)
+    med_history.medications = _extract_medication_candidates(summary_payload.summary)
+    med_history.notes = _extract_snapshot_notes(summary_payload.summary)
     med_history.updated_by = actor_id
     flag_modified(med_history, "conditions")
+    flag_modified(med_history, "allergies")
+    flag_modified(med_history, "medications")
 
 
 def _complete_linked_appointment(db: DBSession, visit: models.Visit, now: datetime) -> None:

@@ -1,0 +1,1822 @@
+INFO:     Started server process [52054]
+INFO:     Waiting for application startup.
+2026-04-19 12:10:02,366 [INFO] EMR: Database connected: /Users/kathandesai/alvyto/backend/emr.db
+2026-04-19 12:10:02,366 [INFO] EMR: EMR API started — all tables verified.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
+2026-04-19 12:10:02,954 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:49806 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:10:03,001 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49806 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:06,618 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:49818 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:10:06,641 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:49821 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:10:32,950 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:49829 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:10:32,961 [INFO] EMR: OPTIONS /api/patients 200
+INFO:     127.0.0.1:49831 - "OPTIONS /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:10:32,961 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:49832 - "OPTIONS /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:10:32,964 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:49835 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:10:32,987 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49833 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:32,988 [INFO] EMR: GET /api/patients 401
+INFO:     127.0.0.1:49832 - "GET /api/patients HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:32,991 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49841 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:32,993 [INFO] EMR: GET /api/queue 401
+INFO:     127.0.0.1:49831 - "GET /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:32,993 [INFO] EMR: GET /api/doctors 401
+INFO:     127.0.0.1:49837 - "GET /api/doctors?active_only=true HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:32,993 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49839 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:10:43,582 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:49851 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:11:32,965 [INFO] EMR: GET /api/doctors 401
+INFO:     127.0.0.1:49869 - "GET /api/doctors?active_only=true HTTP/1.1" 401 Unauthorized
+2026-04-19 12:11:32,967 [INFO] EMR: GET /api/queue 401
+INFO:     127.0.0.1:49864 - "GET /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:11:32,967 [INFO] EMR: GET /api/patients 401
+INFO:     127.0.0.1:49867 - "GET /api/patients HTTP/1.1" 401 Unauthorized
+2026-04-19 12:11:32,967 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49866 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:11:32,969 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49870 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:11:32,974 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49867 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:11:50,043 [INFO] EMR: PATCH /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3/progress 200
+INFO:     127.0.0.1:49874 - "PATCH /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3/progress HTTP/1.1" 200 OK
+2026-04-19 12:11:50,119 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:49877 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:11:50,138 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:49880 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:12:12,731 [INFO] EMR: PATCH /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3/approve 200
+INFO:     127.0.0.1:49885 - "PATCH /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3/approve HTTP/1.1" 200 OK
+2026-04-19 12:12:32,990 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49892 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:12:33,013 [INFO] EMR: GET /api/patients 401
+INFO:     127.0.0.1:49898 - "GET /api/patients HTTP/1.1" 401 Unauthorized
+2026-04-19 12:12:33,014 [INFO] EMR: GET /api/doctors 401
+INFO:     127.0.0.1:49899 - "GET /api/doctors?active_only=true HTTP/1.1" 401 Unauthorized
+2026-04-19 12:12:33,014 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49900 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:12:33,014 [INFO] EMR: GET /api/queue 401
+INFO:     127.0.0.1:49896 - "GET /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:12:33,015 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49899 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:27,611 [INFO] EMR: GET /api/queue 401
+INFO:     127.0.0.1:49906 - "GET /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:27,613 [INFO] EMR: GET /api/doctors 401
+INFO:     127.0.0.1:49910 - "GET /api/doctors?active_only=true HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:27,613 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49911 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:27,614 [INFO] EMR: GET /api/patients 401
+INFO:     127.0.0.1:49907 - "GET /api/patients HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:27,791 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49910 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:32,981 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49928 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:32,983 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49930 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:37,999 [INFO] EMR: GET /api/queue 401
+INFO:     127.0.0.1:49928 - "GET /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:38,010 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49947 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:38,011 [INFO] EMR: GET /api/doctors 401
+INFO:     127.0.0.1:49946 - "GET /api/doctors?active_only=true HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:38,012 [INFO] EMR: GET /api/patients 401
+INFO:     127.0.0.1:49945 - "GET /api/patients HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:42,878 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49945 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:46,689 [INFO] EMR: POST /api/queue 401
+INFO:     127.0.0.1:49945 - "POST /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:48,877 [INFO] EMR: POST /api/queue 401
+INFO:     127.0.0.1:49945 - "POST /api/queue HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:51,338 [INFO] EMR: OPTIONS /api/auth/me 200
+INFO:     127.0.0.1:49945 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:13:51,343 [INFO] EMR: GET /api/auth/me 401
+INFO:     127.0.0.1:49945 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:51,559 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:49945 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-19 12:13:54,819 [INFO] EMR: OPTIONS /api/auth/login 200
+INFO:     127.0.0.1:49945 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:13:55,073 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:49945 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:13:55,083 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:49945 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:13:55,226 [INFO] EMR: OPTIONS /api/rooms/status 200
+INFO:     127.0.0.1:49945 - "OPTIONS /api/rooms/status HTTP/1.1" 200 OK
+2026-04-19 12:13:55,229 [INFO] EMR: OPTIONS /api/rooms/status 200
+INFO:     127.0.0.1:49979 - "OPTIONS /api/rooms/status HTTP/1.1" 200 OK
+2026-04-19 12:13:55,265 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49977 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:13:55,311 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49979 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:13:55,318 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:49981 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-19 12:13:55,319 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49978 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:13:55,333 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:49979 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-19 12:13:55,334 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49977 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:13:58,364 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49977 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:13:58,366 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:49978 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:13:58,367 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:49981 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:13:58,375 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49977 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:13:58,380 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49979 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:13:58,384 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:49978 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:13:58,384 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:49983 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:13:58,391 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49977 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:04,919 [INFO] EMR: POST /api/queue 201
+INFO:     127.0.0.1:49991 - "POST /api/queue HTTP/1.1" 201 Created
+2026-04-19 12:14:04,934 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49991 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:14:04,940 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:49997 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:04,941 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:49996 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:14:04,944 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49994 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:05,094 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:49994 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:06,036 [INFO] EMR: OPTIONS /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 200
+INFO:     127.0.0.1:49994 - "OPTIONS /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 HTTP/1.1" 200 OK
+2026-04-19 12:14:06,063 [INFO] EMR: PATCH /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 200
+INFO:     127.0.0.1:49994 - "PATCH /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 HTTP/1.1" 200 OK
+2026-04-19 12:14:06,078 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49994 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:14:06,082 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:49991 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:06,083 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:49997 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:14:06,088 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49996 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:06,825 [INFO] EMR: PATCH /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 200
+INFO:     127.0.0.1:49996 - "PATCH /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 HTTP/1.1" 200 OK
+2026-04-19 12:14:06,838 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:49996 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:14:06,845 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:49994 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:06,846 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:49991 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:14:06,851 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:49997 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:09,797 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:50007 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-19 12:14:10,943 [INFO] EMR: OPTIONS /api/auth/me 200
+INFO:     127.0.0.1:50007 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:14:10,963 [INFO] EMR: GET /api/auth/me 401
+INFO:     127.0.0.1:50007 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+2026-04-19 12:14:11,496 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:50007 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-19 12:14:13,347 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50021 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:14:13,355 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50025 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-19 12:14:13,357 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50027 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:13,362 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50024 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:15,167 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:50027 - "OPTIONS /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:15,168 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:50025 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:15,169 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:50033 - "OPTIONS /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:15,174 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:50034 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:15,197 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:50027 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:15,200 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50024 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:15,202 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50036 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:15,212 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:50038 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:15,214 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50021 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:15,214 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50040 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:15,279 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50024 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:15,289 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50036 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:15,291 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50027 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:16,769 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50027 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:14:16,814 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:50027 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:16,818 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50040 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:16,820 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50036 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:16,833 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:50021 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:16,833 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50024 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:16,834 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50027 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:16,834 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50040 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:16,846 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50036 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:16,849 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50021 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:16,853 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50040 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:19,416 [INFO] EMR: OPTIONS /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3 200
+INFO:     127.0.0.1:50040 - "OPTIONS /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3 HTTP/1.1" 200 OK
+2026-04-19 12:14:19,441 [INFO] EMR: DELETE /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3 204
+INFO:     127.0.0.1:50040 - "DELETE /api/visits/61d00a92-f8f7-4aa0-8198-4cc3490ae5a3 HTTP/1.1" 204 No Content
+2026-04-19 12:14:19,458 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:50040 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:19,460 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50027 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:19,460 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50021 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:19,464 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50036 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:26,020 [INFO] EMR: OPTIONS /api/visits/5fbfb79e-65a6-4417-9056-2579879bdcf9 200
+INFO:     127.0.0.1:50046 - "OPTIONS /api/visits/5fbfb79e-65a6-4417-9056-2579879bdcf9 HTTP/1.1" 200 OK
+2026-04-19 12:14:26,057 [INFO] EMR: DELETE /api/visits/5fbfb79e-65a6-4417-9056-2579879bdcf9 204
+INFO:     127.0.0.1:50046 - "DELETE /api/visits/5fbfb79e-65a6-4417-9056-2579879bdcf9 HTTP/1.1" 204 No Content
+2026-04-19 12:14:26,072 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:50046 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-19 12:14:26,076 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50052 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:26,077 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50049 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:26,080 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50051 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:26,863 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50051 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:31,264 [INFO] EMR: OPTIONS /api/auth/login 200
+INFO:     127.0.0.1:50066 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:14:31,513 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:50066 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:14:31,535 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50066 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:32,133 [INFO] EMR: OPTIONS /api/patients 200
+INFO:     127.0.0.1:50066 - "OPTIONS /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:32,139 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:50074 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:32,140 [INFO] EMR: OPTIONS /api/patients 200
+INFO:     127.0.0.1:50077 - "OPTIONS /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:32,140 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:50079 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:32,140 [INFO] EMR: OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 200
+INFO:     127.0.0.1:50083 - "OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 HTTP/1.1" 200 OK
+2026-04-19 12:14:32,141 [INFO] EMR: OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits 200
+INFO:     127.0.0.1:50084 - "OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits HTTP/1.1" 200 OK
+2026-04-19 12:14:32,158 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50079 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:32,168 [INFO] EMR: GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 200
+INFO:     127.0.0.1:50084 - "GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 HTTP/1.1" 200 OK
+2026-04-19 12:14:32,168 [INFO] EMR: GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits 200
+INFO:     127.0.0.1:50077 - "GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits HTTP/1.1" 200 OK
+2026-04-19 12:14:32,173 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50083 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:32,174 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:50074 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-19 12:14:32,181 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:50077 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-19 12:14:32,215 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50087 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:14:32,242 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50089 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:14:36,948 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50092 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:41,554 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50106 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:46,927 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50109 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:51,939 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50112 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:14:56,871 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50114 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:01,548 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50116 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:06,935 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50124 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:11,547 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50126 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:12,512 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:50126 - "OPTIONS /api/visits HTTP/1.1" 200 OK
+2026-04-19 12:15:12,534 [INFO] EMR: POST /api/visits 201
+INFO:     127.0.0.1:50126 - "POST /api/visits HTTP/1.1" 201 Created
+2026-04-19 12:15:12,538 [INFO] EMR: OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f 200
+INFO:     127.0.0.1:50126 - "OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f HTTP/1.1" 200 OK
+2026-04-19 12:15:12,547 [INFO] EMR: GET /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f 200
+INFO:     127.0.0.1:50126 - "GET /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f HTTP/1.1" 200 OK
+2026-04-19 12:15:12,713 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50130 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:15:16,919 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50132 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:21,578 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50138 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:26,941 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50140 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:31,546 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50142 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:36,919 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50144 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:41,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50146 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:46,920 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50148 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:51,550 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50150 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:15:56,918 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50152 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:01,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50154 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:11,541 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50156 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:21,541 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50158 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:31,539 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50160 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:32,918 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50162 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:41,536 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50164 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:16:51,534 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50166 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:01,540 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50168 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:11,538 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50171 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:21,538 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50173 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:31,548 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50176 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:32,930 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50178 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:41,550 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50180 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:17:51,541 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50183 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:01,544 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50185 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:11,544 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50187 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:21,544 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50189 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:31,542 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50193 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:32,938 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50195 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:41,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50197 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:18:51,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50199 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:01,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50201 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:11,544 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50203 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:21,545 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50206 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:31,542 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50208 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:32,933 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50210 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:41,551 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50212 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:19:51,564 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50214 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:01,546 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50216 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:11,537 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50218 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:21,536 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50220 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:31,538 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50222 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:32,919 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:50224 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:32,933 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50224 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:41,534 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:50227 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:41,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50227 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:44,148 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50231 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:20:47,141 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50233 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:20:50,139 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50235 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:20:51,535 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50237 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:20:53,172 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50240 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:20:56,168 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50242 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:20:59,147 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50244 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:01,570 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50246 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:02,146 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50248 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:05,144 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50250 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:08,142 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50252 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:11,142 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50254 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:11,510 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50256 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:11,543 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50258 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:15,096 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50260 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:16,952 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50262 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:17,915 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50264 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:20,920 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50286 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:21,913 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50288 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:23,911 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50308 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:26,921 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50341 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:26,922 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50339 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:29,911 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50343 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:31,913 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50345 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:32,928 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50349 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:35,923 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50355 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:36,912 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50357 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:38,927 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50363 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:41,930 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50373 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:41,934 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50371 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:44,966 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50376 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:46,920 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50378 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:47,912 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50380 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:50,372 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50383 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:51,931 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50385 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:53,167 [INFO] EMR: PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:50387 - "PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-19 12:21:53,177 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50389 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:21:56,937 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50391 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:21:57,531 [INFO] EMR: OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:50394 - "OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-19 12:21:57,531 [INFO] EMR: OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:50395 - "OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-19 12:21:57,709 [INFO] EMR: PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:50395 - "PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-19 12:21:57,711 [INFO] EMR: PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:50394 - "PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-19 12:22:01,550 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50394 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:06,927 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50397 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:11,558 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50402 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:21,542 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50407 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:31,552 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50409 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:32,927 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50411 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:33,863 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50415 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:22:41,549 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50446 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:22:51,540 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50449 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:01,550 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50451 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:11,558 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50454 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:21,547 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50458 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:32,133 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50475 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:32,933 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50477 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:41,579 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50481 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:23:51,949 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50496 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:24:01,934 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50505 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:24:11,953 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50521 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:24:21,923 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50523 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:24:31,922 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50525 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:24:32,935 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50527 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:24:41,939 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50541 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:25:32,997 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50579 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:25:32,999 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50578 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:01,913 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:50612 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:01,944 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50612 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:12,528 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50620 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:21,928 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50624 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:29,922 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:50627 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:26:29,945 [INFO] EMR: POST /api/visits 201
+INFO:     127.0.0.1:50628 - "POST /api/visits HTTP/1.1" 201 Created
+2026-04-19 12:26:31,936 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50630 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:32,004 [INFO] EMR: OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d 200
+INFO:     127.0.0.1:50630 - "OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d HTTP/1.1" 200 OK
+2026-04-19 12:26:32,005 [INFO] EMR: OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits 200
+INFO:     127.0.0.1:50633 - "OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits HTTP/1.1" 200 OK
+2026-04-19 12:26:32,084 [INFO] EMR: GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits 200
+INFO:     127.0.0.1:50633 - "GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits HTTP/1.1" 200 OK
+2026-04-19 12:26:32,111 [INFO] EMR: GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d 200
+INFO:     127.0.0.1:50630 - "GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d HTTP/1.1" 200 OK
+2026-04-19 12:26:32,923 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:50635 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:32,934 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50635 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:34,685 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:50637 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-19 12:26:34,722 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50642 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:26:42,417 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50655 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:26:51,923 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50660 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:27:01,927 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50666 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:27:17,502 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50673 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:27:33,035 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50677 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:27:33,064 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50679 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:28:10,224 [INFO] EMR: PATCH /api/visits/d5f84c2b-e8c4-4d68-bbf3-3cfafefe04d2/progress 200
+INFO:     127.0.0.1:50710 - "PATCH /api/visits/d5f84c2b-e8c4-4d68-bbf3-3cfafefe04d2/progress HTTP/1.1" 200 OK
+2026-04-19 12:28:10,258 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50713 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:28:10,277 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:50716 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-19 12:28:32,956 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50729 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:28:32,959 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50727 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:28:38,596 [INFO] EMR: PATCH /api/visits/d5f84c2b-e8c4-4d68-bbf3-3cfafefe04d2/approve 200
+INFO:     127.0.0.1:50730 - "PATCH /api/visits/d5f84c2b-e8c4-4d68-bbf3-3cfafefe04d2/approve HTTP/1.1" 200 OK
+2026-04-19 12:29:32,966 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50783 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:29:32,968 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50782 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:29:33,025 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:50782 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:29:33,026 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:50785 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:29:33,053 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50785 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:29:33,057 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50782 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:29:48,947 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50801 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:30:03,966 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50811 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:30:18,924 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50821 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:30:32,933 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50835 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:30:32,934 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50837 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:30:33,912 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50835 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:30:48,911 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50839 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:31:03,918 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50854 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:31:32,933 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50882 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:31:32,935 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50881 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:31:32,935 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50884 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:32:32,971 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50916 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:32:32,972 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50912 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:32:32,973 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50914 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:33:32,957 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:50963 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:33:32,966 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50959 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:33:32,976 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:50961 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:34:32,958 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51005 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:34:32,959 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51001 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:34:32,962 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51003 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:35:32,942 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51038 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:35:32,943 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51034 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:35:32,945 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51037 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:36:32,925 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:51076 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:36:32,938 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51073 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:36:32,940 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51077 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:36:32,949 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51076 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:37:32,910 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:51124 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:37:32,923 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51124 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:37:32,924 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51126 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:37:32,924 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51128 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:38:32,951 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51174 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:38:32,952 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51173 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:38:32,953 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51170 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:39:32,937 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51216 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:39:32,939 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51212 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:39:32,942 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51215 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:40:32,927 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:51299 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:40:32,943 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51299 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:40:32,943 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51297 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:41:32,930 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51390 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:41:32,933 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51389 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:42:32,932 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51398 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:42:32,934 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51397 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:43:32,934 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51445 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:43:32,936 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51443 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:44:33,008 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51495 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:44:33,009 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51493 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:45:32,962 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51522 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:45:32,966 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51520 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:46:32,931 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51538 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:46:32,937 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51537 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:47:32,950 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:51583 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:47:32,995 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51584 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:47:33,004 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51586 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:48:32,929 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51605 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:48:32,930 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51603 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:49:32,926 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51645 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:49:32,930 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51644 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:50:33,002 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51675 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:50:33,007 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51674 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:51:32,928 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:51691 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:51:32,944 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51691 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:51:32,945 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51690 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 12:52:32,932 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:51735 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 12:52:32,935 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:51733 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-19 23:37:07,715 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:54294 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-19 23:37:07,726 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:54296 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-19 23:37:07,816 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:54300 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-19 23:37:07,822 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:54299 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:54:41,829 [INFO] EMR: OPTIONS /api/patients 200
+INFO:     127.0.0.1:56088 - "OPTIONS /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:54:41,842 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:56090 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 15:54:41,957 [INFO] EMR: GET /api/doctors 401
+INFO:     127.0.0.1:56095 - "GET /api/doctors?active_only=false HTTP/1.1" 401 Unauthorized
+2026-04-24 15:54:41,960 [INFO] EMR: GET /api/patients 401
+INFO:     127.0.0.1:56093 - "GET /api/patients HTTP/1.1" 401 Unauthorized
+2026-04-24 15:54:41,961 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:56097 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 15:54:41,964 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:56099 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 15:54:42,049 [INFO] EMR: GET /api/auth/me 401
+INFO:     127.0.0.1:56101 - "GET /api/auth/me HTTP/1.1" 401 Unauthorized
+2026-04-24 15:54:45,147 [INFO] EMR: OPTIONS /api/auth/login 200
+INFO:     127.0.0.1:56099 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 15:54:45,433 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:56099 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 15:54:45,445 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:56099 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:54:45,466 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56099 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:54:45,494 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:56093 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:54:45,495 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:56095 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:54:45,501 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:56103 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 15:54:45,517 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56097 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 15:54:45,520 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56105 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:54:45,522 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:56110 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 15:54:45,529 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56099 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:54:45,533 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56112 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 15:54:45,533 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56097 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:54:45,538 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56105 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:54:48,044 [INFO] EMR: OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f 200
+INFO:     127.0.0.1:56105 - "OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f HTTP/1.1" 200 OK
+2026-04-24 15:54:48,064 [INFO] EMR: GET /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f 200
+INFO:     127.0.0.1:56105 - "GET /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f HTTP/1.1" 200 OK
+2026-04-24 15:54:48,066 [INFO] EMR: OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d 200
+INFO:     127.0.0.1:56097 - "OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d HTTP/1.1" 200 OK
+2026-04-24 15:54:48,067 [INFO] EMR: OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits 200
+INFO:     127.0.0.1:56112 - "OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits HTTP/1.1" 200 OK
+2026-04-24 15:54:48,076 [INFO] EMR: OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:56099 - "OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-24 15:54:48,078 [INFO] EMR: OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:56115 - "OPTIONS /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-24 15:54:48,088 [INFO] EMR: GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d 200
+INFO:     127.0.0.1:56097 - "GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d HTTP/1.1" 200 OK
+2026-04-24 15:54:48,095 [INFO] EMR: PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:56099 - "PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-24 15:54:48,104 [INFO] EMR: GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits 200
+INFO:     127.0.0.1:56105 - "GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits HTTP/1.1" 200 OK
+2026-04-24 15:54:48,105 [INFO] EMR: PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress 200
+INFO:     127.0.0.1:56115 - "PATCH /api/visits/53656e5f-2c96-4940-a041-85453d98fd3f/progress HTTP/1.1" 200 OK
+2026-04-24 15:54:55,474 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56119 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:54:55,502 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56119 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:54:55,507 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56121 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:55:05,467 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56123 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:55:10,541 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56127 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:55:15,465 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56127 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:55:25,479 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56131 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:55:26,480 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56131 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:55:35,484 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56133 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:55:41,475 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56135 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:55:45,480 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56135 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:55:55,488 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56138 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:55:56,481 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56138 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:55:59,147 [INFO] EMR: OPTIONS /api/auth/logout 200
+INFO:     127.0.0.1:56138 - "OPTIONS /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 15:55:59,179 [INFO] EMR: POST /api/auth/logout 200
+INFO:     127.0.0.1:56138 - "POST /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 15:55:59,233 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:56138 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 15:55:59,236 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:56142 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 15:56:03,465 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:56142 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 15:56:03,477 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:56142 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-24 15:56:03,923 [INFO] EMR: OPTIONS /api/rooms/status 200
+INFO:     127.0.0.1:56150 - "OPTIONS /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 15:56:03,924 [INFO] EMR: OPTIONS /api/rooms/status 200
+INFO:     127.0.0.1:56151 - "OPTIONS /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 15:56:03,936 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56142 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:03,948 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56150 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:03,958 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56138 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:03,966 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:56142 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 15:56:03,970 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56150 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:03,976 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:56138 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 15:56:06,016 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:56151 - "OPTIONS /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:06,021 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:56153 - "OPTIONS /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:06,031 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56138 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:06,041 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56151 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:06,042 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56142 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:06,049 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56155 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:06,056 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56150 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:06,057 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56151 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:06,057 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56138 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:06,065 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56155 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:10,097 [INFO] EMR: OPTIONS /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 200
+INFO:     127.0.0.1:56155 - "OPTIONS /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 HTTP/1.1" 200 OK
+2026-04-24 15:56:10,129 [INFO] EMR: DELETE /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 204
+INFO:     127.0.0.1:56155 - "DELETE /api/queue/5d3b8afd-c535-43b2-a7b2-1132fe6cb5d1 HTTP/1.1" 204 No Content
+2026-04-24 15:56:10,143 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56155 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:10,149 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56150 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:10,149 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56151 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:10,153 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56138 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:13,487 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56138 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:18,953 [INFO] EMR: POST /api/queue 201
+INFO:     127.0.0.1:56157 - "POST /api/queue HTTP/1.1" 201 Created
+2026-04-24 15:56:18,975 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56157 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:18,979 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56163 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:18,982 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56162 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:18,985 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56160 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:21,003 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56160 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:21,016 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56163 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:21,020 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56157 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:21,026 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56162 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:21,323 [INFO] EMR: OPTIONS /api/queue/1d17fab7-27af-4a8c-ac42-a754c05cf7a3 200
+INFO:     127.0.0.1:56162 - "OPTIONS /api/queue/1d17fab7-27af-4a8c-ac42-a754c05cf7a3 HTTP/1.1" 200 OK
+2026-04-24 15:56:21,344 [INFO] EMR: PATCH /api/queue/1d17fab7-27af-4a8c-ac42-a754c05cf7a3 200
+INFO:     127.0.0.1:56162 - "PATCH /api/queue/1d17fab7-27af-4a8c-ac42-a754c05cf7a3 HTTP/1.1" 200 OK
+2026-04-24 15:56:21,362 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56162 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:21,371 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56160 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:21,373 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56163 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:21,378 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56157 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:22,097 [INFO] EMR: PATCH /api/queue/1d17fab7-27af-4a8c-ac42-a754c05cf7a3 200
+INFO:     127.0.0.1:56157 - "PATCH /api/queue/1d17fab7-27af-4a8c-ac42-a754c05cf7a3 HTTP/1.1" 200 OK
+2026-04-24 15:56:22,111 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56157 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:22,116 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56162 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:22,118 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56160 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 15:56:22,123 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56163 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:23,011 [INFO] EMR: POST /api/auth/logout 200
+INFO:     127.0.0.1:56163 - "POST /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 15:56:23,093 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:56163 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 15:56:23,095 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:56160 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 15:56:27,794 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:56160 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 15:56:27,808 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56160 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:28,148 [INFO] EMR: OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 200
+INFO:     127.0.0.1:56174 - "OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 HTTP/1.1" 200 OK
+2026-04-24 15:56:28,151 [INFO] EMR: OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits 200
+INFO:     127.0.0.1:56175 - "OPTIONS /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits HTTP/1.1" 200 OK
+2026-04-24 15:56:28,154 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56160 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:28,165 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56170 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 15:56:28,171 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:56177 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 15:56:28,179 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:56183 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 15:56:28,181 [INFO] EMR: GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 200
+INFO:     127.0.0.1:56175 - "GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0 HTTP/1.1" 200 OK
+2026-04-24 15:56:28,186 [INFO] EMR: GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits 200
+INFO:     127.0.0.1:56174 - "GET /api/patients/19aa3d45-a52c-4413-8ff7-4e6f5e8d10d0/visits HTTP/1.1" 200 OK
+2026-04-24 15:56:28,191 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:56179 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 15:56:28,192 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:56160 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 15:56:28,194 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56169 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:28,203 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:56160 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 15:56:37,823 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56185 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:47,839 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56191 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:56:57,835 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56194 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:57:08,503 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56198 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:57:18,487 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56201 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:57:28,483 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56203 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:57:38,483 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56205 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:57:48,486 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56208 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:57:58,475 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56210 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 15:59:00,491 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56213 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 16:00:00,483 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56220 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 16:01:00,492 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56223 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 16:02:00,497 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:56226 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:54:39,742 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:57718 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:54:39,776 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57718 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:54:42,981 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57718 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:54:52,983 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57724 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:55:02,992 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57729 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:55:13,639 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57731 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:55:23,004 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57736 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:55:32,980 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57738 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:55:34,684 [INFO] EMR: OPTIONS /api/auth/logout 200
+INFO:     127.0.0.1:57738 - "OPTIONS /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 21:55:34,719 [INFO] EMR: POST /api/auth/logout 200
+INFO:     127.0.0.1:57738 - "POST /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 21:55:34,884 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57738 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:55:34,887 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57742 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:56:05,652 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57746 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:56:34,889 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57750 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:56:36,427 [INFO] EMR: OPTIONS /api/auth/login 200
+INFO:     127.0.0.1:57750 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 21:56:36,660 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:57750 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 21:56:36,676 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:57750 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-24 21:56:37,056 [INFO] EMR: OPTIONS /api/rooms/status 200
+INFO:     127.0.0.1:57750 - "OPTIONS /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:56:37,065 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:57755 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:56:37,066 [INFO] EMR: OPTIONS /api/patients 200
+INFO:     127.0.0.1:57757 - "OPTIONS /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:37,067 [INFO] EMR: OPTIONS /api/rooms/status 200
+INFO:     127.0.0.1:57759 - "OPTIONS /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:56:37,067 [INFO] EMR: OPTIONS /api/queue 200
+INFO:     127.0.0.1:57761 - "OPTIONS /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:56:37,068 [INFO] EMR: OPTIONS /api/patients 200
+INFO:     127.0.0.1:57762 - "OPTIONS /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:37,092 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57761 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:56:37,103 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57757 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:56:37,110 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57759 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:37,114 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57762 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:56:37,127 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57759 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:56:37,128 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57757 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:38,900 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:57759 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:56:38,900 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:57761 - "OPTIONS /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:56:38,918 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57761 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:56:38,923 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57757 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:38,924 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57762 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:56:38,936 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57759 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:56:38,940 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57761 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:38,944 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57755 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:56:46,110 [INFO] EMR: OPTIONS /api/rooms/944398bb-a5e4-59df-b3ad-2f69ed1f4377 200
+INFO:     127.0.0.1:57767 - "OPTIONS /api/rooms/944398bb-a5e4-59df-b3ad-2f69ed1f4377 HTTP/1.1" 200 OK
+2026-04-24 21:56:46,136 [INFO] EMR: PATCH /api/rooms/944398bb-a5e4-59df-b3ad-2f69ed1f4377 200
+INFO:     127.0.0.1:57767 - "PATCH /api/rooms/944398bb-a5e4-59df-b3ad-2f69ed1f4377 HTTP/1.1" 200 OK
+2026-04-24 21:56:46,142 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57767 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:56:46,159 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57767 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:56:46,687 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57767 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:56:48,471 [INFO] EMR: POST /api/auth/logout 200
+INFO:     127.0.0.1:57767 - "POST /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 21:56:48,559 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57767 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:56:48,561 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57770 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:56:51,458 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:57770 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 21:56:51,478 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57770 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:56:51,820 [INFO] EMR: OPTIONS /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847 200
+INFO:     127.0.0.1:57777 - "OPTIONS /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847 HTTP/1.1" 200 OK
+2026-04-24 21:56:51,821 [INFO] EMR: OPTIONS /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847/visits 200
+INFO:     127.0.0.1:57778 - "OPTIONS /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847/visits HTTP/1.1" 200 OK
+2026-04-24 21:56:51,822 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57767 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:56:51,834 [INFO] EMR: GET /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847 200
+INFO:     127.0.0.1:57767 - "GET /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847 HTTP/1.1" 200 OK
+2026-04-24 21:56:51,837 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57770 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:51,839 [INFO] EMR: GET /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847/visits 200
+INFO:     127.0.0.1:57778 - "GET /api/patients/766390f7-5e64-5ad9-b59e-03efc0daa847/visits HTTP/1.1" 200 OK
+2026-04-24 21:56:51,840 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57780 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:56:51,849 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57767 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:56:51,863 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57782 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 21:56:51,875 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57784 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 21:56:57,922 [INFO] EMR: POST /api/auth/logout 200
+INFO:     127.0.0.1:57787 - "POST /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 21:56:57,990 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57787 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:56:57,992 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57789 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:57:03,382 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:57791 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 21:57:03,394 [INFO] EMR: GET /api/rooms 401
+INFO:     127.0.0.1:57791 - "GET /api/rooms HTTP/1.1" 401 Unauthorized
+2026-04-24 21:57:03,458 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57791 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:03,757 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57793 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:57:03,772 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57797 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:57:03,774 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57795 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:03,777 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57791 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:03,784 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57795 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:05,369 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57791 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:05,375 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57797 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:05,377 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57795 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:05,385 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57793 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:05,394 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57791 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:05,396 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57797 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:06,212 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57797 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:06,219 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57791 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:11,676 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:57804 - "OPTIONS /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-24 21:57:11,678 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:57810 - "OPTIONS /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-24 21:57:11,706 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57806 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:11,711 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:57812 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-24 21:57:11,717 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57809 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:11,721 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57807 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:11,734 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57810 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:11,735 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57812 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:11,738 [INFO] EMR: GET /api/visits 200
+INFO:     127.0.0.1:57806 - "GET /api/visits?limit=100 HTTP/1.1" 200 OK
+2026-04-24 21:57:11,744 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57809 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:13,403 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57809 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:15,695 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57806 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:57:15,710 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57812 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:15,711 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57809 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:15,711 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57810 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:57:15,734 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57806 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:15,741 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57807 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:17,260 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:57810 - "OPTIONS /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 21:57:17,261 [INFO] EMR: OPTIONS /api/appointments 200
+INFO:     127.0.0.1:57809 - "OPTIONS /api/appointments HTTP/1.1" 200 OK
+2026-04-24 21:57:17,261 [INFO] EMR: OPTIONS /api/doctors 200
+INFO:     127.0.0.1:57812 - "OPTIONS /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 21:57:17,265 [INFO] EMR: OPTIONS /api/appointments 200
+INFO:     127.0.0.1:57815 - "OPTIONS /api/appointments HTTP/1.1" 200 OK
+2026-04-24 21:57:17,295 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57806 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:17,297 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57812 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 21:57:17,311 [INFO] EMR: GET /api/appointments 200
+INFO:     127.0.0.1:57817 - "GET /api/appointments HTTP/1.1" 200 OK
+2026-04-24 21:57:17,320 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57807 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:17,320 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57806 - "GET /api/doctors?active_only=true HTTP/1.1" 200 OK
+2026-04-24 21:57:17,323 [INFO] EMR: GET /api/appointments 200
+INFO:     127.0.0.1:57812 - "GET /api/appointments HTTP/1.1" 200 OK
+2026-04-24 21:57:17,323 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57819 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:17,330 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57817 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:17,436 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57819 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:17,443 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57812 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:17,447 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57806 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:17,448 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57817 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:17,460 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57812 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:17,460 [INFO] EMR: GET /api/rooms/status 200
+INFO:     127.0.0.1:57819 - "GET /api/rooms/status HTTP/1.1" 200 OK
+2026-04-24 21:57:23,408 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57821 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:23,975 [INFO] EMR: PATCH /api/rooms/944398bb-a5e4-59df-b3ad-2f69ed1f4377 200
+INFO:     127.0.0.1:57821 - "PATCH /api/rooms/944398bb-a5e4-59df-b3ad-2f69ed1f4377 HTTP/1.1" 200 OK
+2026-04-24 21:57:23,986 [INFO] EMR: GET /api/queue 200
+INFO:     127.0.0.1:57821 - "GET /api/queue HTTP/1.1" 200 OK
+2026-04-24 21:57:24,001 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57821 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:25,145 [INFO] EMR: POST /api/auth/logout 200
+INFO:     127.0.0.1:57821 - "POST /api/auth/logout HTTP/1.1" 200 OK
+2026-04-24 21:57:25,268 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57821 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:57:25,270 [INFO] EMR: GET /api/rooms/public 200
+INFO:     127.0.0.1:57825 - "GET /api/rooms/public HTTP/1.1" 200 OK
+2026-04-24 21:57:28,254 [INFO] EMR: POST /api/auth/login 200
+INFO:     127.0.0.1:57825 - "POST /api/auth/login HTTP/1.1" 200 OK
+2026-04-24 21:57:28,268 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57825 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:28,628 [INFO] EMR: OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d 200
+INFO:     127.0.0.1:57831 - "OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d HTTP/1.1" 200 OK
+2026-04-24 21:57:28,628 [INFO] EMR: OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits 200
+INFO:     127.0.0.1:57832 - "OPTIONS /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits HTTP/1.1" 200 OK
+2026-04-24 21:57:28,630 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57821 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:28,635 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57833 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 21:57:28,642 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57825 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:28,651 [INFO] EMR: GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits 200
+INFO:     127.0.0.1:57832 - "GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d/visits HTTP/1.1" 200 OK
+2026-04-24 21:57:28,656 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57839 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 21:57:28,657 [INFO] EMR: GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d 200
+INFO:     127.0.0.1:57821 - "GET /api/patients/a24f9d45-eb33-543d-b80f-0cea46007a2d HTTP/1.1" 200 OK
+2026-04-24 21:57:28,657 [INFO] EMR: GET /api/doctors 200
+INFO:     127.0.0.1:57835 - "GET /api/doctors?active_only=false HTTP/1.1" 200 OK
+2026-04-24 21:57:28,663 [INFO] EMR: GET /api/patients 200
+INFO:     127.0.0.1:57831 - "GET /api/patients HTTP/1.1" 200 OK
+2026-04-24 21:57:38,285 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57842 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:48,278 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57845 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:57:58,286 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57847 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:58:08,655 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57855 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:58:18,648 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57860 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:58:28,283 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57862 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:58:38,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57864 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:58:48,277 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57868 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:58:58,283 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57874 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:59:08,651 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57876 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:59:18,636 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57878 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:59:28,274 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57887 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:59:38,287 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57889 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:59:48,281 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57891 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 21:59:53,820 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:57893 - "OPTIONS /api/visits HTTP/1.1" 200 OK
+2026-04-24 21:59:53,862 [INFO] EMR: POST /api/visits 201
+INFO:     127.0.0.1:57893 - "POST /api/visits HTTP/1.1" 201 Created
+2026-04-24 21:59:53,868 [INFO] EMR: OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089 200
+INFO:     127.0.0.1:57893 - "OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089 HTTP/1.1" 200 OK
+2026-04-24 21:59:53,900 [INFO] EMR: GET /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089 200
+INFO:     127.0.0.1:57893 - "GET /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089 HTTP/1.1" 200 OK
+2026-04-24 21:59:54,127 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57897 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 21:59:58,280 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57893 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:00:08,293 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57903 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:00:17,153 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57907 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:00:18,273 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57909 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:00:20,225 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57911 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:00:22,242 [INFO] EMR: PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress 200
+INFO:     127.0.0.1:57913 - "PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress HTTP/1.1" 200 OK
+2026-04-24 22:00:23,140 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57915 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:00:28,278 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57917 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:00:38,092 [INFO] EMR: OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress 200
+INFO:     127.0.0.1:57923 - "OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress HTTP/1.1" 200 OK
+2026-04-24 22:00:38,094 [INFO] EMR: OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress 200
+INFO:     127.0.0.1:57924 - "OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress HTTP/1.1" 200 OK
+2026-04-24 22:00:38,114 [INFO] EMR: PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress 200
+INFO:     127.0.0.1:57923 - "PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress HTTP/1.1" 200 OK
+2026-04-24 22:00:38,115 [INFO] EMR: PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress 200
+INFO:     127.0.0.1:57924 - "PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/progress HTTP/1.1" 200 OK
+2026-04-24 22:00:38,279 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57924 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:00:48,407 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57928 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:00:49,348 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57932 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:00:57,433 [INFO] EMR: OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/validate-summary 200
+INFO:     127.0.0.1:57960 - "OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/validate-summary HTTP/1.1" 200 OK
+2026-04-24 22:00:57,459 [INFO] EMR: POST /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/validate-summary 200
+INFO:     127.0.0.1:57960 - "POST /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/validate-summary HTTP/1.1" 200 OK
+2026-04-24 22:00:58,276 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57960 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:01:08,305 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57966 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:01:08,852 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57970 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:01:17,201 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57976 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:01:18,272 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57980 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:01:20,966 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57982 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:01:28,282 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57984 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:01:28,625 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57986 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:01:34,267 [INFO] EMR: OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/status 200
+INFO:     127.0.0.1:57988 - "OPTIONS /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/status HTTP/1.1" 200 OK
+2026-04-24 22:01:34,291 [INFO] EMR: PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/status 200
+INFO:     127.0.0.1:57988 - "PATCH /api/visits/1f231b7b-1dd2-48b8-b391-7ebcce76c089/status HTTP/1.1" 200 OK
+2026-04-24 22:01:38,287 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57988 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:01:42,094 [INFO] EMR: POST /api/visits 201
+INFO:     127.0.0.1:57988 - "POST /api/visits HTTP/1.1" 201 Created
+2026-04-24 22:01:42,102 [INFO] EMR: OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad 200
+INFO:     127.0.0.1:57988 - "OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad HTTP/1.1" 200 OK
+2026-04-24 22:01:42,113 [INFO] EMR: GET /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad 200
+INFO:     127.0.0.1:57988 - "GET /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad HTTP/1.1" 200 OK
+2026-04-24 22:01:42,223 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:57992 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:01:48,285 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57994 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:01:58,655 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:57998 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:02:05,654 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58002 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:02:08,439 [INFO] EMR: PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress 200
+INFO:     127.0.0.1:58005 - "PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress HTTP/1.1" 200 OK
+2026-04-24 22:02:08,672 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58009 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:02:08,673 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58007 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:02:13,262 [INFO] EMR: OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress 200
+INFO:     127.0.0.1:58007 - "OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress HTTP/1.1" 200 OK
+2026-04-24 22:02:13,266 [INFO] EMR: OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress 200
+INFO:     127.0.0.1:58013 - "OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress HTTP/1.1" 200 OK
+2026-04-24 22:02:13,293 [INFO] EMR: PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress 200
+INFO:     127.0.0.1:58013 - "PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress HTTP/1.1" 200 OK
+2026-04-24 22:02:13,295 [INFO] EMR: PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress 200
+INFO:     127.0.0.1:58007 - "PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/progress HTTP/1.1" 200 OK
+2026-04-24 22:02:14,216 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58017 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:02:18,277 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58007 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:02:28,288 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58021 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:02:38,296 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58028 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:02:41,593 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58032 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:02:47,053 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58036 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:02:48,271 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58038 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:02:55,909 [INFO] EMR: OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/status 200
+INFO:     127.0.0.1:58040 - "OPTIONS /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/status HTTP/1.1" 200 OK
+2026-04-24 22:02:55,929 [INFO] EMR: PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/status 200
+INFO:     127.0.0.1:58040 - "PATCH /api/visits/b535c408-a7cb-48c6-917b-ef3d298449ad/status HTTP/1.1" 200 OK
+2026-04-24 22:02:56,622 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58044 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:02:58,274 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58040 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:03:02,512 [INFO] EMR: POST /api/visits 201
+INFO:     127.0.0.1:58040 - "POST /api/visits HTTP/1.1" 201 Created
+2026-04-24 22:03:02,518 [INFO] EMR: OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29 200
+INFO:     127.0.0.1:58040 - "OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29 HTTP/1.1" 200 OK
+2026-04-24 22:03:02,529 [INFO] EMR: GET /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29 200
+INFO:     127.0.0.1:58040 - "GET /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29 HTTP/1.1" 200 OK
+2026-04-24 22:03:02,638 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58050 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:03:08,277 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58052 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:03:18,302 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58055 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:03:26,595 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58059 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:03:28,255 [INFO] EMR: PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress 200
+INFO:     127.0.0.1:58061 - "PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress HTTP/1.1" 200 OK
+2026-04-24 22:03:28,312 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58063 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:03:29,099 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58065 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:03:33,719 [INFO] EMR: OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress 200
+INFO:     127.0.0.1:58069 - "OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress HTTP/1.1" 200 OK
+2026-04-24 22:03:33,720 [INFO] EMR: OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress 200
+INFO:     127.0.0.1:58070 - "OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress HTTP/1.1" 200 OK
+2026-04-24 22:03:33,767 [INFO] EMR: PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress 200
+INFO:     127.0.0.1:58069 - "PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress HTTP/1.1" 200 OK
+2026-04-24 22:03:33,769 [INFO] EMR: PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress 200
+INFO:     127.0.0.1:58070 - "PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/progress HTTP/1.1" 200 OK
+2026-04-24 22:03:34,955 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58074 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:03:38,273 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58070 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:03:48,287 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58081 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:03:58,602 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58083 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:08,288 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58085 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:18,274 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58087 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:28,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58111 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:38,285 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58119 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:48,272 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:58125 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:48,290 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58125 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:04:58,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58127 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:05:08,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58129 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:05:18,282 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58131 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:05:28,283 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58135 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:05:38,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58137 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:05:48,282 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58139 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:05:58,286 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58141 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:06:08,282 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58145 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:06:18,281 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58147 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:06:28,296 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58151 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:06:38,659 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58154 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:06:48,663 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58160 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:06:58,637 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58169 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:07:08,657 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58173 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:07:18,646 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58175 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:07:28,768 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58178 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:08:15,686 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58283 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:09:15,705 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58331 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:10:15,656 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58349 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:11:15,662 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58372 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:12:15,693 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58416 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:13:15,657 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58430 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:17,307 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:58730 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:17,387 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58730 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:18,275 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58730 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:28,653 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58734 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:38,296 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58739 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:42,217 [INFO] EMR: OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/status 200
+INFO:     127.0.0.1:58739 - "OPTIONS /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/status HTTP/1.1" 200 OK
+2026-04-24 22:42:42,261 [INFO] EMR: PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/status 200
+INFO:     127.0.0.1:58739 - "PATCH /api/visits/8da617d3-34a6-46a1-9dd2-879ecff02d29/status HTTP/1.1" 200 OK
+2026-04-24 22:42:48,283 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58742 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:42:58,290 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58746 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:43:01,378 [INFO] EMR: OPTIONS /api/visits 200
+INFO:     127.0.0.1:58746 - "OPTIONS /api/visits HTTP/1.1" 200 OK
+2026-04-24 22:43:01,406 [INFO] EMR: POST /api/visits 201
+INFO:     127.0.0.1:58746 - "POST /api/visits HTTP/1.1" 201 Created
+2026-04-24 22:43:01,410 [INFO] EMR: OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af 200
+INFO:     127.0.0.1:58746 - "OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af HTTP/1.1" 200 OK
+2026-04-24 22:43:01,421 [INFO] EMR: GET /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af 200
+INFO:     127.0.0.1:58746 - "GET /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af HTTP/1.1" 200 OK
+2026-04-24 22:43:01,599 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58751 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:43:08,279 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58753 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:43:18,299 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58757 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:43:28,295 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58760 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:43:29,985 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58764 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:43:32,969 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58766 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:43:36,664 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58770 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:43:37,344 [INFO] EMR: PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress 200
+INFO:     127.0.0.1:58773 - "PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress HTTP/1.1" 200 OK
+2026-04-24 22:43:38,645 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58775 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:43:39,641 [INFO] EMR: GET /api/auth/me 200
+INFO:     127.0.0.1:58777 - "GET /api/auth/me HTTP/1.1" 200 OK
+2026-04-24 22:43:48,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58780 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:43:49,537 [INFO] EMR: OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress 200
+INFO:     127.0.0.1:58780 - "OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress HTTP/1.1" 200 OK
+2026-04-24 22:43:49,539 [INFO] EMR: OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress 200
+INFO:     127.0.0.1:58782 - "OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress HTTP/1.1" 200 OK
+2026-04-24 22:43:49,557 [INFO] EMR: PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress 200
+INFO:     127.0.0.1:58780 - "PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress HTTP/1.1" 200 OK
+2026-04-24 22:43:49,559 [INFO] EMR: PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress 200
+INFO:     127.0.0.1:58782 - "PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/progress HTTP/1.1" 200 OK
+2026-04-24 22:43:58,659 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58784 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:44:08,645 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58786 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:44:18,649 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58788 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:44:28,657 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58790 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:44:38,654 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58793 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:44:48,653 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58795 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:44:58,652 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58797 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:45:08,640 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58800 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:45:18,663 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58802 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:46:15,655 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58805 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:47:15,667 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58820 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:48:15,660 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58828 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:49:15,701 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58833 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:50:15,689 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58854 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:51:15,661 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58879 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:52:15,660 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58888 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:15,641 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:58895 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:15,663 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58895 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:18,287 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58895 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:19,245 [INFO] EMR: OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/status 200
+INFO:     127.0.0.1:58895 - "OPTIONS /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/status HTTP/1.1" 200 OK
+2026-04-24 22:53:19,266 [INFO] EMR: PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/status 200
+INFO:     127.0.0.1:58895 - "PATCH /api/visits/290dd8ae-a629-41e0-90b0-4e13cac152af/status HTTP/1.1" 200 OK
+2026-04-24 22:53:28,656 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58901 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:38,640 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58903 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:48,640 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58905 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:53:58,661 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58907 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:54:08,641 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58910 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:54:18,648 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58912 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:54:28,649 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58916 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:54:38,639 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58918 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:54:48,641 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58921 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:54:58,646 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58923 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:55:08,647 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58925 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:55:18,643 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58929 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:56:15,662 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58934 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:57:15,671 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58939 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:57:45,404 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58945 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:57:48,274 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58945 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:57:58,655 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58951 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:58:08,647 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58959 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:58:18,639 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58961 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:58:28,642 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58964 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:58:38,656 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58967 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:58:48,642 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58969 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 22:59:15,660 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58975 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:00:15,656 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58978 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:01:15,660 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58985 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:02:15,645 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58988 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:03:15,640 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58992 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:04:15,654 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:58998 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:04:15,676 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:58998 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:05:15,710 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:59008 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:06:15,666 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:59012 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:07:15,657 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:59015 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-24 23:08:15,695 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:59030 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:55:30,833 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:61019 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:55:30,908 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61019 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:55:32,271 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61019 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:55:42,288 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61023 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:55:52,268 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61027 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:56:02,261 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61029 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:56:12,281 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61033 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:56:22,278 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61036 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:56:59,325 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61056 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:57:59,352 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61180 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:58:59,285 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61200 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 04:59:59,311 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61232 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:00:59,299 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61255 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:01:59,339 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61281 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:02:59,322 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61332 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:03:59,312 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61340 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:04:59,293 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61344 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:05:59,280 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:61355 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:05:59,298 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61355 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:06:59,286 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61364 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:07:59,300 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61385 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:08:59,327 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61475 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:09:59,329 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61480 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:10:59,329 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61564 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:11:59,332 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61657 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:12:59,308 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61685 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:13:59,291 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61687 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:14:59,282 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61691 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:15:59,275 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61696 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:16:59,317 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:61703 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:16:59,345 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61703 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:17:59,356 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61724 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:18:59,299 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61742 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:19:59,306 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61761 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:20:59,284 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61771 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:23:02,405 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61862 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:24:02,397 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61889 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:25:02,458 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61949 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:26:02,380 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:61997 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:27:02,398 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62027 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:02,387 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62035 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:05,383 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:62035 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:05,399 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62035 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:15,356 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62043 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:25,371 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62050 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:35,345 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62053 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:45,354 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62055 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:28:55,363 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62060 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:29:05,339 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62063 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:30:02,419 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62079 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:31:02,384 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62083 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:32:02,365 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62088 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:33:02,351 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62094 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:34:02,407 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62111 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:35:02,393 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62128 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:36:02,380 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62131 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:37:02,401 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62136 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:38:02,433 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62140 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:39:02,397 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:62149 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:39:02,458 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62149 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:40:02,415 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62151 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:41:02,430 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62186 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:42:02,399 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62189 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:43:02,406 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62192 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:44:02,428 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62200 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:45:02,433 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62204 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:46:02,393 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62206 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:47:02,378 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62209 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:48:02,414 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62211 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:49:02,440 [INFO] EMR: OPTIONS /api/rooms 200
+INFO:     127.0.0.1:62220 - "OPTIONS /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:49:02,506 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62220 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:50:02,386 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62264 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:51:02,397 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62273 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:52:02,384 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62280 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:53:02,359 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62290 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:54:02,369 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62295 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:55:02,412 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62298 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:56:02,419 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62301 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:57:02,407 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62306 - "GET /api/rooms HTTP/1.1" 200 OK
+2026-04-25 05:58:02,398 [INFO] EMR: GET /api/rooms 200
+INFO:     127.0.0.1:62313 - "GET /api/rooms HTTP/1.1" 200 OK

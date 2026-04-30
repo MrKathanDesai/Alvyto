@@ -1,0 +1,6 @@
+INFO:     Started server process [41243]
+INFO:     Waiting for application startup.
+2026-04-19 08:32:13,968 [INFO] EMR: Database connected: /Users/kathandesai/alvyto/backend/emr.db
+2026-04-19 08:32:13,968 [INFO] EMR: EMR API started — all tables verified.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
