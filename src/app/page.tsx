@@ -13,6 +13,7 @@ import {
   validateVisitSummary,
   updateMedicalHistory,
   updateQueueEntry,
+  ApiError,
 } from '@/services/api';
 import { Visit, DialogueTurn, VisitSummary } from '@/types';
 import { Doctor, EMRPatient, MedicalHistoryRecord, QueueEntry } from '@/types/emr';
@@ -32,11 +33,55 @@ import { useVisitSummary } from '@/hooks/useVisitSummary';
 import { useSessionPersistence } from '@/hooks/useSessionPersistence';
 import { createEmptyMedicalHistory, deriveMedicalSnapshot } from '@/utils/medicalSnapshot';
 
+function extractExistingVisitIdFromError(error: unknown): string | null {
+  if (!(error instanceof ApiError) || !error.data || typeof error.data !== 'object') {
+    return null;
+  }
+
+  const payload = error.data as {
+    existingVisitId?: unknown;
+    detail?: { existingVisitId?: unknown } | unknown;
+  };
+
+  if (typeof payload.existingVisitId === 'string') {
+    return payload.existingVisitId;
+  }
+
+  if (payload.detail && typeof payload.detail === 'object') {
+    const nested = payload.detail as { existingVisitId?: unknown };
+    if (typeof nested.existingVisitId === 'string') {
+      return nested.existingVisitId;
+    }
+  }
+
+  return null;
+}
+
 function extractChiefComplaintFromQueueNotes(notes?: string | null): string | null {
   const text = (notes ?? '').trim();
   if (!text) return null;
   const first = text.split('|')[0]?.trim() ?? '';
   return first || text;
+}
+
+function normalizeWhitespace(value: string): string {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function cleanDoctorActionText(value: unknown): string {
+  if (typeof value === 'string') {
+    const trimmed = normalizeWhitespace(value);
+    const objectMatch = trimmed.match(/['"]action['"]\s*:\s*['"](.+?)['"]/i);
+    return normalizeWhitespace(objectMatch?.[1] ?? trimmed);
+  }
+
+  if (value && typeof value === 'object') {
+    const maybe = value as { text?: unknown; action?: unknown; label?: unknown; note?: unknown };
+    const textCandidate = [maybe.text, maybe.action, maybe.label, maybe.note].find((item) => typeof item === 'string');
+    return typeof textCandidate === 'string' ? normalizeWhitespace(textCandidate) : '';
+  }
+
+  return '';
 }
 
 function normalizeSummaryForApproval(summary: VisitSummary, queueChiefComplaint?: string | null): VisitSummary {
@@ -80,8 +125,21 @@ function normalizeSummaryForApproval(summary: VisitSummary, queueChiefComplaint?
         }
       : null);
 
+  const normalizedDoctorActions = summary.doctorActions
+    .map((item, index) => {
+      const text = cleanDoctorActionText(item);
+      if (!text) return null;
+      return {
+        ...item,
+        id: item.id || `action-${index}`,
+        text,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
+
   return {
     ...summary,
+    doctorActions: normalizedDoctorActions,
     chiefComplaint: normalizedChiefComplaint,
     prescriptionDraft: draft,
   };
@@ -376,13 +434,27 @@ export default function ExamRoom() {
     try {
       clearTranscript();
 
-      // Create backend visit record — only summary will ever be saved here
-      const newVisit = await createVisit({
-        patientId: selectedPatientId,
-        doctorId,
-        roomId,
-        chiefComplaint: queueChiefComplaint ?? undefined,
-      });
+      let newVisit;
+      try {
+        // Create backend visit record — only summary will ever be saved here
+        newVisit = await createVisit({
+          patientId: selectedPatientId,
+          doctorId,
+          roomId,
+          chiefComplaint: queueChiefComplaint ?? undefined,
+        });
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 409) {
+          const existingVisitId = extractExistingVisitIdFromError(error);
+          if (existingVisitId) {
+            await startNewVisit(selectedPatientId, existingVisitId);
+            setActiveVisitId(existingVisitId);
+            await startRecording(undefined, existingVisitId);
+            return;
+          }
+        }
+        throw error;
+      }
       setActiveVisitId(newVisit.id);
 
       // Start in-memory session
@@ -393,7 +465,11 @@ export default function ExamRoom() {
     } catch (error) {
       console.error("Failed to start recording", error);
       setActiveVisitId(null);
-      setVisitError('Failed to start recording. Please check your microphone and try again.');
+      if (error instanceof Error && error.message) {
+        setVisitError(error.message);
+      } else {
+        setVisitError('Failed to start recording. Please check your microphone and try again.');
+      }
     }
   }, [clearTranscript, startNewVisit, selectedPatientId, startRecording, currentRoom, queueChiefComplaint]);
 
@@ -498,14 +574,28 @@ export default function ExamRoom() {
 
     if (!effectiveVisitId && selectedPatientId && currentRoom?.assignedDoctorId && currentRoom?.id) {
       try {
-        const createdVisit = await createVisit({
-          patientId: selectedPatientId,
-          doctorId: currentRoom.assignedDoctorId,
-          roomId: currentRoom.id,
-          chiefComplaint: queueChiefComplaint ?? undefined,
-        });
-        effectiveVisitId = createdVisit.id;
-        setActiveVisitId(createdVisit.id);
+        try {
+          const createdVisit = await createVisit({
+            patientId: selectedPatientId,
+            doctorId: currentRoom.assignedDoctorId,
+            roomId: currentRoom.id,
+            chiefComplaint: queueChiefComplaint ?? undefined,
+          });
+          effectiveVisitId = createdVisit.id;
+          setActiveVisitId(createdVisit.id);
+        } catch (error) {
+          if (error instanceof ApiError && error.status === 409) {
+            const existingVisitId = extractExistingVisitIdFromError(error);
+            if (existingVisitId) {
+              effectiveVisitId = existingVisitId;
+              setActiveVisitId(existingVisitId);
+            } else {
+              throw error;
+            }
+          } else {
+            throw error;
+          }
+        }
       } catch (error) {
         console.error('Failed to create fallback visit for approval', error);
       }
@@ -530,11 +620,6 @@ export default function ExamRoom() {
         ...validation.warnings,
       ];
       setValidationWarnings(validationMessages);
-
-      if (!validation.ok) {
-        setVisitError('Please fix the summary before approval.');
-        return;
-      }
 
       updateSummary(validation.normalizedSummary);
       await approveVisit(effectiveVisitId, validation.normalizedSummary);
@@ -562,9 +647,7 @@ export default function ExamRoom() {
           getPatient(currentPatient.id),
         ]);
         setPatientVisits(updatedVisits ?? []);
-        if (updatedPatient?.medicalHistory) {
-          setMedicalHistory(updatedPatient.medicalHistory);
-        }
+        setMedicalHistory(updatedPatient?.medicalHistory ?? null);
       }
     } catch (error) {
       console.error('Error approving visit:', error);

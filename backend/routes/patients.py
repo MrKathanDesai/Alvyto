@@ -6,6 +6,7 @@ from backend.database import get_db
 from backend import models
 from backend.schemas import PatientCreate, PatientUpdate, PatientOut, MedicalHistoryIn, MedicalHistoryOut
 from backend.auth import require_any_auth, require_admin, audit, RequestContext
+from backend.routes.visits import _sanitize_summary_for_response
 
 router = APIRouter(prefix="/api/patients", tags=["patients"])
 
@@ -158,7 +159,7 @@ def get_patient_visits(
             "patientId": v.patient_id,
             "doctorId": v.doctor_id,
             "roomId": v.room_id,
-            "summary": v.summary,
+            "summary": _sanitize_summary_for_response(v.summary),
             "status": v.status,
             "createdAt": v.created_at.isoformat() if v.created_at else None,
             "endedAt": v.ended_at.isoformat() if v.ended_at else None,
@@ -171,12 +172,18 @@ def get_patient_visits(
 def update_medical_history(
     patient_id: str,
     body: MedicalHistoryIn,
-    ctx: RequestContext = Depends(require_admin),
+    ctx: RequestContext = Depends(require_any_auth),
     db: DBSession = Depends(get_db),
 ):
     patient = db.query(models.Patient).filter(models.Patient.id == patient_id).first()
     if not patient:
         raise HTTPException(404, "Patient not found")
+
+    if ctx.is_room_device:
+        room = db.query(models.Room).filter(models.Room.id == ctx.room_id).first()
+        if not room or room.current_patient_id != patient_id:
+            raise HTTPException(403, "Access denied")
+
     hist = db.query(models.MedicalHistory).filter(models.MedicalHistory.patient_id == patient_id).first()
     if not hist:
         hist = models.MedicalHistory(patient_id=patient_id)

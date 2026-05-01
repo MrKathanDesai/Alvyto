@@ -245,7 +245,7 @@ async function createPrescriptionPdfBytes(params: {
     text: doctorName,
     x: A4_WIDTH - 220,
     y: A4_HEIGHT - 54,
-    maxWidth: 180,
+    maxWidth: 220 - MARGIN,
     font: bold,
     size: 15,
     color: INDIGO,
@@ -256,7 +256,7 @@ async function createPrescriptionPdfBytes(params: {
     text: doctorMeta || 'Prescriber details unavailable',
     x: A4_WIDTH - 220,
     y: A4_HEIGHT - 74,
-    maxWidth: 180,
+    maxWidth: 220 - MARGIN,
     font: regular,
     size: 9,
     color: SLATE,
@@ -277,9 +277,9 @@ async function createPrescriptionPdfBytes(params: {
   drawKeyValueBlock({ page, label: 'Patient Name', value: patientName, x: MARGIN + 14, y: y - 16, width: 170, labelFont: bold, bodyFont: regular });
   drawKeyValueBlock({ page, label: 'Patient ID / MRN', value: `${visit.patientId.slice(0, 8).toUpperCase()} / ${patient?.mrn || 'N/A'}`, x: MARGIN + 195, y: y - 16, width: 150, labelFont: bold, bodyFont: regular });
   drawKeyValueBlock({ page, label: 'Date of Birth', value: patient?.dateOfBirth || 'N/A', x: MARGIN + 360, y: y - 16, width: 110, labelFont: bold, bodyFont: regular });
-  drawKeyValueBlock({ page, label: 'Age / Sex / Contact', value: patientMeta, x: MARGIN + 14, y: y - 54, width: 240, labelFont: bold, bodyFont: regular });
-  drawKeyValueBlock({ page, label: 'Issued On', value: issueDateTime, x: MARGIN + 275, y: y - 54, width: 170, labelFont: bold, bodyFont: regular });
-  drawKeyValueBlock({ page, label: 'Reference', value: visitReference, x: MARGIN + 455, y: y - 54, width: 80, labelFont: bold, bodyFont: mono });
+  drawKeyValueBlock({ page, label: 'Age / Sex / Contact', value: patientMeta, x: MARGIN + 14, y: y - 54, width: 190, labelFont: bold, bodyFont: regular });
+  drawKeyValueBlock({ page, label: 'Issued On', value: issueDateTime, x: MARGIN + 216, y: y - 54, width: 165, labelFont: bold, bodyFont: regular });
+  drawKeyValueBlock({ page, label: 'Reference', value: visitReference, x: MARGIN + 393, y: y - 54, width: 104, labelFont: bold, bodyFont: mono });
 
   y -= 120;
 
@@ -463,19 +463,27 @@ async function createPrescriptionPdfBytes(params: {
     thickness: 1,
     color: SLATE,
   });
-  page.drawText(doctorName, {
+  drawWrappedText({
+    page,
+    text: doctorName,
     x: A4_WIDTH - 210,
     y: y + 14,
+    maxWidth: 210 - MARGIN,
     font: bold,
     size: 11,
     color: INDIGO,
+    lineGap: 1,
   });
-  page.drawText(doctorMeta || 'Prescriber record', {
+  drawWrappedText({
+    page,
+    text: doctorMeta || 'Prescriber record',
     x: A4_WIDTH - 210,
     y,
+    maxWidth: 210 - MARGIN,
     font: regular,
     size: 9,
     color: SLATE,
+    lineGap: 2,
   });
   page.drawText(`Issued: ${issueDate}  |  Ref: ${visitReference}`, {
     x: MARGIN,

@@ -1,4 +1,5 @@
 import unittest
+import json
 
 from summarizer import Summarizer
 
@@ -150,7 +151,33 @@ class SummarizerStructuredExtractionTests(unittest.TestCase):
         self.assertIn("sourceFacts", formatted)
         self.assertIn("sections", formatted)
         self.assertIn("quality", formatted)
+        self.assertIn("structuredFindings", formatted)
+        self.assertTrue(len(formatted["structuredFindings"]) > 0)
         self.assertTrue(all("sourceFactIds" in item for item in formatted["doctorActions"]))
+
+    def test_parse_main_response_drops_snapshot_medication_category(self) -> None:
+        raw = json.dumps(
+            {
+                "clinicalSnapshot": [
+                    {"label": "headache", "category": "symptom"},
+                    {"label": "pantoprazole", "category": "medication"},
+                ],
+                "doctorActions": ["Take medicine after food"],
+                "prescriptions": [{"name": "Pantoprazole", "dosage": "40 mg", "frequency": "once daily"}],
+                "issuesParagraph": "Patient has headache.",
+                "actionsParagraph": "Doctor advised medicine.",
+                "chiefComplaint": "headache",
+            }
+        )
+
+        parsed = self.summarizer._parse_main_response(raw, transcript=TRANSCRIPT)
+        categories = [item.get("category") for item in parsed.get("clinicalSnapshot", []) if isinstance(item, dict)]
+        self.assertNotIn("medication", categories)
+
+    def test_fallback_summary_has_non_empty_paragraphs(self) -> None:
+        fallback = self.summarizer._fallback_summary_from_transcript(TRANSCRIPT)
+        self.assertTrue(str(fallback.get("issuesParagraph") or "").strip())
+        self.assertTrue(str(fallback.get("actionsParagraph") or "").strip())
 
     def test_regex_medication_extraction_keeps_sig_details(self) -> None:
         meds = self.summarizer._extract_medications_from_transcript(TRANSCRIPT)

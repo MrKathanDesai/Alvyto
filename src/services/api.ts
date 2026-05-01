@@ -21,6 +21,39 @@ const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 const ADMIN_TOKEN_KEY = 'alvyto_admin_token';
 const ROOM_TOKEN_KEY  = 'alvyto_token';
 
+export class ApiError extends Error {
+  status: number;
+  data: unknown;
+
+  constructor(message: string, status: number, data: unknown) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.data = data;
+  }
+}
+
+function extractErrorMessage(data: unknown): string {
+  if (typeof data === 'string' && data.trim()) return data;
+  if (!data || typeof data !== 'object') return 'Request failed';
+
+  const record = data as Record<string, unknown>;
+  const detail = record.detail;
+  const message = record.message;
+
+  if (typeof detail === 'string' && detail.trim()) return detail;
+  if (typeof message === 'string' && message.trim()) return message;
+
+  if (detail && typeof detail === 'object') {
+    const detailRecord = detail as Record<string, unknown>;
+    if (typeof detailRecord.message === 'string' && detailRecord.message.trim()) {
+      return detailRecord.message;
+    }
+  }
+
+  return 'Request failed';
+}
+
 export function getStoredToken(): string | null {
   if (typeof window === 'undefined') return null;
   const isAdminPanel = window.location.pathname.startsWith('/admin');
@@ -55,9 +88,11 @@ async function req<T>(
   if (res.status === 204) return undefined as unknown as T;
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const errorMsg = data?.detail || data?.message || 'Request failed';
-    console.error(`[API] ${method} ${path} failed: ${res.status} - ${errorMsg}`, { data, token: t ? 'present' : 'missing' });
-    throw new Error(errorMsg);
+    const errorMsg = extractErrorMessage(data);
+    if (res.status !== 409) {
+      console.error(`[API] ${method} ${path} failed: ${res.status} - ${errorMsg}`, { data, token: t ? 'present' : 'missing' });
+    }
+    throw new ApiError(errorMsg, res.status, data);
   }
   return data as T;
 }
@@ -486,6 +521,52 @@ function normalizeSummarySections(raw: unknown): SummarySections | null {
   return base;
 }
 
+function normalizeDoctorActions(raw: unknown): VisitSummary['doctorActions'] {
+  if (!Array.isArray(raw)) return [];
+
+  const seen = new Set<string>();
+
+  return raw
+    .map((item, index) => {
+      if (typeof item === 'string') {
+        const objectMatch = item.match(/['"]action['"]\s*:\s*['"](.+?)['"]/i);
+        const text = String(objectMatch?.[1] ?? item).trim();
+        return {
+          id: `action-${index}`,
+          text,
+          sourceFactIds: [],
+          isEdited: false,
+        };
+      }
+
+      if (!item || typeof item !== 'object') return null;
+      const obj = item as Record<string, unknown>;
+      const textValue = obj.text ?? obj.action ?? obj.label ?? obj.note ?? '';
+      const text = String(textValue).trim();
+      if (!text) return null;
+
+      const sourceFactIds = Array.isArray(obj.sourceFactIds)
+        ? obj.sourceFactIds.map(String).map((value) => value.trim()).filter(Boolean)
+        : Array.isArray(obj.source_fact_ids)
+          ? (obj.source_fact_ids as unknown[]).map(String).map((value) => value.trim()).filter(Boolean)
+          : [];
+
+      return {
+        id: String(obj.id ?? `action-${index}`),
+        text,
+        sourceFactIds,
+        isEdited: Boolean(obj.isEdited ?? obj.is_edited ?? false),
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .filter((item) => {
+      const key = item.text.toLowerCase();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
 function mapVisit(r: Record<string, unknown>): Visit {
   const s = r.summary as Record<string, unknown> | null;
   const rawStructured = (s?.structuredFindings ?? s?.structured_findings) as unknown;
@@ -557,7 +638,7 @@ function mapVisit(r: Record<string, unknown>): Visit {
           evidence: (item as { evidence?: string }).evidence,
           status: (item as { status?: 'confirmed' | 'probable' | 'denied' | 'unclear' }).status,
         })),
-        doctorActions: ((s.doctorActions ?? s.doctor_actions) as { id: string; text: string; sourceFactIds: string[]; isEdited: boolean }[]) ?? [],
+        doctorActions: normalizeDoctorActions(s.doctorActions ?? s.doctor_actions),
         prescriptions: ((s.prescriptions ?? s.prescription_list) as { name: string; dosage?: string; frequency?: string; isSupported?: boolean }[]) ?? [],
         prescriptionDraft: normalizePrescriptionDraft(s.prescriptionDraft ?? s.prescription_draft),
         issuesParagraph: ((s.issuesParagraph ?? s.issues_paragraph ?? s.issuesIdentified ?? s.issues_identified) as string) ?? '',

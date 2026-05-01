@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { KeyFactCategory, VisitSummary } from '@/types';
+import { KeyFact, KeyFactCategory, VisitSummary } from '@/types';
 import { saveVisitProgress } from '@/services/api';
 import { getRoomAgentHeaders, withRoomAgentToken } from '@/utils/roomAgentAuth';
 export interface DialogueTurn {
@@ -84,6 +84,23 @@ function trimFactLabel(input: string): string {
     return compactText(input).slice(0, 100);
 }
 
+const GENERIC_PRESCRIPTION_NAMES = new Set([
+    'medicine',
+    'medication',
+    'this medicine',
+    'care',
+    'treatment',
+    'tablet',
+    'capsule',
+    'drug',
+]);
+
+const JUNK_DOCTOR_ACTION_PATTERNS = [
+    /^(take care|you'?ll be (fine|ok(?:ay)?)|feel better|get well|goodbye|bye)\b/i,
+    /^(good (morning|afternoon|evening))\b/i,
+    /^(thank you|thanks)\b/i,
+];
+
 const NOISE_PATTERNS = [
     /^(all right|alright|okay|ok|hmm|uh|um|sure|thanks|thank you)\b/i,
     /^(good (morning|afternoon|evening|bye))\b/i,
@@ -140,10 +157,19 @@ function isNoiseChunk(chunk: string): boolean {
     return NOISE_PATTERNS.some((pattern) => pattern.test(text));
 }
 
+// Matches LLM-generated category meta-labels like "Duration of headache",
+// "Location of pain", "Onset of fever", "Frequency of cough", etc.
+const GENERIC_CATEGORY_PREFIXES = /^(duration|location|onset|frequency|timing|severity|nature|character|quality|pattern|history|progression|associated|trigger|relief|aggravating|relieving factor) of\b/i;
+
+// Matches pure inquiry/question labels: "X inquiry", "X question", "X symptom"
+const GENERIC_INQUIRY_SUFFIXES = /\b(inquiry|question|symptom|complaint|finding|factor|attempt)s?$/i;
+
 function isGenericSnapshotLabel(label: string): boolean {
     const normalized = normalizeText(label);
     if (!normalized) return true;
     if (GENERIC_SNAPSHOT_LABELS.has(normalized)) return true;
+    if (GENERIC_CATEGORY_PREFIXES.test(label)) return true;
+    if (GENERIC_INQUIRY_SUFFIXES.test(label) && label.split(' ').length <= 4) return true;
     if (label.includes(' - ')) {
         const [left = '', right = ''] = label.split(' - ', 2).map(normalizeText);
         if (!left || !right) return true;
@@ -153,9 +179,214 @@ function isGenericSnapshotLabel(label: string): boolean {
     return false;
 }
 
+function normalizeDedupKey(value: string): string {
+    return normalizeText(value)
+        .replace(/\bfor\b/g, '')
+        .replace(/\bhave\b/g, '')
+        .replace(/\bhad\b/g, '')
+        .replace(/\bjust\b/g, '')
+        .replace(/\ba\b/g, '')
+        .replace(/\ban\b/g, '')
+        .replace(/\bthe\b/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function cleanSnapshotLabel(label: string, category: KeyFactCategory): string {
+    const text = trimFactLabel(label);
+    if (!text) return '';
+
+    if (category === 'symptom') {
+        const stripped = text
+            .replace(/^good morning[,]?\s*doctor[,]?\s*/i, '')
+            .replace(/^i\s+(have|had|am having)\s+/i, '')
+            .replace(/^just\s+/i, '')
+            .trim();
+        return trimFactLabel(stripped || text);
+    }
+
+    if (category === 'duration') {
+        const durationMatch = text.match(/\b(for\s+)?((?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(?:day|days|week|weeks|month|months))\b/i);
+        if (durationMatch?.[2]) {
+            return trimFactLabel(durationMatch[2]);
+        }
+    }
+
+    if (category === 'negative') {
+        return trimFactLabel(text.replace(/^no[, ]*/i, 'No ').trim());
+    }
+
+    return text;
+}
+
+function inferSnapshotCategory(label: string, fallback: KeyFactCategory): KeyFactCategory {
+    const normalized = normalizeText(label);
+    if (!normalized) return fallback;
+    if (/\b(no|denies|without|not)\b/.test(normalized)) return 'negative';
+    if (/\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(day|days|week|weeks|month|months)\b/.test(normalized)) return 'duration';
+    if (/\b(after|before|morning|night|evening|daily|hour|hours|weekly)\b/.test(normalized)) return 'timing';
+    if (/\b(paracetamol|ibuprofen|amoxicillin|pantoprazole|tablet|capsule|mg|ml)\b/.test(normalized)) return 'medication';
+    return fallback;
+}
+
+function chooseBetterSnapshotFact(current: KeyFact, candidate: KeyFact): KeyFact {
+    const currentConfidence = current.confidence ?? 0;
+    const candidateConfidence = candidate.confidence ?? 0;
+
+    if (candidateConfidence > currentConfidence) return candidate;
+    if (candidateConfidence < currentConfidence) return current;
+    if (candidate.category === 'symptom' && current.category !== 'symptom') return candidate;
+    if (candidate.category !== 'symptom' && current.category === 'symptom') return current;
+    return candidate.label.length < current.label.length ? candidate : current;
+}
+
+function sanitizeClinicalSnapshot(items: KeyFact[]): KeyFact[] {
+    const deduped = new Map<string, KeyFact>();
+
+    for (const item of items) {
+        const category = inferSnapshotCategory(item.label, (item.category ?? 'symptom') as KeyFactCategory);
+        const cleanedLabel = cleanSnapshotLabel(item.label, category);
+        if (!cleanedLabel) continue;
+        if (isGenericSnapshotLabel(cleanedLabel) || isNoiseChunk(cleanedLabel)) continue;
+
+        const normalizedItem: KeyFact = {
+            ...item,
+            label: cleanedLabel,
+            category,
+            status: item.status ?? (category === 'negative' ? 'denied' : 'confirmed'),
+        };
+
+        const key = `${category}:${normalizeDedupKey(cleanedLabel)}`;
+        const existing = deduped.get(key);
+        if (!existing) {
+            deduped.set(key, normalizedItem);
+        } else {
+            deduped.set(key, chooseBetterSnapshotFact(existing, normalizedItem));
+        }
+    }
+
+    return [...deduped.values()].slice(0, 10);
+}
+
+function cleanDoctorActionText(value: unknown): string {
+    let text = '';
+
+    if (typeof value === 'string') {
+        text = value;
+    } else if (value && typeof value === 'object') {
+        const candidate = value as { text?: unknown; action?: unknown; label?: unknown; note?: unknown };
+        const raw = [candidate.text, candidate.action, candidate.label, candidate.note].find((item) => typeof item === 'string');
+        text = typeof raw === 'string' ? raw : '';
+    }
+
+    text = compactText(text);
+    if (!text) return '';
+
+    const objectMatch = text.match(/['"]action['"]\s*:\s*['"](.+?)['"]/i);
+    if (objectMatch?.[1]) {
+        text = compactText(objectMatch[1]);
+    }
+
+    return text;
+}
+
+function isMeaningfulDoctorAction(text: string): boolean {
+    if (!text) return false;
+    if (JUNK_DOCTOR_ACTION_PATTERNS.some((pattern) => pattern.test(text))) return false;
+    if (text.endsWith('?')) return false;
+    return text.split(/\s+/).length >= 3;
+}
+
+function sanitizeDoctorActions(actions: VisitSummary['doctorActions']): VisitSummary['doctorActions'] {
+    const deduped = new Map<string, VisitSummary['doctorActions'][number]>();
+
+    actions.forEach((action, index) => {
+        const text = cleanDoctorActionText(action);
+        if (!isMeaningfulDoctorAction(text)) return;
+
+        const normalizedAction = {
+            ...action,
+            id: action.id || `action-${index}`,
+            text,
+        };
+        const key = normalizeDedupKey(text);
+        const existing = deduped.get(key);
+        if (!existing || existing.text.length > normalizedAction.text.length) {
+            deduped.set(key, normalizedAction);
+        }
+    });
+
+    return [...deduped.values()].slice(0, 8);
+}
+
+function sanitizeMedicationInstructions(name: string, instructions?: string): string | undefined {
+    const text = compactText(instructions || '');
+    if (!text) return undefined;
+
+    let cleaned = text;
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    cleaned = cleaned.replace(new RegExp(`\\b${escapedName}\\b`, 'ig'), '').trim();
+    cleaned = cleaned.replace(/\b(in order to|would recommend you to|recommend you to)\b/ig, '').trim();
+    cleaned = cleaned.replace(/\s+/g, ' ').replace(/^[,\s.]+|[,\s.]+$/g, '');
+    return cleaned || undefined;
+}
+
+function sanitizeMedicationDetails(result: VisitSummary): VisitSummary {
+    const sanitizeMed = (med: NonNullable<VisitSummary['prescriptionDraft']>['medications'][number]) => {
+        const name = compactText(med.name || '');
+        const dosage = compactText(med.dosage || '');
+        const frequency = compactText(med.frequency || '');
+        const instructions = sanitizeMedicationInstructions(name, med.instructions);
+
+        return {
+            ...med,
+            name,
+            dosage: dosage || undefined,
+            frequency: frequency || undefined,
+            instructions,
+        };
+    };
+
+    return {
+        ...result,
+        prescriptionDraft: result.prescriptionDraft
+            ? {
+                ...result.prescriptionDraft,
+                medications: (result.prescriptionDraft.medications ?? []).map(sanitizeMed),
+                advice: (result.prescriptionDraft.advice ?? []).map((item) => compactText(item)).filter((item) => item && !JUNK_DOCTOR_ACTION_PATTERNS.some((pattern) => pattern.test(item))),
+            }
+            : null,
+    };
+}
+
+function isMeaningfulPrescriptionName(name: string): boolean {
+    const normalized = normalizeText(name);
+    if (!normalized) return false;
+    if (GENERIC_PRESCRIPTION_NAMES.has(normalized)) return false;
+    if (/^(this|that|the)\s+(medicine|medication|tablet|capsule|drug)$/i.test(normalized)) return false;
+    return true;
+}
+
+function sanitizePrescriptionDraft(result: VisitSummary): VisitSummary {
+    const medicationCleaned = sanitizeMedicationDetails(result);
+    const sanitizedPrescriptions = (medicationCleaned.prescriptions ?? []).filter((rx) => isMeaningfulPrescriptionName(rx.name));
+    const sanitizedDraftMeds = (medicationCleaned.prescriptionDraft?.medications ?? []).filter((med) => isMeaningfulPrescriptionName(med.name));
+
+    return {
+        ...medicationCleaned,
+        prescriptions: sanitizedPrescriptions,
+        prescriptionDraft: medicationCleaned.prescriptionDraft
+            ? {
+                ...medicationCleaned.prescriptionDraft,
+                medications: sanitizedDraftMeds,
+            }
+            : null,
+    };
+}
+
 function inferChiefComplaintFromDialogue(dialogue: DialogueTurn[]): string {
     const patientTurns = dialogue
-        .filter((turn) => turn.speaker.toLowerCase().includes('patient'))
+        .filter((turn) => isPatientTurn(turn))
         .map((turn) => compactText(turn.text))
         .filter(Boolean);
 
@@ -182,11 +413,15 @@ function normalizeSpeakerRole(speaker: string, doctorName?: string, patientName?
     if (!value) return 'Unknown';
     if (lower.includes('doctor') || (normalizedDoctor && lower === normalizedDoctor)) return 'Doctor';
     if (lower.includes('patient') || (normalizedPatient && lower === normalizedPatient)) return 'Patient';
+    if (/^speaker[\s_-]?\d+$/i.test(value) || /^s\d+$/i.test(value)) return 'Patient';
     return value;
 }
 
 function isPatientTurn(turn: DialogueTurn, doctorName?: string, patientName?: string): boolean {
-    return normalizeSpeakerRole(turn.speaker, doctorName, patientName) === 'Patient';
+    const normalizedRole = normalizeSpeakerRole(turn.speaker, doctorName, patientName);
+    if (normalizedRole === 'Patient') return true;
+    if (normalizedRole === 'Doctor') return false;
+    return !compactText(turn.speaker).toLowerCase().includes('doctor');
 }
 
 function extractStructuredFindings(dialogue: DialogueTurn[], doctorName?: string, patientName?: string): NonNullable<VisitSummary['structuredFindings']> {
@@ -232,18 +467,19 @@ function extractStructuredFindings(dialogue: DialogueTurn[], doctorName?: string
 }
 
 function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[], doctorName?: string, patientName?: string): VisitSummary {
+    const sanitizedResult = sanitizePrescriptionDraft(result);
     const extracted = extractStructuredFindings(dialogue, doctorName, patientName);
 
-    const enrichedSnapshot = (result.clinicalSnapshot ?? []).map((item) => ({
+    const enrichedSnapshot = (sanitizedResult.clinicalSnapshot ?? []).map((item) => ({
         ...item,
-        label: trimFactLabel(item.label),
+        label: cleanSnapshotLabel(item.label, item.category),
         confidence: item.confidence ?? 0.8,
         evidence: item.evidence ?? extracted.find((f) => f.label.toLowerCase().includes(item.label.toLowerCase()) || item.label.toLowerCase().includes(f.label.toLowerCase()))?.evidence,
         status: item.status ?? (item.category === 'negative' ? 'denied' : 'confirmed'),
     }));
 
     const fallbackSnapshot = extracted.map((f) => ({
-        label: trimFactLabel(f.label),
+        label: cleanSnapshotLabel(f.label, f.category),
         category: f.category,
         isSupported: true,
         confidence: f.confidence,
@@ -251,23 +487,10 @@ function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[], doct
         status: f.status,
     }));
 
-    const filteredSnapshot = enrichedSnapshot.filter((item) => {
-        return !isGenericSnapshotLabel(item.label) && !isNoiseChunk(item.label);
-    });
+    const snapshotWithFallback = enrichedSnapshot.length > 0 ? enrichedSnapshot : fallbackSnapshot;
+    const clinicalSnapshot = sanitizeClinicalSnapshot(snapshotWithFallback);
 
-    const snapshotWithFallback = filteredSnapshot.length > 0 ? filteredSnapshot : fallbackSnapshot;
-
-    const clinicalSnapshot = snapshotWithFallback.map((item) => {
-        if (item.category === 'symptom' && !item.label.includes(' - ') && item.evidence) {
-            return {
-                ...item,
-                label: trimFactLabel(`${item.label} - ${item.evidence}`),
-            };
-        }
-        return item;
-    });
-
-    const candidateChiefComplaint = result.chiefComplaint?.trim()
+    const candidateChiefComplaint = sanitizedResult.chiefComplaint?.trim()
         || clinicalSnapshot.find((f) => f.category === 'symptom' && (f.status ?? 'confirmed') !== 'denied')?.label
         || inferChiefComplaintFromDialogue(dialogue)
         || '';
@@ -276,37 +499,30 @@ function buildHybridSummary(result: VisitSummary, dialogue: DialogueTurn[], doct
         ? inferChiefComplaintFromDialogue(dialogue)
         : candidateChiefComplaint;
 
-    const structuredFindings = (result.structuredFindings && result.structuredFindings.length > 0)
-        ? result.structuredFindings
+    const structuredFindings = (sanitizedResult.structuredFindings && sanitizedResult.structuredFindings.length > 0)
+        ? sanitizedResult.structuredFindings
         : extracted;
 
     const missingFields: string[] = [];
     if (!chiefComplaint) missingFields.push('chiefComplaint');
-    if ((result.prescriptionDraft?.medications?.length ?? 0) === 0) missingFields.push('medications');
-    if ((result.doctorActions?.length ?? 0) === 0) missingFields.push('doctorActions');
+    if ((sanitizedResult.prescriptionDraft?.medications?.length ?? 0) === 0) missingFields.push('medications');
+    if ((sanitizedResult.doctorActions?.length ?? 0) === 0) missingFields.push('doctorActions');
 
     const quality = {
-        ...(result.quality ?? {}),
+        ...(sanitizedResult.quality ?? {}),
         score: Math.max(15, 100 - missingFields.length * 18),
         confidence: clamp01(
             (clinicalSnapshot.reduce((acc, item) => acc + (item.confidence ?? 0.7), 0) / Math.max(1, clinicalSnapshot.length))
         ),
         missingFields,
-        mode: result.quality?.mode ?? ('hybrid' as const),
-        generatedAt: result.quality?.generatedAt ?? new Date().toISOString(),
+        mode: sanitizedResult.quality?.mode ?? ('hybrid' as const),
+        generatedAt: sanitizedResult.quality?.generatedAt ?? new Date().toISOString(),
     };
 
-    const mergedDoctorActions = [...(result.doctorActions ?? [])].reduce<VisitSummary['doctorActions']>((acc, action) => {
-        const text = compactText(action.text || '');
-        if (!text) return acc;
-        const key = text.toLowerCase();
-        if (acc.some((item) => compactText(item.text).toLowerCase() === key)) return acc;
-        acc.push({ ...action, text });
-        return acc;
-    }, []).slice(0, 8);
+    const mergedDoctorActions = sanitizeDoctorActions([...(sanitizedResult.doctorActions ?? [])]);
 
     return {
-        ...result,
+        ...sanitizedResult,
         clinicalSnapshot,
         doctorActions: mergedDoctorActions,
         chiefComplaint,
@@ -338,20 +554,21 @@ function buildQuickSummary(dialogue: DialogueTurn[], doctorName?: string, patien
     }));
 
     const clinicalSnapshot = extracted.slice(0, 10).map((item) => ({
-        label: trimFactLabel(item.label),
+        label: cleanSnapshotLabel(item.label, item.category),
         category: item.category,
         isSupported: true,
         confidence: item.confidence,
         evidence: item.evidence,
         status: item.status,
     }));
+    const sanitizedSnapshot = sanitizeClinicalSnapshot(clinicalSnapshot);
 
     const missingFields: string[] = [];
     if (!chiefComplaint) missingFields.push('chiefComplaint');
     if (doctorActions.length === 0) missingFields.push('doctorActions');
 
     return {
-        clinicalSnapshot,
+        clinicalSnapshot: sanitizedSnapshot,
         doctorActions,
         prescriptions: [],
         prescriptionDraft: null,
@@ -383,7 +600,7 @@ function buildQuickSummary(dialogue: DialogueTurn[], doctorName?: string, patien
         },
         quality: {
             score: Math.max(25, 100 - missingFields.length * 25),
-            confidence: clamp01(clinicalSnapshot.reduce((acc, item) => acc + (item.confidence ?? 0.7), 0) / Math.max(1, clinicalSnapshot.length)),
+            confidence: clamp01(sanitizedSnapshot.reduce((acc, item) => acc + (item.confidence ?? 0.7), 0) / Math.max(1, sanitizedSnapshot.length)),
             missingFields,
             mode: 'rule_only',
             generatedAt: new Date().toISOString(),
@@ -441,6 +658,9 @@ export function useWhisperLive(
     const confirmedTextRef = useRef('');
     const dialogueRef = useRef<DialogueTurn[]>([]);
     const visitIdRef = useRef<string | null | undefined>(visitId);
+    // Ref mirrors sessionId state so stopRecording always reads the current value
+    // even when called from a stale closure (avoids "no session ID" early return on re-record).
+    const sessionIdRef = useRef<string | null>(null);
     const wsUrl = whisperEndpoint.replace('http://', 'ws://').replace('https://', 'wss://') + '/ws/transcribe';
     useEffect(() => {
         const checkHealth = async () => {
@@ -570,6 +790,7 @@ export function useWhisperLive(
                     } else if (data.type === 'session_start') {
                         // Session started
                         if (data.session_id) {
+                            sessionIdRef.current = data.session_id;
                             setSessionId(data.session_id);
                         }
                     } else if (data.type === 'live_preview') {
@@ -711,8 +932,12 @@ export function useWhisperLive(
             streamRef.current = null;
         }
 
+        // Read session ID from ref so we always have the current value regardless
+        // of when this callback was last recreated (avoids stale-closure misses on re-record).
+        const activeSessionId = sessionIdRef.current;
+
         let triggeredViaWs = false;
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && sessionId) {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && activeSessionId) {
             try {
                 wsRef.current.send(JSON.stringify({
                     type: 'stop_recording',
@@ -726,6 +951,7 @@ export function useWhisperLive(
         }
 
         if (!triggeredViaWs && wsRef.current) {
+            wsRef.current.onclose = null;
             wsRef.current.close();
             wsRef.current = null;
         }
@@ -735,9 +961,9 @@ export function useWhisperLive(
         isPausedRef.current = false;
         setConnectionStatus('disconnected');
 
-        if (!sessionId) {
+        if (!activeSessionId) {
             console.error('[useWhisperLive] No active session ID to process');
-            return { text: confirmedText, dialogue: dialogue };
+            return { text: confirmedTextRef.current, dialogue: dialogueRef.current };
         }
 
         return new Promise(async (resolve) => {
@@ -767,7 +993,7 @@ export function useWhisperLive(
                         if (attempt > 0) {
                             await new Promise(r => setTimeout(r, 500));
                         }
-                        processResp = await fetch(`${whisperEndpoint}/process/${sessionId}${queryStr}`, {
+                        processResp = await fetch(`${whisperEndpoint}/process/${activeSessionId}${queryStr}`, {
                             method: 'POST',
                             headers: getRoomAgentHeaders(),
                         });
@@ -777,7 +1003,7 @@ export function useWhisperLive(
 
                     if (!processResp || !processResp.ok) {
                         // Last chance: if status endpoint exists, pipeline may already be active.
-                        const statusProbe = await fetch(`${whisperEndpoint}/session/${sessionId}/status`, {
+                        const statusProbe = await fetch(`${whisperEndpoint}/session/${activeSessionId}/status`, {
                             headers: getRoomAgentHeaders(),
                         });
                         if (!statusProbe.ok) {
@@ -786,6 +1012,8 @@ export function useWhisperLive(
                     }
                 }
 
+                let notFoundStrikes = 0;
+                const MAX_NOT_FOUND_STRIKES = 5;
                 const interval = setInterval(async () => {
                     pollCount++;
                         if (pollCount >= MAX_POLLS) {
@@ -794,15 +1022,16 @@ export function useWhisperLive(
                             setProcessingStage(null);
                             setError('Transcription timed out after 5 minutes. Please try again.');
                             if (wsRef.current) {
+                                wsRef.current.onclose = null;
                                 wsRef.current.close();
                                 wsRef.current = null;
                             }
-                            resolve({ text: confirmedText, dialogue });
+                            resolve({ text: confirmedTextRef.current, dialogue: dialogueRef.current });
                             return;
                         }
 
                     try {
-                        const statusResp = await fetch(`${whisperEndpoint}/session/${sessionId}/status`, {
+                        const statusResp = await fetch(`${whisperEndpoint}/session/${activeSessionId}/status`, {
                             headers: getRoomAgentHeaders(),
                         });
                         const statusData = await statusResp.json();
@@ -819,16 +1048,16 @@ export function useWhisperLive(
                                 setError(`Transcription failed: ${data?.error || 'Unknown error'}`);
                                 setProcessingStage(null);
                                 if (wsRef.current) {
+                                    wsRef.current.onclose = null;
                                     wsRef.current.close();
                                     wsRef.current = null;
                                 }
-                                resolve({ text: confirmedText, dialogue });
+                                resolve({ text: confirmedTextRef.current, dialogue: dialogueRef.current });
                                 return;
                             }
 
                             const finalDialogue = data.dialogue || [];
                             const finalSamples = data.speaker_samples || [];
-                            const finalSummary = data.summary;
 
                             setBackendDialogue(finalDialogue);
                             setSpeakerSamples(finalSamples);
@@ -841,23 +1070,33 @@ export function useWhisperLive(
                             } else {
                                 const finalText = finalDialogue.map((d: DialogueTurn) => d.text).join(' ');
                                 setConfirmedText(finalText);
+                                confirmedTextRef.current = finalText;
                                 setDialogue(finalDialogue);
+                                dialogueRef.current = finalDialogue;
                                 if (wsRef.current) {
+                                    wsRef.current.onclose = null;
                                     wsRef.current.close();
                                     wsRef.current = null;
                                 }
-                                resolve({ text: finalText, dialogue: finalDialogue, summary: finalSummary });
+                                resolve({ text: finalText, dialogue: finalDialogue });
                             }
                         } else if (statusData.status === 'error' || statusData.error) {
+                            // "Session not found" can be a transient race — the pipeline may
+                            // not have been queued yet. Give it a few strikes before giving up.
+                            if (statusResp.status === 404) {
+                                notFoundStrikes++;
+                                if (notFoundStrikes < MAX_NOT_FOUND_STRIKES) return;
+                            }
                             clearInterval(interval);
                             setIsTranscribing(false);
                             setError(statusData.error || "WhisperX processing failed");
                             setProcessingStage(null);
                             if (wsRef.current) {
+                                wsRef.current.onclose = null;
                                 wsRef.current.close();
                                 wsRef.current = null;
                             }
-                            resolve({ text: confirmedText, dialogue: dialogue });
+                            resolve({ text: confirmedTextRef.current, dialogue: dialogueRef.current });
                         } else if (statusData.stage) {
                             setProcessingStage(statusData.stage);
                         }
@@ -872,28 +1111,57 @@ export function useWhisperLive(
                 setIsTranscribing(false);
                 setProcessingStage(null);
                 if (wsRef.current) {
+                    wsRef.current.onclose = null;
                     wsRef.current.close();
                     wsRef.current = null;
                 }
-                resolve({ text: confirmedText, dialogue });
+                resolve({ text: confirmedTextRef.current, dialogue: dialogueRef.current });
             }
         });
-    }, [sessionId, whisperEndpoint, confirmedText, dialogue, stopAutoSaveInterval, stopDurationTimer]);
+    }, [whisperEndpoint, stopAutoSaveInterval, stopDurationTimer]);
 
     const clearTranscript = useCallback(() => {
         stopAutoSaveInterval();
         stopDurationTimer();
+
+        // Stop any active recording
+        isRecordingRef.current = false;
+        isPausedRef.current = false;
+
+        // Disconnect audio processing nodes
+        if (processorRef.current) {
+            try { processorRef.current.disconnect(); } catch { /* ignore */ }
+            processorRef.current = null;
+        }
+        if (audioContextRef.current) {
+            try { audioContextRef.current.close(); } catch { /* ignore */ }
+            audioContextRef.current = null;
+        }
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+
+        // Close the WebSocket so its onclose doesn't fire into a future session
+        if (wsRef.current) {
+            wsRef.current.onclose = null; // suppress the setConnectionStatus('disconnected') side-effect
+            try { wsRef.current.close(); } catch { /* ignore */ }
+            wsRef.current = null;
+        }
+
         accumulatedDurationRef.current = 0;
         recordingStartRef.current = null;
+        sessionIdRef.current = null;
 
+        setIsRecording(false);
+        setIsPaused(false);
+        setIsTranscribing(false);
         setConfirmedText('');
         setPartialText('');
         setLivePreviewText('');
         setConfidence(0);
         setError(null);
         setRecordingDuration(0);
-        setIsPaused(false);
-        isPausedRef.current = false;
         setDialogue([]);
         setSpeakerSamples([]);
         setSessionId(null);
@@ -913,10 +1181,19 @@ export function useWhisperLive(
         let finalDialogue: DialogueTurn[];
 
         if (!assignments) {
-            // No explicit remapping provided — keep detected speaker labels as-is.
+            // No explicit assignment — first unique "Speaker X" label is the doctor
+            // (recording typically starts with the doctor greeting the patient).
+            const speakerOrder: string[] = [];
+            for (const turn of backendDialogue) {
+                if (!speakerOrder.includes(turn.speaker)) speakerOrder.push(turn.speaker);
+            }
+            const firstSpeaker = speakerOrder[0] ?? '';
             finalDialogue = backendDialogue.map(turn => ({
                 ...turn,
-                speaker: turn.speaker,
+                speaker: normalizeSpeakerRole(turn.speaker, doctorName, patientName) === 'Doctor'
+                    || turn.speaker === firstSpeaker
+                    ? doctorName
+                    : patientName,
             }));
         } else {
             const backendRoleOfSpeaker: Record<string, string> = {};
@@ -932,7 +1209,8 @@ export function useWhisperLive(
 
             finalDialogue = backendDialogue.map(turn => ({
                 ...turn,
-                speaker: backendRoleToActualName[turn.speaker] ?? turn.speaker,
+                speaker: backendRoleToActualName[turn.speaker]
+                    ?? (normalizeSpeakerRole(turn.speaker, doctorName, patientName) === 'Doctor' ? doctorName : patientName),
             }));
         }
 
@@ -945,6 +1223,14 @@ export function useWhisperLive(
         if (confirmationResolverRef.current) {
             confirmationResolverRef.current({ text: finalText, dialogue: finalDialogue });
             confirmationResolverRef.current = null;
+        }
+
+        // Close the WebSocket now that the session is fully done — prevents it from
+        // orphaning and firing ws.onclose into a future recording session.
+        if (wsRef.current) {
+            wsRef.current.onclose = null;
+            try { wsRef.current.close(); } catch { /* ignore */ }
+            wsRef.current = null;
         }
     }, [backendDialogue, speakerSamples]);
 

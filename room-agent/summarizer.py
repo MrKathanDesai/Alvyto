@@ -225,7 +225,7 @@ ZERO-INFERENCE RULE: Use only words and phrases actually spoken in the conversat
 RECALL-FIRST RULE: Do not compress away clinically relevant details. Keep explicit negatives, night symptoms, risk factors, vitals, examination findings, investigations, warning signs, and follow-up instructions when they are stated.
 
 JSON FIELDS:
-- "clinicalSnapshot": array of objects, each with "label" (a short phrase from the conversation) and "category" (one of: symptom, warning, lifestyle, timing, duration, negative, action, medication). Capture every clinically important snapshot item that matters for safe review. Do NOT put medications here — medications belong in prescriptions.
+- "clinicalSnapshot": array of objects, each with "label" (a short phrase from the conversation) and "category" (one of: symptom, warning, lifestyle, timing, duration, negative, action). Capture every clinically important snapshot item that matters for safe review. Do NOT put medications here — medications belong in prescriptions.
 - "doctorActions": array of strings. Each string is a specific, concrete non-medication action the doctor stated. Include every clinically relevant non-medication plan item explicitly stated, such as investigations, follow-up, lifestyle advice, return precautions, or monitoring.
 - "prescriptions": array of objects for every medication the doctor prescribed or changed this visit. Each object has "name" (medication name only, no verbs), "dosage" (e.g. "500mg", null if not stated), "frequency" (e.g. "twice daily", null if not stated).
 - "prescriptionDraft": object summarising the prescription-ready plan from the conversation only:
@@ -283,10 +283,84 @@ class Summarizer:
             "issuesParagraph": "",
             "actionsParagraph": "",
             "chiefComplaint": "",
+            "structuredFindings": [],
             "sourceFacts": [],
             "sections": self._empty_sections(),
             "quality": self._empty_quality(mode),
         }
+
+    def _build_structured_findings(self, summary: Dict[str, Any], source_facts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        findings: List[Dict[str, Any]] = []
+        seen = set()
+
+        category_map = {
+            "symptom": "symptom",
+            "negative": "negative",
+            "risk_factor": "lifestyle",
+            "warning": "warning",
+            "prescription": "action",
+            "advice": "action",
+            "follow_up": "action",
+            "assessment": "symptom",
+        }
+
+        for fact in source_facts:
+            if not isinstance(fact, dict):
+                continue
+            text = self._normalize_fact_text(str(fact.get("text") or ""))
+            src_category = str(fact.get("category") or "other").strip().lower()
+            status = str(fact.get("status") or "confirmed").strip().lower() or "confirmed"
+            confidence = float(fact.get("confidence") or 0.0)
+            evidence = self._normalize_fact_text(str(fact.get("evidence") or text))
+
+            if not text or src_category not in category_map:
+                continue
+
+            category = category_map[src_category]
+            key = (text.lower(), category, status)
+            if key in seen:
+                continue
+            seen.add(key)
+
+            findings.append(
+                {
+                    "id": str(fact.get("id") or f"f-{len(findings)}"),
+                    "label": text[:140],
+                    "category": category,
+                    "status": status if status in {"confirmed", "probable", "denied", "unclear"} else "confirmed",
+                    "confidence": max(0.0, min(1.0, confidence if confidence else 0.78)),
+                    "evidence": evidence[:500] if evidence else None,
+                }
+            )
+
+        if findings:
+            return findings[:24]
+
+        for item in summary.get("clinicalSnapshot", []):
+            if not isinstance(item, dict):
+                continue
+            label = self._normalize_fact_text(str(item.get("label") or ""))
+            category = str(item.get("category") or "symptom").strip().lower()
+            if category == "medication":
+                continue
+            if category not in VALID_CATEGORIES or not label:
+                continue
+            key = (label.lower(), category)
+            if key in seen:
+                continue
+            seen.add(key)
+            findings.append(
+                {
+                    "id": f"f-{len(findings)}",
+                    "label": label[:140],
+                    "category": category,
+                    "status": "denied" if category == "negative" else "confirmed",
+                    "confidence": max(0.0, min(1.0, float(item.get("confidence") or 0.75))),
+                    "evidence": self._normalize_fact_text(str(item.get("evidence") or label))[:500],
+                }
+            )
+
+        return findings[:24]
 
     def warmup(self) -> None:
         """Run a minimal inference to pull phi4-mini into Ollama's memory before the first real visit."""
@@ -936,8 +1010,10 @@ class Summarizer:
                 transcript,
             )
         sections = self._build_sections(working, source_facts)
+        structured_findings = self._build_structured_findings(working, source_facts)
         working["sourceFacts"] = source_facts
         working["sections"] = sections
+        working["structuredFindings"] = structured_findings
         working["clinicalSnapshot"] = self._augment_clinical_snapshot(working, sections)
         working["quality"] = self._build_quality(working, sections, source_facts)
         return working
@@ -1470,6 +1546,25 @@ class Summarizer:
 
         return self._dedupe_strings(actions)[:10]
 
+    def _coerce_action_text(self, value: Any) -> str:
+        if isinstance(value, dict):
+            for key in ("text", "action", "label", "note"):
+                candidate = str(value.get(key) or "").strip()
+                if candidate:
+                    return re.sub(r"\s+", " ", candidate).strip()
+            return ""
+
+        text = re.sub(r"\s+", " ", str(value or "")).strip()
+        if not text:
+            return ""
+
+        lowered = text.lower()
+        if lowered.startswith("{") and lowered.endswith("}") and "action" in lowered:
+            match = re.search(r"['\"]action['\"]\s*:\s*['\"](.+?)['\"]", text)
+            if match:
+                return re.sub(r"\s+", " ", match.group(1)).strip()
+        return text
+
     def _extract_diagnoses_from_transcript(self, transcript: str) -> List[str]:
         doctor_lines = [
             line.split(":", 1)[1].strip()
@@ -1650,14 +1745,28 @@ class Summarizer:
                 "followUp": follow_up,
             }
 
+        chief_complaint = self._infer_chief_complaint(transcript, {"clinicalSnapshot": clinical_snapshot})
+        issues_paragraph = (
+            f"The patient reports {chief_complaint}."
+            if chief_complaint
+            else "The patient reported ongoing symptoms discussed during the visit."
+        )
+        if follow_up and follow_up.get("timeline"):
+            actions_paragraph = f"The doctor advised treatment and planned follow-up in {follow_up['timeline']}."
+        elif doctor_actions:
+            actions_paragraph = f"The doctor advised: {doctor_actions[0]}."
+        else:
+            actions_paragraph = "The doctor provided management advice based on the visit discussion."
+
         return {
             "clinicalSnapshot": clinical_snapshot,
             "doctorActions": doctor_actions,
             "prescriptions": prescriptions,
             "prescriptionDraft": prescription_draft,
-            "issuesParagraph": "",
-            "actionsParagraph": "",
-            "chiefComplaint": self._infer_chief_complaint(transcript, {"clinicalSnapshot": clinical_snapshot}),
+            "issuesParagraph": issues_paragraph,
+            "actionsParagraph": actions_paragraph,
+            "chiefComplaint": chief_complaint,
+            "structuredFindings": [],
         }
 
     def _parse_main_response(self, raw: str, transcript: str = "") -> Dict[str, Any]:
@@ -1686,11 +1795,13 @@ class Summarizer:
                 continue
             if category not in VALID_CATEGORIES:
                 category = "symptom"
+            if category == "medication":
+                continue
             clinical_snapshot.append({"label": label, "category": category})
 
         doctor_actions = []
         for item in parsed.get("doctorActions", []):
-            text = str(item).strip()
+            text = self._coerce_action_text(item)
             if not text:
                 continue
             if not self._is_actionable_doctor_note(text):
@@ -1925,6 +2036,7 @@ class Summarizer:
             "issuesParagraph": self._coerce_paragraph_text(parsed.get("issuesParagraph", "")),
             "actionsParagraph": self._coerce_paragraph_text(parsed.get("actionsParagraph", "")),
             "chiefComplaint": chief_complaint,
+            "structuredFindings": [],
         }
 
     def _parse_expand_response(self, raw: str) -> Dict[str, str]:
@@ -1999,6 +2111,7 @@ class Summarizer:
             "issuesParagraph": self._coerce_paragraph_text(summary.get("issuesParagraph", "")),
             "actionsParagraph": self._coerce_paragraph_text(summary.get("actionsParagraph", "")),
             "chiefComplaint": str(summary.get("chiefComplaint", "")).strip(),
+            "structuredFindings": summary.get("structuredFindings", []),
             "sourceFacts": source_facts,
             "sections": summary.get("sections", self._empty_sections()),
             "quality": summary.get("quality") or self._empty_quality("hybrid"),

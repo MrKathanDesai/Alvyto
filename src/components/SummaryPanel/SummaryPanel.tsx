@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import styles from './SummaryPanel.module.css';
 import { SummaryItem, VisitStatus, KeyFact, KeyFactCategory, VisitSummary, PrescriptionMedicationDetail } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -146,6 +146,12 @@ export default function SummaryPanel({
     const [isExpandingLocal, setIsExpandingLocal] = useState(false);
     const [expandError, setExpandError] = useState<string | null>(null);
     const expandDebounceRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (expandDebounceRef.current) clearTimeout(expandDebounceRef.current);
+        };
+    }, []);
 
     const isExpanding = isExpandingProp || isExpandingLocal;
     const isLocked = status === 'approved';

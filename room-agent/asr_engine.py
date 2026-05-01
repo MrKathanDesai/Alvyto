@@ -27,32 +27,6 @@ logger.info(f"Hardware acceleration: {DEVICE}")
 SAMPLE_RATE = 16000
 
 
-def _preprocess_audio_for_asr(audio: np.ndarray) -> np.ndarray:
-    """Improve robustness for natural/noisy speech before ASR."""
-    if audio is None:
-        return np.array([], dtype=np.float32)
-    arr = np.asarray(audio, dtype=np.float32).copy()
-    if arr.size == 0:
-        return arr
-
-    # Remove DC offset
-    arr = arr - float(np.mean(arr))
-
-    # Mild pre-emphasis to reduce low-frequency rumble/wind masking
-    emphasized = np.empty_like(arr)
-    emphasized[0] = arr[0]
-    emphasized[1:] = arr[1:] - 0.95 * arr[:-1]
-    arr = 0.75 * arr + 0.25 * emphasized
-
-    # Peak normalize with conservative headroom
-    peak = float(np.max(np.abs(arr)))
-    if peak > 1e-6:
-        arr = arr / peak * 0.92
-
-    # Soft-clip outlier peaks from wind pops without hard distortion
-    arr = np.tanh(arr * 1.35).astype(np.float32)
-    return arr
-
 class HybridDiarizer:
     def __init__(self, hf_token: str):
         from pyannote.audio import Model
@@ -180,7 +154,7 @@ class HybridDiarizer:
         embeddings_matrix = embeddings_matrix / (norms + 1e-8)
 
         clustering = AgglomerativeClustering(
-            n_clusters=self._estimate_num_speakers(embeddings_matrix),
+            n_clusters=2,
             metric="cosine",
             linkage="average"
         )
@@ -208,7 +182,7 @@ class ASREngine:
         logger.info(f"Loading models on device: {DEVICE}")
 
         self.wx_model = whisperx.load_model(
-            os.environ.get("WHISPERX_MODEL", "medium.en"),
+            os.environ.get("WHISPERX_MODEL", "small.en"),
             device="cpu",
             compute_type="int8",
             asr_options={
@@ -216,7 +190,7 @@ class ASREngine:
                 "suppress_tokens": [-1],
                 "initial_prompt": build_medical_asr_prompt(),
                 "condition_on_previous_text": True,
-                "temperature": 0.0,
+                "temperatures": [0.0],
             }
         )
 
@@ -229,30 +203,82 @@ class ASREngine:
         self.summarizer = Summarizer()
         self.summarizer.warmup()
 
-        logger.info("Models loaded: WhisperX small.en (preview + pipeline) + Wav2Vec2 + ResNet34 + phi4-mini (Ollama)")
-        logger.info(f"Alignment and voiceprinting on: {DEVICE}")
-        logger.info("ASR and VAD on: CPU (int8)")
+        logger.info(f"Models loaded: WhisperX {os.environ.get('WHISPERX_MODEL', 'small.en')} + Wav2Vec2 ({DEVICE}) + ResNet34 ({DEVICE}) + phi4-mini (Ollama)")
+        logger.info(f"Alignment and voiceprinting on: {DEVICE} (Metal)")
+        logger.info("ASR on: CPU (int8, vad_filter=False)")
 
     def transcribe_preview(self, audio_array: np.ndarray) -> str:
         if self.wx_model is None or len(audio_array) < 1600:
             return ""
         try:
-            fw = getattr(self.wx_model, "model", None)
-            if fw is None:
-                return ""
-            segments, _ = fw.transcribe(
-                audio_array,
-                language="en",
+            result = self._transcribe_with_faster_whisper(
+                np.asarray(audio_array, dtype=np.float32),
+                word_timestamps=False,
                 beam_size=1,
                 best_of=1,
-                temperature=0.0,
-                vad_filter=False,
-                word_timestamps=False,
             )
-            return " ".join(seg.text.strip() for seg in segments).strip()
+            return " ".join(seg.get("text", "").strip() for seg in result.get("segments", [])).strip()
         except Exception as e:
             logger.warning(f"Preview transcription error: {e}")
             return ""
+
+    def _transcribe_with_faster_whisper(
+        self,
+        audio_array: np.ndarray,
+        *,
+        word_timestamps: bool,
+        beam_size: int,
+        best_of: int,
+    ) -> dict:
+        fw = getattr(self.wx_model, "model", None)
+        if fw is None:
+            raise RuntimeError("WhisperX model wrapper has no underlying faster-whisper model")
+
+        segments, info = fw.transcribe(
+            audio_array,
+            language="en",
+            beam_size=beam_size,
+            best_of=best_of,
+            temperature=0.0,
+            vad_filter=True,
+            word_timestamps=word_timestamps,
+            initial_prompt=build_medical_asr_prompt(),
+            condition_on_previous_text=True,
+        )
+
+        whisperx_segments = []
+        for seg in segments:
+            if seg.start is None or seg.end is None:
+                continue
+
+            whisperx_seg = {
+                "start": float(seg.start),
+                "end": float(seg.end),
+                "text": (seg.text or "").strip(),
+            }
+
+            if word_timestamps and getattr(seg, "words", None):
+                words = []
+                for w in seg.words:
+                    if w.start is None or w.end is None:
+                        continue
+                    words.append(
+                        {
+                            "word": (w.word or "").strip(),
+                            "start": float(w.start),
+                            "end": float(w.end),
+                            "score": float(w.probability) if w.probability is not None else None,
+                        }
+                    )
+                if words:
+                    whisperx_seg["words"] = words
+
+            whisperx_segments.append(whisperx_seg)
+
+        return {
+            "segments": whisperx_segments,
+            "language": getattr(info, "language", "en"),
+        }
 
     def run_pipeline(
         self,
@@ -272,18 +298,13 @@ class ASREngine:
             logger.info("Step 1: Transcribing...")
             t0 = time.time()
 
-            asr_audio = _preprocess_audio_for_asr(audio)
+            asr_audio = np.asarray(audio, dtype=np.float32)
 
-            result = self.wx_model.transcribe(
+            result = self._transcribe_with_faster_whisper(
                 asr_audio,
-                language="en",
-                batch_size=8,
-                print_progress=False,
-                vad_filter=True,
-                vad_parameters={
-                    "min_silence_duration_ms": 280,
-                    "speech_pad_ms": 240,
-                },
+                word_timestamps=True,
+                beam_size=2,
+                best_of=1,
             )
 
             if not result.get("segments"):

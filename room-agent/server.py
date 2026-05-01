@@ -26,6 +26,7 @@ logging.basicConfig(
 logger = logging.getLogger("RoomAgent")
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8080")
 KEEP_RAW_RECORDINGS = os.environ.get("ROOM_AGENT_KEEP_RAW", "0").strip().lower() in {"1", "true", "yes", "on"}
+COMPLETED_SESSION_TTL_SECONDS = int(os.environ.get("ROOM_AGENT_COMPLETED_SESSION_TTL_SECONDS", "3600"))
 
 
 def _save_progress_to_backend(
@@ -113,11 +114,13 @@ active_sessions: Dict[str, Any] = {}
 # Stores session_id -> np.ndarray OR session_id -> filepath (string)
 pending_sessions: Dict[str, Any] = {}
 completed_sessions: Dict[str, Any] = {}
-session_transcripts: Dict[str, str] = {}
+completed_session_times: Dict[str, float] = {}
 session_metadata: Dict[str, Any] = {}
 session_stages: Dict[str, str] = {}
+processing_sessions: set[str] = set()
 engine = None
 preview_executor = ThreadPoolExecutor(max_workers=1)
+pipeline_executor = ThreadPoolExecutor(max_workers=1)
 
 # Persistent recording config
 RECORDINGS_DIR = os.path.join(os.path.dirname(__file__), "recordings")
@@ -138,9 +141,115 @@ def startup_event():
                 pending_sessions[session_id] = path
                 logger.info(f"Recovered stranded session from disk: {session_id}")
 
+
+def _reset_session_outputs(session_id: str) -> None:
+    completed_sessions.pop(session_id, None)
+    completed_session_times.pop(session_id, None)
+    session_stages.pop(session_id, None)
+    processing_sessions.discard(session_id)
+
+
+def _begin_processing_session(session_id: str) -> bool:
+    if session_id in processing_sessions:
+        return False
+    processing_sessions.add(session_id)
+    session_stages[session_id] = "queued"
+    return True
+
+
+def _prune_expired_completed_sessions() -> None:
+    if COMPLETED_SESSION_TTL_SECONDS <= 0:
+        return
+    now = time.time()
+    expired_ids = [
+        session_id
+        for session_id, completed_at in completed_session_times.items()
+        if now - completed_at >= COMPLETED_SESSION_TTL_SECONDS
+    ]
+    for session_id in expired_ids:
+        completed_sessions.pop(session_id, None)
+        completed_session_times.pop(session_id, None)
+
+
+def _cleanup_session_audio(session_id: str) -> None:
+    audio_data = pending_sessions.pop(session_id, None)
+    if isinstance(audio_data, str) and os.path.exists(audio_data):
+        if KEEP_RAW_RECORDINGS:
+            logger.info(f"Keeping persistent audio file (ROOM_AGENT_KEEP_RAW=1): {audio_data}")
+        else:
+            try:
+                os.remove(audio_data)
+                logger.info(f"Cleaned up persistent audio file: {audio_data}")
+            except Exception as e:
+                logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
+
+
+def _run_session_pipeline(session_id: str, doctor_name: str, patient_name: str) -> dict:
+    logger.info(f"Starting pipeline for session: {session_id}")
+    audio = pending_sessions.get(session_id)
+    if audio is None:
+        logger.error(f"Session {session_id} not found in pending_sessions")
+        result = {"status": "error", "error": "Session audio not found"}
+        completed_sessions[session_id] = result
+        completed_session_times[session_id] = time.time()
+        return result
+
+    try:
+        def status_cb(stage: str):
+            session_stages[session_id] = stage
+
+        if isinstance(audio, str) and os.path.exists(audio):
+            logger.info(f"Loading audio from persistent storage: {audio}")
+            audio_array = np.fromfile(audio, dtype=np.float32)
+        else:
+            audio_array = audio
+
+        if audio_array is None or len(audio_array) == 0:
+            logger.error(f"Audio empty for session {session_id}")
+            result = {"status": "error", "error": "Audio empty or missing"}
+            completed_sessions[session_id] = result
+            completed_session_times[session_id] = time.time()
+            return result
+
+        result = engine.run_pipeline(
+            audio_array,
+            doctor_name,
+            patient_name,
+            should_summarize=False,
+            status_callback=status_cb,
+        )
+        completed_sessions[session_id] = result
+        completed_session_times[session_id] = time.time()
+
+        visit_meta = session_metadata.get(session_id, {})
+        visit_id = visit_meta.get("visit_id")
+        if visit_id and isinstance(result, dict):
+            _save_progress_to_backend(
+                visit_id,
+                result.get("transcript", ""),
+                result.get("dialogue", []),
+                auth_token=visit_meta.get("token"),
+                status="in_progress",
+            )
+
+        logger.info(f"Pipeline complete for {session_id}")
+        return result
+    except Exception as e:
+        logger.error(f"Pipeline execution failed for {session_id}: {e}", exc_info=True)
+        result = {"status": "error", "error": str(e)}
+        completed_sessions[session_id] = result
+        completed_session_times[session_id] = time.time()
+        return result
+    finally:
+        _cleanup_session_audio(session_id)
+        session_stages.pop(session_id, None)
+        session_metadata.pop(session_id, None)
+        processing_sessions.discard(session_id)
+
 @app.get("/health")
 def health(authorization: Optional[str] = Header(default=None)):
     _validate_room_agent_token(_extract_bearer_token(authorization))
+    _prune_expired_completed_sessions()
     status = "ok" if engine else "loading"
     return {
         "status": status,
@@ -212,6 +321,11 @@ async def process_session(
 ):
     token = _extract_bearer_token(authorization)
     _validate_room_agent_token(token)
+    _prune_expired_completed_sessions()
+    if session_id in completed_sessions:
+        return {"status": "completed", "session_id": session_id}
+    if session_id in processing_sessions:
+        return {"status": "processing", "session_id": session_id, "stage": session_stages.get(session_id, "processing")}
     if session_id not in pending_sessions:
         return JSONResponse({"error": "Session not found"}, status_code=404)
     if session_id not in session_metadata:
@@ -221,91 +335,25 @@ async def process_session(
     if token:
         session_metadata[session_id]["token"] = token
 
+    if not _begin_processing_session(session_id):
+        return {"status": "processing", "session_id": session_id, "stage": session_stages.get(session_id, "processing")}
+
     background_tasks.add_task(execute_pipeline, session_id, doctor_name, patient_name)
     return {"status": "processing", "session_id": session_id}
 
 @app.get("/session/{session_id}/status")
 async def get_session_status(session_id: str, authorization: Optional[str] = Header(default=None)):
     _validate_room_agent_token(_extract_bearer_token(authorization))
+    _prune_expired_completed_sessions()
     if session_id in completed_sessions:
         return {"status": "completed", "data": completed_sessions[session_id]}
-    elif session_id in pending_sessions:
+    elif session_id in processing_sessions or session_id in pending_sessions:
         return {"status": "processing", "stage": session_stages.get(session_id, "processing")}
     else:
         return JSONResponse({"error": "Session not found"}, status_code=404)
 
 def execute_pipeline(session_id: str, doctor_name: str, patient_name: str):
-    logger.info(f"Starting pipeline for session: {session_id}")
-    audio = pending_sessions.get(session_id)
-    if audio is None:
-        logger.error(f"Session {session_id} not found in pending_sessions")
-        return
-
-    try:
-        def status_cb(stage: str):
-            session_stages[session_id] = stage
-
-        # Load audio from disk if it's a string path, else use in-memory array
-        if isinstance(audio, str) and os.path.exists(audio):
-            logger.info(f"Loading audio from persistent storage: {audio}")
-            audio_array = np.fromfile(audio, dtype=np.float32)
-        else:
-            audio_array = audio
-
-        if audio_array is None or len(audio_array) == 0:
-            logger.error(f"Audio empty for session {session_id}")
-            completed_sessions[session_id] = {"status": "error", "error": "Audio empty or missing"}
-            return
-
-        # ASREngine handles transcription + diarization only (no summarization)
-        # Summary is generated separately after the user confirms speaker labels
-        result = engine.run_pipeline(audio_array, doctor_name, patient_name, should_summarize=False, status_callback=status_cb)
-
-        # Apply confirmed label mapping if it arrived while processing
-        meta = session_metadata.get(session_id, {})
-        label_map = meta.get("speaker_label_map")
-
-        # Speaker remapping is done client-side in confirmSpeakersClientSide().
-        # The label_map stored here is unused at the server level.
-
-        completed_sessions[session_id] = result
-
-        # Persist transcript + dialogue to backend so browser refresh can restore session
-        visit_meta = session_metadata.get(session_id, {})
-        visit_id = visit_meta.get("visit_id")
-        if visit_id and isinstance(result, dict):
-            _transcript = result.get("transcript", "")
-            _dialogue = result.get("dialogue", [])
-            _save_progress_to_backend(
-                visit_id,
-                _transcript,
-                _dialogue,
-                auth_token=visit_meta.get("token"),
-                status="in_progress",
-            )
-
-        if result.get("dialogue"):
-            session_transcripts[session_id] = " ".join(
-                t.get("text", "") for t in result["dialogue"]
-            )
-        logger.info(f"Pipeline complete for {session_id}")
-    except Exception as e:
-        logger.error(f"Pipeline execution failed for {session_id}: {e}", exc_info=True)
-        completed_sessions[session_id] = {"status": "error", "error": str(e)}
-    finally:
-        audio_data = pending_sessions.pop(session_id, None)
-        # Cleanup persistent file
-        if isinstance(audio_data, str) and os.path.exists(audio_data):
-            if KEEP_RAW_RECORDINGS:
-                logger.info(f"Keeping persistent audio file (ROOM_AGENT_KEEP_RAW=1): {audio_data}")
-            else:
-                try:
-                    os.remove(audio_data)
-                    logger.info(f"Cleaned up persistent audio file: {audio_data}")
-                except Exception as e:
-                    logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
-
-        session_stages.pop(session_id, None)
+    _run_session_pipeline(session_id, doctor_name, patient_name)
 
 @app.websocket("/ws/transcribe")
 async def websocket_transcribe(
@@ -320,6 +368,11 @@ async def websocket_transcribe(
         await websocket.close(code=4401)
         return
 
+    _prune_expired_completed_sessions()
+    if session_id and active_sessions.get(session_id):
+        await websocket.close(code=4409)
+        return
+
     await websocket.accept()
 
     if not session_id:
@@ -328,9 +381,9 @@ async def websocket_transcribe(
     else:
         logger.info(f"WebSocket connection requested for session_id: {session_id}")
 
+    _reset_session_outputs(session_id)
     active_sessions[session_id] = True
-    if session_id not in session_metadata:
-        session_metadata[session_id] = {}
+    session_metadata[session_id] = {}
     if visit_id:
         session_metadata[session_id]["visit_id"] = visit_id
     if token:
@@ -380,45 +433,21 @@ async def websocket_transcribe(
                         pending_sessions[session_id] = backup_filepath
                         await websocket.send_json({"type": "processing", "session_id": session_id})
 
+                        if not _begin_processing_session(session_id):
+                            logger.info(f"Session {session_id} already processing; ignoring duplicate stop trigger")
+                            continue
+
                         try:
-                            audio_array = np.fromfile(backup_filepath, dtype=np.float32)
-
-                            if audio_array is None or len(audio_array) == 0:
-                                result = {"status": "error", "error": "Audio empty or missing"}
-                            else:
-                                loop = asyncio.get_running_loop()
-                                doctor_name = data_json.get("doctor_name", "Doctor")
-                                patient_name = data_json.get("patient_name", "Patient")
-                                result = await loop.run_in_executor(
-                                    preview_executor,
-                                    engine.run_pipeline,
-                                    audio_array,
-                                    doctor_name,
-                                    patient_name,
-                                    False,
-                                    None,
-                                )
-
-                            completed_sessions[session_id] = result
-
-                            # Persist transcript + dialogue to backend so browser refresh can restore session
-                            visit_meta = session_metadata.get(session_id, {})
-                            visit_id = visit_meta.get("visit_id")
-                            if visit_id and isinstance(result, dict):
-                                _transcript = result.get("transcript", "")
-                                _dialogue = result.get("dialogue", [])
-                                _save_progress_to_backend(
-                                    visit_id,
-                                    _transcript,
-                                    _dialogue,
-                                    auth_token=visit_meta.get("token"),
-                                    status="in_progress",
-                                )
-
-                            if isinstance(result, dict) and result.get("dialogue"):
-                                session_transcripts[session_id] = " ".join(
-                                    t.get("text", "") for t in result["dialogue"]
-                                )
+                            loop = asyncio.get_running_loop()
+                            doctor_name = data_json.get("doctor_name", "Doctor")
+                            patient_name = data_json.get("patient_name", "Patient")
+                            result = await loop.run_in_executor(
+                                pipeline_executor,
+                                _run_session_pipeline,
+                                session_id,
+                                doctor_name,
+                                patient_name,
+                            )
 
                             await websocket.send_json({
                                 "type": "pipeline_complete",
@@ -434,17 +463,6 @@ async def websocket_transcribe(
                                 "status": "error",
                                 "error": str(e),
                             })
-                        finally:
-                            audio_data = pending_sessions.pop(session_id, None)
-                            if isinstance(audio_data, str) and os.path.exists(audio_data):
-                                if KEEP_RAW_RECORDINGS:
-                                    logger.info(f"Keeping persistent audio file (ROOM_AGENT_KEEP_RAW=1): {audio_data}")
-                                else:
-                                    try:
-                                        os.remove(audio_data)
-                                        logger.info(f"Cleaned up persistent audio file: {audio_data}")
-                                    except Exception as e:
-                                        logger.warning(f"Failed to cleanup audio file {audio_data}: {e}")
 
                         continue
 
